@@ -1,0 +1,15 @@
+{
+  "name": "crowdlens-idl",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./idl": "./idl/crowdlens.json"
+  },
+  "peerDependencies": {
+    "@solana/web3.js": "^1.98.0"
+  },
+  "dependencies": {
+    "buffer": "^6.0.3"
+  }
+}

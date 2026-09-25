@@ -1,0 +1,610 @@
+{
+  "address": "4DcAdpaXFFvzLVDxjHoswyKojaueMuQBF4cMTY4XNfw4",
+  "metadata": {
+    "name": "crowdlens",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "close_task",
+      "discriminator": [
+        55,
+        234,
+        77,
+        69,
+        245,
+        208,
+        54,
+        167
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "task",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  97,
+                  115,
+                  107
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "task.creator",
+                "account": "TaskEscrow"
+              },
+              {
+                "kind": "account",
+                "path": "task.nonce",
+                "account": "TaskEscrow"
+              }
+            ]
+          }
+        },
+        {
+          "name": "creator",
+          "writable": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "commit_votes",
+      "discriminator": [
+        87,
+        6,
+        135,
+        227,
+        18,
+        249,
+        159,
+        163
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "task",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  97,
+                  115,
+                  107
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "task.creator",
+                "account": "TaskEscrow"
+              },
+              {
+                "kind": "account",
+                "path": "task.nonce",
+                "account": "TaskEscrow"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "vote_commitment",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "create_task",
+      "discriminator": [
+        194,
+        80,
+        6,
+        180,
+        232,
+        127,
+        48,
+        171
+      ],
+      "accounts": [
+        {
+          "name": "creator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "creator_stats",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  97,
+                  116,
+                  111,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "creator"
+              }
+            ]
+          }
+        },
+        {
+          "name": "task",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  97,
+                  115,
+                  107
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "creator"
+              },
+              {
+                "kind": "arg",
+                "path": "nonce"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "required",
+          "type": "u32"
+        },
+        {
+          "name": "nonce",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "initialize",
+      "discriminator": [
+        175,
+        175,
+        109,
+        31,
+        13,
+        152,
+        155,
+        237
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "settle_chunk",
+      "discriminator": [
+        214,
+        141,
+        97,
+        183,
+        51,
+        94,
+        40,
+        60
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "task",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  97,
+                  115,
+                  107
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "task.creator",
+                "account": "TaskEscrow"
+              },
+              {
+                "kind": "account",
+                "path": "task.nonce",
+                "account": "TaskEscrow"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "amounts",
+          "type": {
+            "vec": "u64"
+          }
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Config",
+      "discriminator": [
+        155,
+        12,
+        170,
+        224,
+        30,
+        250,
+        204,
+        130
+      ]
+    },
+    {
+      "name": "CreatorStats",
+      "discriminator": [
+        239,
+        158,
+        112,
+        237,
+        227,
+        82,
+        97,
+        129
+      ]
+    },
+    {
+      "name": "TaskEscrow",
+      "discriminator": [
+        209,
+        72,
+        197,
+        54,
+        17,
+        55,
+        3,
+        187
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "Unauthorized",
+      "msg": "Only the program authority can run this instruction"
+    },
+    {
+      "code": 6001,
+      "name": "BadNonce",
+      "msg": "Task nonce does not match the creator's next nonce"
+    },
+    {
+      "code": 6002,
+      "name": "BadAmount",
+      "msg": "Escrow amount must equal required votes times lamports per vote"
+    },
+    {
+      "code": 6003,
+      "name": "VotesAlreadyCommitted",
+      "msg": "Vote commitment has already been set"
+    },
+    {
+      "code": 6004,
+      "name": "VotesNotCommitted",
+      "msg": "Votes must be committed before settling"
+    },
+    {
+      "code": 6005,
+      "name": "EmptyCommitment",
+      "msg": "Cannot commit an empty vote hash"
+    },
+    {
+      "code": 6006,
+      "name": "InvalidChunkSize",
+      "msg": "Settle chunk must include 1 to 4 workers"
+    },
+    {
+      "code": 6007,
+      "name": "AmountAccountMismatch",
+      "msg": "Amount list does not match remaining worker accounts"
+    },
+    {
+      "code": 6008,
+      "name": "ZeroPayout",
+      "msg": "Payout amount must be greater than zero"
+    },
+    {
+      "code": 6009,
+      "name": "Overpay",
+      "msg": "Payout total exceeds remaining escrow"
+    },
+    {
+      "code": 6010,
+      "name": "Overflow",
+      "msg": "Math overflow"
+    },
+    {
+      "code": 6011,
+      "name": "WorkerNotWritable",
+      "msg": "Worker account must be writable"
+    },
+    {
+      "code": 6012,
+      "name": "InvalidWorker",
+      "msg": "Invalid worker account"
+    },
+    {
+      "code": 6013,
+      "name": "DuplicateWorker",
+      "msg": "Duplicate worker in the same chunk"
+    },
+    {
+      "code": 6014,
+      "name": "AlreadySettled",
+      "msg": "Task has already been closed"
+    },
+    {
+      "code": 6015,
+      "name": "EscrowNotEmpty",
+      "msg": "Cannot close while escrow lamports remain"
+    },
+    {
+      "code": 6016,
+      "name": "BadRequired",
+      "msg": "Required vote count must be greater than zero"
+    }
+  ],
+  "types": [
+    {
+      "name": "Config",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreatorStats",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "task_count",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TaskEscrow",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "nonce",
+            "type": "u64"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "required",
+            "type": "u32"
+          },
+          {
+            "name": "remaining_lamports",
+            "type": "u64"
+          },
+          {
+            "name": "vote_commitment",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "chunks_paid",
+            "type": "u32"
+          },
+          {
+            "name": "settled",
+            "type": "bool"
+          }
+        ]
+      }
+    }
+  ],
+  "constants": [
+    {
+      "name": "CONFIG_SEED",
+      "type": "bytes",
+      "value": "[99, 111, 110, 102, 105, 103]"
+    },
+    {
+      "name": "CREATOR_SEED",
+      "type": "bytes",
+      "value": "[99, 114, 101, 97, 116, 111, 114]"
+    },
+    {
+      "name": "LAMPORTS_PER_VOTE",
+      "type": "u64",
+      "value": "1000000"
+    },
+    {
+      "name": "TASK_SEED",
+      "type": "bytes",
+      "value": "[116, 97, 115, 107]"
+    }
+  ]
+}

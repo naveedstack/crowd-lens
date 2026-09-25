@@ -1,0 +1,38 @@
+{
+  "name": "api",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "start": "bun run src/index.ts",
+    "build": "tsc -b"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/express": "^5.0.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.816.0",
+    "@aws-sdk/s3-presigned-post": "^3.816.0",
+    "@aws-sdk/s3-request-presigner": "^3.816.0",
+    "@solana/web3.js": "^1.98.0",
+    "@types/cors": "^2.8.18",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/uuid": "^10.0.0",
+    "bs58": "^6.0.0",
+    "cors": "^2.8.5",
+    "db": "*",
+    "auth-message": "*",
+    "crowdlens-idl": "*",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.2.1",
+    "jsonwebtoken": "^9.0.2",
+    "tweetnacl": "^1.0.3",
+    "uuid": "^11.1.0",
+    "zod": "^3.25.23"
+  }
+}

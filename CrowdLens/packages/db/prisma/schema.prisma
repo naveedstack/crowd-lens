@@ -1,0 +1,141 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/n/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int     @id @default(autoincrement())
+  address       String  @unique
+  tasks         Task[]
+}
+
+model Worker {
+  id                  Int     @id @default(autoincrement())
+  address             String  @unique
+  submissions         Submission[]
+  pending_amount      Int    // amount in lamports 
+  locked_amount       Int
+  unsettled_amount    Int     @default(0)
+  reputation          Int     @default(50)
+  aligned_votes       Int     @default(0)
+  outlier_votes       Int     @default(0)
+  payouts             Payouts[]
+  taskServes          TaskServe[]
+}
+
+model Task {
+  id                    Int       @id @default(autoincrement())
+  title                 String?   @default("Select the best visual")
+  options               Option[]
+  user_id               Int
+  signature             String    @unique
+  amount                Int
+  required_submissions  Int
+  winner_option_id      Int?
+  done                  Boolean @default(false)
+  escrow_pda            String?
+  escrow_nonce          Int?
+  vote_commitment       String?
+  settle_status         SettleStatus @default(Offchain)
+  user                  User    @relation(fields: [user_id], references: [id])
+  submissions           Submission[]
+  taskServes            TaskServe[]
+
+  @@index([escrow_pda])
+}
+
+model Option {
+  id          Int        @id @default(autoincrement())
+  image_url   String
+  content     String     @default("")
+  type        OptionType @default(Image)
+  task_id     Int
+  task        Task       @relation(fields: [task_id], references: [id])
+  submissions Submission[]
+}
+
+model Submission {
+  id                Int     @id @default(autoincrement())
+  worker_id         Int
+  worker            Worker @relation(fields: [worker_id], references: [id])
+  option_id         Int
+  option            Option @relation(fields: [option_id], references: [id])
+  task_id           Int
+  task              Task   @relation(fields: [task_id], references: [id])
+  amount            Int
+  comment           String?
+  settled           Boolean  @default(false)
+  created_at        DateTime @default(now())
+  payout_signature  String?
+  @@unique([worker_id, task_id])
+  @@index([task_id, created_at])
+}
+
+model TaskServe {
+  worker_id Int
+  worker    Worker   @relation(fields: [worker_id], references: [id])
+  task_id   Int
+  task      Task     @relation(fields: [task_id], references: [id])
+  served_at DateTime @default(now())
+  @@id([worker_id, task_id])
+}
+
+model Payouts {
+  id            Int          @id @default(autoincrement())
+  worker_id     Int
+  worker        Worker       @relation(fields: [worker_id], references: [id])
+  amount        Int
+  signature     String
+  status        TxnStatus
+  source        PayoutSource @default(Treasury)
+  created_at    DateTime     @default(now())
+
+  @@unique([worker_id, signature])
+}
+
+model SignInNonce {
+  id         Int        @id @default(autoincrement())
+  nonce      String     @unique
+  address    String
+  role       SignInRole
+  expires_at DateTime
+  created_at DateTime   @default(now())
+
+  @@index([address])
+}
+
+enum TxnStatus {
+  Processing
+  Success
+  Failure
+}
+
+enum SignInRole {
+  User
+  Worker
+}
+
+enum SettleStatus {
+  Offchain
+  Escrowed
+  Settling
+  Settled
+  Failed
+}
+
+enum PayoutSource {
+  Treasury
+  Escrow
+}
+
+enum OptionType {
+  Image
+  Text
+}

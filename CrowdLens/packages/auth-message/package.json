@@ -1,0 +1,8 @@
+{
+  "name": "auth-message",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

@@ -1,117 +1,97 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { CheckCircle2 } from "lucide-react";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Coins, Users } from "lucide-react";
 import SectionHeading from "../components/SectionHeading";
 import Button from "../components/Button";
-import { MOCK_ECONOMICS, isUiPreview } from "@/lib/ui-preview";
-
-type Economics = {
-  lamportsPerVote: number;
-  batchSizes: number[];
-};
-
-const FALLBACK: Economics = {
-  lamportsPerVote: MOCK_ECONOMICS.lamportsPerVote,
-  batchSizes: MOCK_ECONOMICS.batchSizes,
-};
-
-function formatSol(lamports: number) {
-  return (lamports / 1_000_000_000).toLocaleString(undefined, {
-    maximumFractionDigits: 6,
-  });
-}
+import { VoteCountControl } from "../components/VoteCountControl";
+import { useEconomics } from "@/lib/use-economics";
+import { formatUsd, formatUsdAndSol } from "@/lib/money";
 
 const PricingSection: React.FC = () => {
-  const [economics, setEconomics] = useState<Economics>(FALLBACK);
+  const router = useRouter();
+  const { economics } = useEconomics();
+  const [votes, setVotes] = useState(1);
 
-  useEffect(() => {
-    if (isUiPreview || !process.env.NEXT_PUBLIC_BACKEND_URL) {
-      return;
-    }
-
-    let cancelled = false;
-    (async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/user/economics`,
-        );
-        if (!response.ok) {
-          return;
-        }
-        const data = (await response.json()) as Economics;
-        if (
-          cancelled ||
-          !data.lamportsPerVote ||
-          !Array.isArray(data.batchSizes) ||
-          data.batchSizes.length === 0
-        ) {
-          return;
-        }
-        setEconomics({
-          lamportsPerVote: data.lamportsPerVote,
-          batchSizes: data.batchSizes,
-        });
-      } catch {
-        // Keep the published batch sizes if the API is down.
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  const perVote = formatSol(economics.lamportsPerVote);
+  const creatorTotal = votes * economics.lamportsPerVote;
+  const voterTotal = votes * economics.lamportsPerVotePayout;
 
   return (
-    <section id="pricing" className="relative bg-slate-950 py-20">
-      <div className="absolute top-0 right-0 left-0 h-1/3 bg-gradient-to-b from-slate-900 to-transparent" />
-
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="pricing" className="py-20 bg-slate-950">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          title="Pay per vote"
-          subtitle={`Each vote costs ${perVote} SOL. You pick the batch size, and that full amount is paid out to the validators who complete it.`}
+          title="Simple pricing"
+          subtitle="Creators pay $1 per vote. Voters earn $0.50 per vote. You always pay and get paid in SOL at the live rate."
           centered
           light
         />
 
-        <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-5">
-          {economics.batchSizes.map((size) => {
-            const total = size * economics.lamportsPerVote;
-            return (
-              <div
-                key={size}
-                className="flex h-full flex-col rounded-2xl border border-slate-700 bg-slate-800/50 p-6"
-              >
-                <p className="text-sm font-medium text-slate-400">Batch</p>
-                <h3 className="mt-2 text-3xl font-bold text-white">{size}</h3>
-                <p className="mt-1 text-sm text-slate-400">
-                  {size === 1 ? "vote" : "votes"}
-                </p>
-                <p className="mt-6 text-2xl font-bold text-white">{formatSol(total)} SOL</p>
-                <p className="mt-1 text-sm text-slate-400">{perVote} SOL each</p>
-                <ul className="mt-6 flex-1 space-y-3">
-                  <li className="flex items-start text-sm text-slate-300">
-                    <CheckCircle2 className="mt-0.5 mr-2 h-4 w-4 shrink-0 text-emerald-500" />
-                    Image comparison
-                  </li>
-                  <li className="flex items-start text-sm text-slate-300">
-                    <CheckCircle2 className="mt-0.5 mr-2 h-4 w-4 shrink-0 text-emerald-500" />
-                    Winner when the batch fills
-                  </li>
-                </ul>
-                <a href="/dashboard/new" className="mt-6 block">
-                  <Button fullWidth>Create a task</Button>
-                </a>
-              </div>
-            );
-          })}
+        <div className="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-2">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6">
+            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-violet-500/15 text-violet-400">
+              <Coins className="h-5 w-5" />
+            </div>
+            <p className="text-sm font-medium text-slate-400">Creators pay</p>
+            <p className="mt-2 text-3xl font-bold text-white">
+              {formatUsd(economics.usdPerVoteCreator)}
+              <span className="ml-2 text-base font-medium text-slate-400">per vote</span>
+            </p>
+            <p className="mt-2 text-sm text-cyan-400">
+              {formatUsdAndSol(economics.lamportsPerVote, economics.solUsd)}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6">
+            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400">
+              <Users className="h-5 w-5" />
+            </div>
+            <p className="text-sm font-medium text-slate-400">Voters earn</p>
+            <p className="mt-2 text-3xl font-bold text-white">
+              {formatUsd(economics.usdPerVoteVoter)}
+              <span className="ml-2 text-base font-medium text-slate-400">per vote</span>
+            </p>
+            <p className="mt-2 text-sm text-emerald-400">
+              {formatUsdAndSol(economics.lamportsPerVotePayout, economics.solUsd)}
+            </p>
+          </div>
         </div>
 
-        <p className="mx-auto mt-10 max-w-2xl text-center text-sm text-slate-400">
-          Devnet SOL for now. There is no monthly plan and no extra platform fee on the vote itself.
-        </p>
+        <div className="mx-auto mt-8 max-w-4xl rounded-2xl border border-slate-800 bg-slate-900/40 p-6 sm:p-8">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm font-medium text-slate-400">How many votes do you need?</p>
+              <p className="mt-1 text-xs text-slate-500">
+                {economics.minVotes}–{economics.maxVotes} votes · SOL at ${economics.solUsd.toFixed(2)}
+              </p>
+            </div>
+            <VoteCountControl value={votes} economics={economics} onChange={setVotes} />
+          </div>
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            <div className="rounded-xl border border-slate-800 bg-slate-950/60 px-4 py-4">
+              <p className="text-xs uppercase tracking-wide text-slate-500">You pay</p>
+              <p className="mt-1 text-lg font-semibold text-white">
+                {formatUsdAndSol(creatorTotal, economics.solUsd)}
+              </p>
+            </div>
+            <div className="rounded-xl border border-slate-800 bg-slate-950/60 px-4 py-4">
+              <p className="text-xs uppercase tracking-wide text-slate-500">Voters earn in total</p>
+              <p className="mt-1 text-lg font-semibold text-emerald-400">
+                {formatUsdAndSol(voterTotal, economics.solUsd)}
+              </p>
+            </div>
+          </div>
+
+          <p className="mt-4 text-sm text-slate-400">
+            Wallet transfers stay in SOL. USD is the list price, converted at the current Solana rate.
+          </p>
+
+          <div className="mt-6">
+            <Button size="lg" onClick={() => router.push("/creator/new")}>
+              Create a task
+            </Button>
+          </div>
+        </div>
       </div>
     </section>
   );

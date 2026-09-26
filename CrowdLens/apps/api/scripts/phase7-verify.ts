@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { prismaClient } from "db/client";
 import { env } from "../src/env";
 import { getNextTask } from "../src/db";
-import { priceFor } from "../src/economics";
+import { quotedPriceFor } from "../src/economics";
 import { submitVote } from "../src/taskLifecycle";
 
 const API = `http://localhost:${env.PORT}`;
@@ -30,7 +30,7 @@ async function createOpenTask(userId: number, requiredSubmissions: number, signa
       title: `phase7-${requiredSubmissions}-${signature}`,
       user_id: userId,
       signature,
-      amount: priceFor(requiredSubmissions),
+      amount: await quotedPriceFor(requiredSubmissions),
       required_submissions: requiredSubmissions,
       options: {
         create: [

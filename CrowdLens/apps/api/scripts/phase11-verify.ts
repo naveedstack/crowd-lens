@@ -1,6 +1,6 @@
 import { prismaClient } from "db/client";
 import { env } from "../src/env";
-import { priceFor } from "../src/economics";
+import { quotedPriceFor } from "../src/economics";
 import { DEMO_CREATOR_ADDRESS, seedDemo } from "./seed-demo";
 
 const API = `http://localhost:${env.PORT}`;
@@ -86,7 +86,7 @@ async function main() {
       title: "phase11-pilot",
       user_id: creator.id,
       signature: `p11-task-${stamp}`,
-      amount: priceFor(2),
+      amount: await quotedPriceFor(2),
       required_submissions: 2,
       done: true,
       options: {

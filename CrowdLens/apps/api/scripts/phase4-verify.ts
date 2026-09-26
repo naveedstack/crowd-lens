@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { prismaClient } from "db/client";
 import { env } from "../src/env";
 import { getNextTask, parseExcludeIds } from "../src/db";
-import { priceFor } from "../src/economics";
+import { quotedPriceFor, rewardFor } from "../src/economics";
 
 const API = `http://localhost:${env.PORT}`;
 const stamp = Date.now();
@@ -29,7 +29,7 @@ async function createOpenTask(userId: number, requiredSubmissions: number, signa
       title: `phase4-${requiredSubmissions}-${signature}`,
       user_id: userId,
       signature,
-      amount: priceFor(requiredSubmissions),
+      amount: await quotedPriceFor(requiredSubmissions),
       required_submissions: requiredSubmissions,
       options: {
         create: [
@@ -97,7 +97,8 @@ async function main() {
   assert(firstTask, "nextTask should return an open task");
   assert(firstTask.submission_count === 0, "new task submission_count should be 0");
   assert(firstTask.required_submissions === 5, "batch size should be 5");
-  assert(firstTask.reward === 1_000_000, "reward should be 0.001 SOL in lamports");
+  const expectedReward = rewardFor(taskA.amount, taskA.required_submissions);
+  assert(firstTask.reward === expectedReward, `reward should be half of creator per-vote, got ${firstTask.reward}`);
 
   const skipped = await workerGet(`/nextTask?exclude=${firstTask.id}`, token);
   const skippedTask = skipped.body.task as { id: number } | null;
@@ -109,7 +110,12 @@ async function main() {
   const listRows = listed.body.tasks as Array<{ id: number; reward: number }>;
   assert(listRows.some((row) => row.id === taskA.id), "list should include task A");
   assert(listRows.some((row) => row.id === taskB.id), "list should include task B");
-  assert(listRows.every((row) => row.reward === 1_000_000), "list rewards should be 0.001 SOL");
+  assert(
+    listRows
+      .filter((row) => row.id === taskA.id || row.id === taskB.id)
+      .every((row) => row.reward === expectedReward),
+    "list rewards should be half of creator per-vote",
+  );
 
   const detail = await workerGet(`/task?taskId=${taskB.id}`, token);
   assert(detail.status === 200, `task detail HTTP ${detail.status}`);
@@ -155,10 +161,10 @@ async function main() {
   const stats = await workerGet("/stats", token);
   assert(stats.status === 200, `stats HTTP ${stats.status}`);
   assert(stats.body.votesSubmitted === 1, "votesSubmitted should be 1");
-  assert(stats.body.totalEarned === 1_000_000, "totalEarned should include this vote");
-  assert(stats.body.unsettledBal === 1_000_000, "open batch should credit unsettled until close");
+  assert(stats.body.totalEarned === expectedReward, "totalEarned should include this vote");
+  assert(stats.body.unsettledBal === expectedReward, "open batch should credit unsettled until close");
   assert(stats.body.pendingBal === 0, "pending should stay 0 until the batch closes");
-  assert(stats.body.minPayout === 1_000_000, "minPayout should match lamports per vote");
+  assert(stats.body.minPayout === expectedReward, "minPayout should match one voter payout");
 
   const submissions = await workerGet("/submissions", token);
   assert(submissions.status === 200, `submissions HTTP ${submissions.status}`);
@@ -175,7 +181,7 @@ async function main() {
 
   const balance = await workerGet("/balance", token);
   assert(balance.status === 200, `balance HTTP ${balance.status}`);
-  assert(balance.body.unsettledBal === 1_000_000, "GET /balance should show unsettled on an open batch");
+  assert(balance.body.unsettledBal === expectedReward, "GET /balance should show unsettled on an open batch");
   assert(balance.body.pendingBal === 0, "GET /balance pending should stay 0 until close");
 
   const payouts = await workerGet("/payouts", token);

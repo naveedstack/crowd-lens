@@ -19,10 +19,12 @@ services:
         value: 8080
       - key: RPC_URL
         value: https://api.devnet.solana.com
-      - key: LAMPORTS_PER_VOTE
-        value: "1000000"
-      - key: TASK_BATCH_SIZES
-        value: "1,5,20,50,100"
+      - key: SOL_USD_FALLBACK
+        value: "120"
+      - key: TASK_MIN_VOTES
+        value: "1"
+      - key: TASK_MAX_VOTES
+        value: "100"
       - key: JWT_SECRET
         sync: false
       - key: WORKER_JWT_SECRET

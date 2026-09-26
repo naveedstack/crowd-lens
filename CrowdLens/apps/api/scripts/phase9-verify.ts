@@ -3,7 +3,7 @@ import { OptionType } from "@prisma/client";
 import { prismaClient } from "db/client";
 import { env } from "../src/env";
 import { getNextTask } from "../src/db";
-import { priceFor } from "../src/economics";
+import { quotedPriceFor } from "../src/economics";
 import { createTaskSchema } from "../src/types";
 
 const API = `http://localhost:${env.PORT}`;
@@ -105,7 +105,7 @@ async function main() {
       title: "phase9-caption-hidden",
       user_id: creator.id,
       signature: `p9-caption-${stamp}`,
-      amount: priceFor(1),
+      amount: await quotedPriceFor(1),
       required_submissions: 1,
       options: {
         create: [

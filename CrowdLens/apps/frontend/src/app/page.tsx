@@ -2,8 +2,8 @@ import Navbar from '../components/Navbar';
 import HeroSection from '../sections/HeroSection';
 import FeaturesSection from '../sections/FeaturesSection';
 import HowItWorksSection from '../sections/HowItWorksSection';
-import TestimonialsSection from '../sections/TestimonialsSection';
 import PricingSection from '../sections/PricingSection';
+import TestimonialsSection from '../sections/TestimonialsSection';
 import FAQSection from '../sections/FAQSection';
 import CTASection from '../sections/CTASection';
 import Footer from '../components/Footer';
@@ -17,8 +17,8 @@ function App() {
         <HeroSection />
         <FeaturesSection />
         <HowItWorksSection />
-        <TestimonialsSection />
         <PricingSection />
+        <TestimonialsSection />
         <FAQSection />
         <CTASection />
       </main>

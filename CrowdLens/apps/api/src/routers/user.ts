@@ -12,7 +12,16 @@ import { env } from "../env";
 import { isUniqueConstraintError, sendError } from "../http";
 import { issueNonce, verifySignedNonce } from "../auth/nonce";
 import { authRateLimit, exportRateLimit, presignRateLimit } from "../rateLimit";
-import { economicsPayload, isAllowedBatchSize, isOnchainSettlement, priceFor, TREASURY_ADDRESS } from "../economics";
+import {
+    acceptQuotedCreatorLamports,
+    economicsPayload,
+    getVoteQuote,
+    isAllowedBatchSize,
+    isOnchainSettlement,
+    priceFor,
+    TREASURY_ADDRESS,
+    voteCountBounds,
+} from "../economics";
 import { exportRowsToCsv, exportTaskVotes, taskAnalytics } from "../analytics";
 import { verifyTaskPayment } from "../solana/payment";
 import { verifyCreateTask } from "../solana/verifyCreateTask";
@@ -43,8 +52,8 @@ interface VoteRow {
     option: Option;
 }
 
-router.get("/economics", (_req, res) => {
-    res.json(economicsPayload());
+router.get("/economics", async (_req, res) => {
+    res.json(await economicsPayload());
 });
 
 router.get("/task/onchain-params", authMiddleware, async (req, res) => {
@@ -64,11 +73,21 @@ router.get("/task/onchain-params", authMiddleware, async (req, res) => {
 
     const requiredSubmissions = Number(req.query.requiredSubmissions);
     if (!isAllowedBatchSize(requiredSubmissions)) {
-        sendError(res, 400, "Invalid batch size", { allowed: economicsPayload().batchSizes });
+        sendError(res, 400, "Invalid vote count", voteCountBounds());
         return;
     }
 
-    const amount = priceFor(requiredSubmissions);
+    const quote = await getVoteQuote();
+    const quoted = Number(req.query.quotedLamportsPerVote);
+    const accepted = acceptQuotedCreatorLamports(
+        Number.isInteger(quoted) && quoted > 0 ? quoted : undefined,
+        quote.creatorLamports,
+    );
+    if (!accepted.ok) {
+        sendError(res, 400, accepted.error);
+        return;
+    }
+    const amount = priceFor(requiredSubmissions, accepted.lamports);
     const programId = env.CROWDLENS_PROGRAM_ID;
     const nonce = await fetchCreatorNonce(user.address);
     const [taskPda] = findTaskPda(new PublicKey(user.address), nonce, new PublicKey(programId));
@@ -263,7 +282,7 @@ router.post("/task", authMiddleware, async (req, res) => {
 
     const requiredSubmissionsEarly = Number((req.body as { requiredSubmissions?: unknown })?.requiredSubmissions);
     if (!isAllowedBatchSize(requiredSubmissionsEarly)) {
-        sendError(res, 400, "Invalid batch size", { allowed: economicsPayload().batchSizes });
+        sendError(res, 400, "Invalid vote count", voteCountBounds());
         return;
     }
     
@@ -276,11 +295,20 @@ router.post("/task", authMiddleware, async (req, res) => {
 
     const requiredSubmissions = parsedBody.data.requiredSubmissions;
     if (!isAllowedBatchSize(requiredSubmissions)) {
-        sendError(res, 400, "Invalid batch size", { allowed: economicsPayload().batchSizes });
+        sendError(res, 400, "Invalid vote count", voteCountBounds());
         return;
     }
 
-    const expectedLamports = priceFor(requiredSubmissions);
+    const quote = await getVoteQuote();
+    const accepted = acceptQuotedCreatorLamports(
+        parsedBody.data.quotedLamportsPerVote,
+        quote.creatorLamports,
+    );
+    if (!accepted.ok) {
+        sendError(res, 400, accepted.error);
+        return;
+    }
+    const expectedLamports = priceFor(requiredSubmissions, accepted.lamports);
     const transaction = await getConfirmedTransaction(parsedBody.data.signature);
 
     if (!transaction) {

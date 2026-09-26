@@ -11,7 +11,7 @@ import { issueNonce, verifySignedNonce } from "../auth/nonce";
 import { authRateLimit, payoutRateLimit, submissionRateLimit } from "../rateLimit";
 import { submitVote } from "../taskLifecycle";
 import { executePayout } from "../payouts/engine";
-import { LAMPORTS_PER_VOTE } from "../economics";
+import { minPayoutLamports } from "../economics";
 import { assertVoteAllowed } from "../sybil";
 import { settleEscrow } from "../solana/escrow";
 
@@ -222,7 +222,7 @@ router.get("/balance", workerAuthMiddleware, async (req, res) => {
         reputation: worker?.reputation ?? 50,
         alignedVotes: worker?.aligned_votes ?? 0,
         outlierVotes: worker?.outlier_votes ?? 0,
-        minPayout: LAMPORTS_PER_VOTE,
+        minPayout: await minPayoutLamports(),
     })
 })
 
@@ -295,7 +295,7 @@ router.get("/stats", workerAuthMiddleware, async (req, res) => {
         pendingBal: worker?.pending_amount ?? 0,
         lockedBal: worker?.locked_amount ?? 0,
         unsettledBal: worker?.unsettled_amount ?? 0,
-        minPayout: LAMPORTS_PER_VOTE,
+        minPayout: await minPayoutLamports(),
         votesSubmitted,
         totalEarned: earned._sum.amount ?? 0,
         reputation: worker?.reputation ?? 50,

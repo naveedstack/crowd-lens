@@ -2,10 +2,9 @@ import { randomUUID } from "node:crypto";
 import { TxnStatus } from "@prisma/client";
 import { prismaClient } from "db/client";
 import { HttpError } from "../http";
-import { LAMPORTS_PER_VOTE } from "../economics";
+import { minPayoutLamports } from "../economics";
 import { confirmPayout, sendPayout, signatureStatus } from "../solana/treasury";
 
-export const MIN_PAYOUT_LAMPORTS = LAMPORTS_PER_VOTE;
 const PLACEHOLDER_PREFIX = "pending:";
 const PLACEHOLDER_STALE_MS = 2 * 60 * 1000;
 
@@ -14,6 +13,7 @@ export function isPlaceholderSignature(signature: string): boolean {
 }
 
 export async function lockPendingForPayout(workerId: number) {
+  const minPayout = await minPayoutLamports();
   return prismaClient.$transaction(async (tx) => {
     await tx.$queryRaw`SELECT id FROM "Worker" WHERE id = ${workerId} FOR UPDATE`;
 
@@ -29,7 +29,7 @@ export async function lockPendingForPayout(workerId: number) {
       throw new HttpError(409, "Payout already in progress");
     }
 
-    if (worker.pending_amount < MIN_PAYOUT_LAMPORTS) {
+    if (worker.pending_amount < minPayout) {
       throw new HttpError(400, "Below minimum withdrawal");
     }
 

@@ -18,29 +18,23 @@ const CTASection: React.FC = () => {
           </h2>
           
           <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
-            Upload your images, pay per vote, and see which option people actually choose.
+            Upload your images and see which option people actually choose.
           </p>
           
           <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-12">
-            <a href="/dashboard/new">
+            <a href="/creator/new">
               <Button size="lg" className="px-8">
                 Create a task
               </Button>
             </a>
-            {process.env.NEXT_PUBLIC_WORKER_URL ? (
-              <a href={process.env.NEXT_PUBLIC_WORKER_URL}>
-                <Button variant="outline" size="lg">
-                  Vote as a validator
-                </Button>
-              </a>
-            ) : null}
+            <a href="/voter">
+              <Button variant="outline" size="lg">
+                Vote as a validator
+              </Button>
+            </a>
           </div>
 
-          <div className="mx-auto grid max-w-3xl grid-cols-1 gap-4 text-left sm:grid-cols-3">
-            <div className="rounded-xl border border-slate-700 bg-slate-800/50 p-4">
-              <p className="text-sm text-slate-400">Price</p>
-              <p className="mt-1 font-medium text-white">Pay per vote</p>
-            </div>
+          <div className="mx-auto grid max-w-3xl grid-cols-1 gap-4 text-left sm:grid-cols-2">
             <div className="rounded-xl border border-slate-700 bg-slate-800/50 p-4">
               <p className="text-sm text-slate-400">Task</p>
               <p className="mt-1 font-medium text-white">Image comparison</p>

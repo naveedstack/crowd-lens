@@ -13,7 +13,7 @@ const envSchema = z.object({
   AWS_SECRET_ACCESS_KEY: z.string().min(1, "AWS_SECRET_ACCESS_KEY is required"),
   AWS_REGION: z.string().min(1, "AWS_REGION is required"),
   PORT: z.coerce.number().int().positive().default(8080),
-  CORS_ORIGIN: z.string().min(1).default("http://localhost:3000,http://localhost:3001"),
+  CORS_ORIGIN: z.string().min(1).default("http://localhost:3000"),
   TREASURY_ADDRESS: z
     .string()
     .default(DEFAULT_TREASURY)
@@ -26,6 +26,10 @@ const envSchema = z.object({
       }
     }, "TREASURY_ADDRESS must be a valid Solana address"),
   LAMPORTS_PER_VOTE: z.coerce.number().int().positive().default(1_000_000),
+  SOL_USD_FALLBACK: z.coerce.number().positive().default(120),
+  PRICE_QUOTE_TOLERANCE: z.coerce.number().min(0).max(1).default(0.15),
+  TASK_MIN_VOTES: z.coerce.number().int().min(1).default(1),
+  TASK_MAX_VOTES: z.coerce.number().int().min(1).default(100),
   TREASURY_SECRET_KEY: z
     .string()
     .min(1, "TREASURY_SECRET_KEY is required")
@@ -55,25 +59,6 @@ const envSchema = z.object({
         return z.NEVER;
       }
     }),
-  TASK_BATCH_SIZES: z
-    .string()
-    .default("1,5,20,50,100")
-    .transform((raw) => {
-      const sizes = [
-        ...new Set(
-          raw
-            .split(",")
-            .map((part) => Number(part.trim()))
-            .filter((n) => Number.isInteger(n) && n > 0),
-        ),
-      ].sort((a, b) => a - b);
-
-      if (sizes.length === 0) {
-        throw new Error("TASK_BATCH_SIZES must include at least one positive integer");
-      }
-
-      return sizes;
-    }),
   WALLET_MIN_SIGNATURES: z.coerce.number().int().min(0).default(0),
   EXPORT_SALT: z.string().optional(),
   SETTLEMENT_MODE: z.enum(["custodial", "onchain"]).default("custodial"),
@@ -95,6 +80,11 @@ const parsed = envSchema.safeParse(process.env);
 if (!parsed.success) {
   console.error("Invalid environment variables:");
   console.error(parsed.error.flatten().fieldErrors);
+  process.exit(1);
+}
+
+if (parsed.data.TASK_MAX_VOTES < parsed.data.TASK_MIN_VOTES) {
+  console.error("TASK_MAX_VOTES must be greater than or equal to TASK_MIN_VOTES");
   process.exit(1);
 }
 

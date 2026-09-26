@@ -2,16 +2,16 @@
 
 import React, { useEffect, useState } from 'react';
 import Button from '../components/Button';
-import { Youtube, Trophy, BarChart, Code } from 'lucide-react';
+import { Youtube, BarChart, Code } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from "next/navigation";
 import toast from 'react-hot-toast';
-import { isUiPreview } from '@/lib/ui-preview';
-import { getToken } from '@/lib/auth';
+import { useWallet } from "@solana/wallet-adapter-react";
 
 const HeroSection: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const router = useRouter();
+  const { publicKey } = useWallet();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -21,26 +21,21 @@ const HeroSection: React.FC = () => {
   }, []);
 
   const handleGetStarted = () => {
-    if (isUiPreview) {
-      router.push("/dashboard");
+    if (publicKey) {
+      router.push("/creator");
       return;
     }
 
-    const token = getToken();
-    if (token) {
-      router.push("/dashboard");
-    } else {
-      toast.error("Please connect wallet/sign in to continue", {
-        duration: 3000,
-        position: "top-center",
-        style: {
-          background: "#ef4444",
-          color: "#fff",
-          padding: "16px",
-          borderRadius: "8px",
-        },
-      });
-    }
+    toast.error("Please connect your wallet to continue", {
+      duration: 3000,
+      position: "top-center",
+      style: {
+        background: "#ef4444",
+        color: "#fff",
+        padding: "16px",
+        borderRadius: "8px",
+      },
+    });
   };
 
   return (
@@ -65,13 +60,11 @@ const HeroSection: React.FC = () => {
               <Button size="lg" onClick={handleGetStarted}>
                 Get Started Free
               </Button>
-              {process.env.NEXT_PUBLIC_WORKER_URL ? (
-                <a href={process.env.NEXT_PUBLIC_WORKER_URL}>
-                  <Button variant="outline" size="lg" className="w-full">
-                    Vote as a validator
-                  </Button>
-                </a>
-              ) : null}
+              <a href="/voter">
+                <Button variant="outline" size="lg" className="w-full">
+                  Vote as a validator
+                </Button>
+              </a>
             </div>
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-400">
               <span className="flex items-center">
@@ -81,10 +74,6 @@ const HeroSection: React.FC = () => {
               <span className="flex items-center">
                 <Code className="h-4 w-4 mr-1 text-red-500" />
                 For AI Builders
-              </span>
-              <span className="flex items-center">
-                <Trophy className="h-4 w-4 mr-1 text-amber-500" />
-                Pay per vote
               </span>
               <span className="flex items-center">
                 <BarChart className="h-4 w-4 mr-1 text-emerald-500" />

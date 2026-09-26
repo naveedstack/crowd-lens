@@ -4,7 +4,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "dev:ui": "turbo run dev --filter=frontend --filter=worker-frontend",
+    "dev:ui": "turbo run dev --filter=frontend",
     "db:migrate": "bun run --filter=db migrate",
     "db:migrate:dev": "bun run --filter=db migrate:dev",
     "db:generate": "bun run --filter=db generate",

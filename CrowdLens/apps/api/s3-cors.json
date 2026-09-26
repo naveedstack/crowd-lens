@@ -4,8 +4,7 @@
       "AllowedHeaders": ["*"],
       "AllowedMethods": ["GET", "PUT", "POST", "HEAD"],
       "AllowedOrigins": [
-        "http://localhost:3000",
-        "http://localhost:3001"
+        "http://localhost:3000"
       ],
       "ExposeHeaders": ["ETag", "Location"],
       "MaxAgeSeconds": 3000

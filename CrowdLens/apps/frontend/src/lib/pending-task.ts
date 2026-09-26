@@ -5,6 +5,7 @@ export type PendingTask = {
   title: string;
   images: string[];
   requiredSubmissions: number;
+  quotedLamportsPerVote?: number;
 };
 
 export function loadPendingTask(): PendingTask | null {
@@ -30,6 +31,8 @@ export function loadPendingTask(): PendingTask | null {
       title: parsed.title,
       images: parsed.images.filter((url): url is string => typeof url === "string"),
       requiredSubmissions: parsed.requiredSubmissions,
+      quotedLamportsPerVote:
+        typeof parsed.quotedLamportsPerVote === "number" ? parsed.quotedLamportsPerVote : undefined,
     };
   } catch {
     return null;

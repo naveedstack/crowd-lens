@@ -1,5 +1,5 @@
 import { prismaClient } from "db/client";
-import { priceFor } from "../src/economics";
+import { quotedPriceFor } from "../src/economics";
 
 /** Throwaway address so a tester's Phantom is never the task creator. */
 export const DEMO_CREATOR_ADDRESS = "CrowdLensDemoCreatorDoNotUse111111111111";
@@ -55,7 +55,7 @@ export async function seedDemo() {
   }
 
   const requiredSubmissions = 5;
-  const amount = priceFor(requiredSubmissions);
+  const amount = await quotedPriceFor(requiredSubmissions);
   let created = 0;
 
   for (const demo of DEMO_TASKS) {

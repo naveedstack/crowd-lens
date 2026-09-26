@@ -24,7 +24,7 @@ const FAQSection: React.FC = () => {
     },
     {
       question: "How is a task priced?",
-      answer: "You pay a fixed amount of SOL per vote and choose a batch size. The whole payment is split across the validators who complete that batch. There is no monthly subscription.",
+      answer: "Creators pay $1 per vote, converted to SOL at the live Solana price. Voters earn $0.50 per vote, also paid in SOL. You pick how many votes you need; wallet transfers stay on Solana.",
       isOpen: false,
     },
     {

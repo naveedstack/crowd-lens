@@ -3,7 +3,7 @@ import { prismaClient } from "db/client";
 import { env } from "../src/env";
 import { getNextTask } from "../src/db";
 import { HttpError, isUniqueConstraintError } from "../src/http";
-import { priceFor } from "../src/economics";
+import { quotedPriceFor, rewardFor } from "../src/economics";
 import { submitVote } from "../src/taskLifecycle";
 
 const API = `http://localhost:${env.PORT}`;
@@ -35,7 +35,7 @@ async function createOpenTask(
       title: `phase2-${requiredSubmissions}-${stamp}`,
       user_id: userId,
       signature,
-      amount: priceFor(requiredSubmissions),
+      amount: await quotedPriceFor(requiredSubmissions),
       required_submissions: requiredSubmissions,
       options: {
         create: [
@@ -54,11 +54,18 @@ async function main() {
   assert(economicsRes.ok, `economics HTTP ${economicsRes.status}`);
   const economics = await economicsRes.json() as {
     treasuryAddress: string;
+    usdPerVoteCreator: number;
+    usdPerVoteVoter: number;
     lamportsPerVote: number;
-    batchSizes: number[];
+    lamportsPerVotePayout: number;
+    minVotes: number;
+    maxVotes: number;
   };
-  assert(economics.lamportsPerVote === 1_000_000, "lamportsPerVote should be 1_000_000");
-  assert(economics.batchSizes.includes(1) && economics.batchSizes.includes(5), "batch sizes missing 1 or 5");
+  assert(economics.usdPerVoteCreator === 1, "creators should pay $1 per vote");
+  assert(economics.usdPerVoteVoter === 0.5, "voters should earn $0.50 per vote");
+  assert(economics.lamportsPerVote > 0, "lamportsPerVote should be converted from live SOL/USD");
+  assert(economics.lamportsPerVotePayout === Math.floor(economics.lamportsPerVote / 2), "voter payout should be half of creator pay-in");
+  assert(economics.minVotes === 1 && economics.maxVotes >= 1, "vote count range missing");
   console.log("ok economics", economics);
 
   const creator = await seedActor("user");
@@ -81,13 +88,13 @@ async function main() {
       options: [{ imageUrl: "https://example.com/a.png" }],
       title: "bad batch",
       signature: `missing-tx-${stamp}`,
-      requiredSubmissions: 3,
+      requiredSubmissions: 101,
     }),
   });
   const badBatchBody = await badBatch.json() as { error?: string };
-  assert(badBatch.status === 400, `expected 400 for invalid batch, got ${badBatch.status}`);
-  assert(badBatchBody.error === "Invalid batch size", `unexpected error ${badBatchBody.error}`);
-  console.log("ok invalid batch size 400");
+  assert(badBatch.status === 400, `expected 400 for invalid vote count, got ${badBatch.status}`);
+  assert(badBatchBody.error === "Invalid vote count", `unexpected error ${badBatchBody.error}`);
+  console.log("ok invalid vote count 400");
 
   const oneVote = await createOpenTask(creator.id, 1, `phase2-one-${stamp}`);
   const winnerOption = oneVote.options[0];
@@ -100,14 +107,15 @@ async function main() {
       optionId: winnerOption.id,
     }),
   );
-  assert(reward === 1_000_000, `reward ${reward}`);
+  const expectedReward = rewardFor(oneVote.amount, oneVote.required_submissions);
+  assert(reward === expectedReward, `reward ${reward}`);
 
   const closed = await prismaClient.task.findUnique({ where: { id: oneVote.id } });
   assert(closed?.done === true, "1-vote task should be done");
   assert(closed?.winner_option_id === winnerOption.id, "winner should be the voted option");
 
   const workerRow = await prismaClient.worker.findUnique({ where: { id: worker.id } });
-  assert(workerRow?.pending_amount === 1_000_000, `pending_amount ${workerRow?.pending_amount}`);
+  assert(workerRow?.pending_amount === expectedReward, `pending_amount ${workerRow?.pending_amount}`);
 
   const resultsRes = await fetch(`${API}/api/v1/user/task?taskId=${oneVote.id}`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -147,7 +155,7 @@ async function main() {
         title: "dup",
         user_id: creator.id,
         signature: oneVote.signature,
-        amount: priceFor(1),
+        amount: await quotedPriceFor(1),
         required_submissions: 1,
       },
     });

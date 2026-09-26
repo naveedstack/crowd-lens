@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { prismaClient } from "db/client";
 import { env } from "../src/env";
-import { priceFor } from "../src/economics";
+import { quotedPriceFor } from "../src/economics";
 
 const API = `http://localhost:${env.PORT}`;
 const stamp = Date.now();
@@ -41,7 +41,7 @@ async function createTask(
       title: args.title,
       user_id: userId,
       signature: args.signature,
-      amount: priceFor(args.requiredSubmissions),
+      amount: await quotedPriceFor(args.requiredSubmissions),
       required_submissions: args.requiredSubmissions,
       done: args.done ?? false,
       options: {
@@ -138,7 +138,7 @@ async function main() {
   assert(listedOpen?.done === false, "open task should be Open");
   assert(listedOpen?.submission_count === 0, "new task has 0 votes");
   assert(listedOpen?.required_submissions === 5, "open task batch size");
-  assert(listedOpen?.amount === priceFor(5), "amount spent should match batch price");
+  assert(listedOpen?.amount === await quotedPriceFor(5), "amount spent should match batch price");
   assert(listedOpen?.thumbnail === "https://example.com/phase5-open.png", "thumbnail should be first option");
   assert(listedDone?.done === true, "closed task should be Done");
   assert(listedDone?.winner_option_id != null, "closed task should expose a winner");

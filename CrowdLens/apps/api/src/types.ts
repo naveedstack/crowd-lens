@@ -10,6 +10,7 @@ export const createTaskSchema = z.object({
     title: z.string().optional(),
     signature: z.string(),
     requiredSubmissions: z.coerce.number().int().positive(),
+    quotedLamportsPerVote: z.coerce.number().int().positive().optional(),
     optionType: z.enum(["image"]).optional().default("image"),
 }).superRefine((data, ctx) => {
     data.options.forEach((option, index) => {

@@ -12,8 +12,13 @@ const PEXELS_C =
 
 export const MOCK_ECONOMICS = {
   treasuryAddress: "5tm9oN2bpTxFdELx9ddcxjFG9HD4NQHdkdz3CYm25EQj",
-  lamportsPerVote: 1_000_000,
-  batchSizes: [1, 5, 20, 50, 100],
+  solUsd: 120,
+  usdPerVoteCreator: 1,
+  usdPerVoteVoter: 0.5,
+  lamportsPerVote: 8_333_333,
+  lamportsPerVotePayout: 4_166_666,
+  minVotes: 1,
+  maxVotes: 100,
   settlementMode: "custodial" as const,
   programId: null as string | null,
 };

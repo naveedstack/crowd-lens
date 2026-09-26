@@ -1,17 +1,18 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, BarChart3 } from 'lucide-react';
 import { WalletButton } from './WalletButton';
 import { useWallet } from "@solana/wallet-adapter-react";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import { isUiPreview } from '@/lib/ui-preview';
-import { clearToken, signInWithWallet } from '@/lib/auth';
+import { clearToken, hasValidSession, signInWithWallet } from '@/lib/auth';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { publicKey, signMessage } = useWallet();
+  const { publicKey, signMessage, connected } = useWallet();
+  const hadWallet = useRef(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,21 +30,25 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     if (isUiPreview) return;
 
-    if (!publicKey) {
-      clearToken();
+    if (connected && publicKey) {
+      hadWallet.current = true;
+      if (hasValidSession(publicKey.toBase58())) {
+        return;
+      }
+      if (!signMessage) {
+        return;
+      }
+      signInWithWallet(publicKey, signMessage).catch((err) => {
+        console.error("Login failed:", err);
+      });
       return;
     }
 
-    const handleSignMessageAndSend = async () => {
-      try {
-        await signInWithWallet(publicKey, signMessage);
-      } catch (err) {
-        console.error("Login failed:", err);
-      }
-    };
-
-    handleSignMessageAndSend();
-  }, [publicKey, signMessage])
+    if (hadWallet.current && !connected) {
+      clearToken();
+      hadWallet.current = false;
+    }
+  }, [connected, publicKey, signMessage]);
 
 
   return (
@@ -73,11 +78,11 @@ const Navbar: React.FC = () => {
             <a href="#how-it-works" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
               How It Works
             </a>
-            <a href="#testimonials" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
-              Results
-            </a>
             <a href="#pricing" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
               Pricing
+            </a>
+            <a href="#testimonials" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
+              Results
             </a>
             <a href="#faq" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
               FAQ
@@ -136,18 +141,18 @@ const Navbar: React.FC = () => {
             How It Works
           </a>
           <a
-            href="#testimonials"
-            className="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Results
-          </a>
-          <a
             href="#pricing"
             className="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800"
             onClick={() => setIsMenuOpen(false)}
           >
             Pricing
+          </a>
+          <a
+            href="#testimonials"
+            className="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Results
           </a>
           <a
             href="#faq"

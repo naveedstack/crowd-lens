@@ -1,6 +1,6 @@
 # Deploy CrowdLens (devnet)
 
-Grant reviewers need two public Next apps and one API. Network is **Solana devnet only**. Do not commit secrets.
+Grant reviewers need one public Next app and one API. Network is **Solana devnet only**. Do not commit secrets.
 
 Repo root for these files is `CrowdLens/`.
 
@@ -9,8 +9,8 @@ Repo root for these files is `CrowdLens/`.
 1. Create a Blueprint from [`render.yaml`](render.yaml), or a Docker web service with this Dockerfile and a Postgres 16 instance.
 2. Set `DATABASE_URL` from the Render database.
 3. Fill the `sync: false` env vars from [`apps/api/.env.example`](apps/api/.env.example).
-4. `CORS_ORIGIN` must be the two Vercel origins, comma-separated, **no trailing slash**:
-   `https://<creator>.vercel.app,https://<worker>.vercel.app`
+4. `CORS_ORIGIN` must be the Vercel origin, **no trailing slash**:
+   `https://<app>.vercel.app`
 5. Confirm `GET https://<api>/health` returns `{ "ok": true }`.
 6. From a machine with `DATABASE_URL` pointing at Render Postgres:
 
@@ -21,30 +21,22 @@ bun scripts/seed-demo.ts
 
 The API container already runs `prisma migrate deploy` on boot.
 
-## 2. Frontends (Vercel)
+## 2. Frontend (Vercel)
 
-Create **two** projects. Root directory:
+Create **one** project. Root directory: `apps/frontend` (port 3000 locally).
 
-| App | Root directory | Port locally |
-| --- | --- | --- |
-| Creator | `apps/frontend` | 3000 |
-| Worker | `apps/worker-frontend` | 3001 |
+Landing is `/`. Creators use `/creator`. Voters use `/voter`.
 
-Creator env:
+Env:
 
 - `NEXT_PUBLIC_BACKEND_URL` — Render API origin, no trailing slash (e.g. `https://crowdlens-api.onrender.com`)
 - `NEXT_PUBLIC_CLOUDFRONT_URL` — public S3 base (`https://crowd-lens-mvp.s3.ap-south-1.amazonaws.com`)
-- `NEXT_PUBLIC_WORKER_URL` — worker Vercel origin
-
-Worker env:
-
-- `NEXT_PUBLIC_BACKEND_URL` — same API origin
 
 Redeploy after env changes so `NEXT_PUBLIC_*` is baked in.
 
 ## 3. S3 CORS
 
-Presigned POST uploads run in the **browser**. On bucket `crowd-lens-mvp`, allow both Vercel origins:
+Presigned POST uploads run in the **browser**. On bucket `crowd-lens-mvp`, allow the Vercel origin:
 
 ```json
 [
@@ -52,8 +44,7 @@ Presigned POST uploads run in the **browser**. On bucket `crowd-lens-mvp`, allow
     "AllowedHeaders": ["*"],
     "AllowedMethods": ["GET", "PUT", "POST", "HEAD"],
     "AllowedOrigins": [
-      "https://<creator>.vercel.app",
-      "https://<worker>.vercel.app"
+      "https://<app>.vercel.app"
     ],
     "ExposeHeaders": ["ETag"],
     "MaxAgeSeconds": 3000
@@ -65,16 +56,16 @@ Local `http://localhost:3000` can stay in the same policy while developing.
 
 ## 4. Treasury
 
-Withdrawals send SOL from `TREASURY_SECRET_KEY` on **devnet**. Airdrop that wallet enough SOL that a 0.001 SOL payout plus fees succeeds (`https://faucet.solana.com`).
+Withdrawals send SOL from `TREASURY_SECRET_KEY` on **devnet**. Airdrop that wallet enough SOL that a $0.50 voter payout plus fees succeeds (`https://faucet.solana.com`).
 
 Keep a treasury airdrop only as fee payer / oracle signer. Do not switch this on mainnet.
 
 ## 5. Smoke test
 
-1. Open the worker URL, set Phantom to **devnet**, faucet if needed, connect, vote on a seeded demo task.
-2. Open the creator URL, connect a **different** wallet, create a 2-image task, pay 0.001 SOL (1-vote batch) or more.
+1. Open `/voter`, set Phantom to **devnet**, faucet if needed, connect, vote on a seeded demo task.
+2. Open `/creator`, connect a **different** wallet, create a 2-image task, pay **$1 in SOL** (1 vote) or more.
 3. The first wallet should then be able to vote on that new task (not its own).
-4. Worker **Withdraw** should land a devnet tx on the explorer.
+4. Voter **Withdraw** should land a devnet tx on the explorer.
 
 ## 6. On-chain escrow (optional, Phase 8)
 

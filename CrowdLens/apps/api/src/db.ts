@@ -1,6 +1,5 @@
 import { prismaClient } from "db/client";
 import { OptionType } from "@prisma/client";
-import { DEMO_CREATOR_ADDRESS, DEMO_SIGNATURE_PREFIX } from "../scripts/seed-demo";
 import { rewardFor } from "./economics";
 
 export function parseExcludeIds(raw: unknown): number[] {
@@ -37,10 +36,9 @@ function workerOpenTaskWhere(
     return {
         ...idFilter,
         done: false,
-        NOT: { signature: { startsWith: DEMO_SIGNATURE_PREFIX } },
         user: {
             address: {
-                notIn: [workerAddress, DEMO_CREATOR_ADDRESS],
+                not: workerAddress,
             },
         },
         submissions: {

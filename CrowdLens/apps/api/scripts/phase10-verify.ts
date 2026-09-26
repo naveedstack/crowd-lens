@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { createHash } from "node:crypto";
 import { prismaClient } from "db/client";
 import { env } from "../src/env";
-import { priceFor } from "../src/economics";
+import { quotedPriceFor } from "../src/economics";
 import { anonymizeWorkerId } from "../src/analytics";
 
 const API = `http://localhost:${env.PORT}`;
@@ -68,7 +68,7 @@ async function main() {
       title: "phase10-analytics",
       user_id: creator.id,
       signature: `p10-task-${stamp}`,
-      amount: priceFor(2),
+      amount: await quotedPriceFor(2),
       required_submissions: 2,
       done: true,
       options: {

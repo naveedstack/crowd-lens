@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import { prismaClient } from "db/client";
 import { env } from "../src/env";
-import { getNextTask } from "../src/db";
 import { DEMO_CREATOR_ADDRESS, DEMO_SIGNATURE_PREFIX, seedDemo } from "./seed-demo";
 
 const API = `http://localhost:${env.PORT}`;
@@ -51,30 +50,13 @@ async function main() {
   });
   assert(next.status === 200, `nextTask HTTP ${next.status}`);
   const body = await next.json() as { task: { id: number; title: string } | null };
-  if (body.task) {
-    const served = await prismaClient.task.findUnique({ where: { id: body.task.id } });
-    assert(served, "served task should exist");
-    assert(
-      !served.signature.startsWith(DEMO_SIGNATURE_PREFIX),
-      "worker queue must not serve seeded demo tasks",
-    );
-    assert(served.user_id !== first.creatorId, "worker queue must not serve the demo creator");
-  }
-
-  const liveOpen = await prismaClient.task.findMany({
-    where: {
-      done: false,
-      NOT: { signature: { startsWith: DEMO_SIGNATURE_PREFIX } },
-      user: { address: { not: DEMO_CREATOR_ADDRESS } },
-    },
-    select: { id: true },
-  });
-  const demoOnly = await getNextTask(
-    worker.id,
-    worker.address,
-    liveOpen.map((row) => row.id),
+  assert(body.task, "worker queue should include seeded demo tasks when no live tasks exist");
+  const served = await prismaClient.task.findUnique({ where: { id: body.task.id } });
+  assert(served, "served task should exist");
+  assert(
+    served.signature.startsWith(DEMO_SIGNATURE_PREFIX) || served.user_id === first.creatorId,
+    "with only demo inventory, nextTask should serve a demo task",
   );
-  assert(demoOnly == null, "seeded demo tasks must not fill the worker queue");
 
   console.log("ok phase6 health + seed + nextTask");
 }

@@ -4,7 +4,8 @@
       "AllowedHeaders": ["*"],
       "AllowedMethods": ["GET", "PUT", "POST", "HEAD"],
       "AllowedOrigins": [
-        "http://localhost:3000"
+        "http://localhost:3000",
+        "https://crowdlens-bay.vercel.app"
       ],
       "ExposeHeaders": ["ETag", "Location"],
       "MaxAgeSeconds": 3000

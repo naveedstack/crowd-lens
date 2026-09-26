@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { BarChart3, Twitter, Instagram, Mail, Linkedin } from 'lucide-react';
 
 const Footer: React.FC = () => {
@@ -38,8 +39,8 @@ const Footer: React.FC = () => {
               <li><a href="#features" className="text-slate-400 hover:text-white transition-colors text-sm">Features</a></li>
               <li><a href="#how-it-works" className="text-slate-400 hover:text-white transition-colors text-sm">How It Works</a></li>
               <li><a href="#pricing" className="text-slate-400 hover:text-white transition-colors text-sm">Pricing</a></li>
-              <li><a href="/stats" className="text-slate-400 hover:text-white transition-colors text-sm">Stats</a></li>
-              <li><a href="/case-studies" className="text-slate-400 hover:text-white transition-colors text-sm">Case Studies</a></li>
+              <li><Link href="/stats" className="text-slate-400 hover:text-white transition-colors text-sm">Stats</Link></li>
+              <li><Link href="/case-studies" className="text-slate-400 hover:text-white transition-colors text-sm">Case Studies</Link></li>
             </ul>
           </div>
 

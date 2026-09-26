@@ -24,4 +24,5 @@ pub struct TaskEscrow {
     pub vote_commitment: [u8; 32],
     pub chunks_paid: u32,
     pub settled: bool,
+    pub winner_option_id: u32,
 }

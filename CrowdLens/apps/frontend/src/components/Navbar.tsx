@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { Menu, X, BarChart3 } from 'lucide-react';
 import { WalletButton } from './WalletButton';
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -62,12 +63,12 @@ const Navbar: React.FC = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           <div className="flex items-center">
-            <a href="/" className="flex items-center space-x-2">
+            <Link href="/" className="flex items-center space-x-2">
               <BarChart3 className="h-8 w-8 text-violet-500" />
               <span className="text-xl font-bold bg-gradient-to-r from-violet-500 to-cyan-400 bg-clip-text text-transparent">
                 CrowdLens
               </span>
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
@@ -87,12 +88,12 @@ const Navbar: React.FC = () => {
             <a href="#faq" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
               FAQ
             </a>
-            <a href="/stats" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
+            <Link href="/stats" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
               Stats
-            </a>
-            <a href="/case-studies" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
+            </Link>
+            <Link href="/case-studies" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
               Case studies
-            </a>
+            </Link>
           </nav>
 
           {/* CTA Buttons */}
@@ -161,20 +162,20 @@ const Navbar: React.FC = () => {
           >
             FAQ
           </a>
-          <a
+          <Link
             href="/stats"
             className="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800"
             onClick={() => setIsMenuOpen(false)}
           >
             Stats
-          </a>
-          <a
+          </Link>
+          <Link
             href="/case-studies"
             className="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800"
             onClick={() => setIsMenuOpen(false)}
           >
             Case studies
-          </a>
+          </Link>
           <div className="px-3 pt-2">
             <WalletButton />
           </div>

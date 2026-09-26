@@ -137,6 +137,7 @@ export async function settleEscrow(taskId: number) {
         creator,
         nonce,
         voteCommitment: commitment,
+        winnerOptionId: task.winner_option_id ?? 0,
         programId: programId(),
       }),
     );
@@ -190,7 +191,7 @@ export async function settleEscrow(taskId: number) {
   }
 
   const afterPay = await fetchTaskEscrow(task.user.address, nonce);
-  if (afterPay.account && afterPay.account.remainingLamports === 0 && !afterPay.account.settled) {
+  if (afterPay.account && !afterPay.account.settled) {
     await sendIx(
       closeTaskInstruction({
         authority,

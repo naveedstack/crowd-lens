@@ -28,8 +28,16 @@ pub mod crowdlens {
         crate::instructions::create_task::handle_create_task(ctx, amount, required, nonce)
     }
 
-    pub fn commit_votes(ctx: Context<CommitVotes>, vote_commitment: [u8; 32]) -> Result<()> {
-        crate::instructions::commit_votes::handle_commit_votes(ctx, vote_commitment)
+    pub fn commit_votes(
+        ctx: Context<CommitVotes>,
+        vote_commitment: [u8; 32],
+        winner_option_id: u32,
+    ) -> Result<()> {
+        crate::instructions::commit_votes::handle_commit_votes(
+            ctx,
+            vote_commitment,
+            winner_option_id,
+        )
     }
 
     pub fn settle_chunk(ctx: Context<SettleChunk>, amounts: Vec<u64>) -> Result<()> {

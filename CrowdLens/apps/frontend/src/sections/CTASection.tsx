@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import Button from '../components/Button';
 
 const CTASection: React.FC = () => {
@@ -22,16 +23,16 @@ const CTASection: React.FC = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-12">
-            <a href="/creator/new">
+            <Link href="/creator/new">
               <Button size="lg" className="px-8">
                 Create a task
               </Button>
-            </a>
-            <a href="/voter">
+            </Link>
+            <Link href="/voter">
               <Button variant="outline" size="lg">
                 Vote as a validator
               </Button>
-            </a>
+            </Link>
           </div>
 
           <div className="mx-auto grid max-w-3xl grid-cols-1 gap-4 text-left sm:grid-cols-2">

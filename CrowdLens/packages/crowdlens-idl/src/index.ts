@@ -122,6 +122,7 @@ export function commitVotesInstruction(args: {
   creator: PublicKey;
   nonce: number;
   voteCommitment: Uint8Array;
+  winnerOptionId?: number;
   programId?: PublicKey;
 }): TransactionInstruction {
   if (args.voteCommitment.length !== 32) {
@@ -133,13 +134,15 @@ export function commitVotesInstruction(args: {
   return new TransactionInstruction({
     programId,
     keys: [
-      { pubkey: args.authority, isSigner: true, isWritable: false },
+      { pubkey: args.authority, isSigner: true, isWritable: true },
       { pubkey: config, isSigner: false, isWritable: false },
       { pubkey: task, isSigner: false, isWritable: true },
+      { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
     ],
     data: Buffer.concat([
       DISCRIMINATOR.commitVotes,
       Buffer.from(args.voteCommitment),
+      u32le(args.winnerOptionId ?? 0),
     ]),
   });
 }
@@ -164,9 +167,10 @@ export function settleChunkInstruction(args: {
   return new TransactionInstruction({
     programId,
     keys: [
-      { pubkey: args.authority, isSigner: true, isWritable: false },
+      { pubkey: args.authority, isSigner: true, isWritable: true },
       { pubkey: config, isSigner: false, isWritable: false },
       { pubkey: task, isSigner: false, isWritable: true },
+      { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
       ...args.workers.map((pubkey) => ({
         pubkey,
         isSigner: false,
@@ -193,10 +197,11 @@ export function closeTaskInstruction(args: {
   return new TransactionInstruction({
     programId,
     keys: [
-      { pubkey: args.authority, isSigner: true, isWritable: false },
+      { pubkey: args.authority, isSigner: true, isWritable: true },
       { pubkey: config, isSigner: false, isWritable: false },
       { pubkey: task, isSigner: false, isWritable: true },
       { pubkey: args.creator, isSigner: false, isWritable: true },
+      { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
     ],
     data: DISCRIMINATOR.closeTask,
   });
@@ -216,6 +221,7 @@ export type TaskEscrowAccount = {
   voteCommitment: Buffer;
   chunksPaid: number;
   settled: boolean;
+  winnerOptionId: number;
 };
 
 function hasPrefix(data: Buffer, prefix: Buffer): boolean {
@@ -245,6 +251,7 @@ export function decodeTaskEscrow(data: Buffer): TaskEscrowAccount | null {
     voteCommitment: Buffer.from(data.subarray(68, 100)),
     chunksPaid: data.readUInt32LE(100),
     settled: data[104] !== 0,
+    winnerOptionId: data.length >= 109 ? data.readUInt32LE(105) : 0,
   };
 }
 

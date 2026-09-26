@@ -1,9 +1,11 @@
 use anchor_lang::prelude::*;
 
-use crate::{constants::*, error::CrowdLensError, state::{Config, TaskEscrow}};
+use crate::{constants::*, error::CrowdLensError, state::Config};
+use super::task_account::{load_task, resize_task_if_needed, store_task, verify_task_pda};
 
 #[derive(Accounts)]
 pub struct SettleChunk<'info> {
+    #[account(mut)]
     pub authority: Signer<'info>,
     #[account(
         seeds = [CONFIG_SEED],
@@ -11,18 +13,20 @@ pub struct SettleChunk<'info> {
         has_one = authority @ CrowdLensError::Unauthorized
     )]
     pub config: Account<'info, Config>,
-    #[account(
-        mut,
-        seeds = [TASK_SEED, task.creator.as_ref(), &task.nonce.to_le_bytes()],
-        bump,
-        constraint = !task.settled @ CrowdLensError::AlreadySettled
-    )]
-    pub task: Account<'info, TaskEscrow>,
+    /// CHECK: task PDA is verified from on-chain bytes before payouts.
+    #[account(mut)]
+    pub task: UncheckedAccount<'info>,
+    pub system_program: Program<'info, System>,
 }
 
 pub fn handle_settle_chunk(ctx: Context<SettleChunk>, amounts: Vec<u64>) -> Result<()> {
+    verify_task_pda(&ctx.accounts.task)?;
+    resize_task_if_needed(&ctx.accounts.task, &ctx.accounts.authority.to_account_info())?;
+
+    let mut task = load_task(&ctx.accounts.task)?;
+    require!(!task.settled, CrowdLensError::AlreadySettled);
     require!(
-        ctx.accounts.task.vote_commitment != [0u8; 32],
+        task.vote_commitment != [0u8; 32],
         CrowdLensError::VotesNotCommitted
     );
     require!(
@@ -39,10 +43,7 @@ pub fn handle_settle_chunk(ctx: Context<SettleChunk>, amounts: Vec<u64>) -> Resu
         require!(*amount > 0, CrowdLensError::ZeroPayout);
         total = total.checked_add(*amount).ok_or(CrowdLensError::Overflow)?;
     }
-    require!(
-        total <= ctx.accounts.task.remaining_lamports,
-        CrowdLensError::Overpay
-    );
+    require!(total <= task.remaining_lamports, CrowdLensError::Overpay);
 
     let task_key = ctx.accounts.task.key();
     let task_info = ctx.accounts.task.to_account_info();
@@ -64,11 +65,10 @@ pub fn handle_settle_chunk(ctx: Context<SettleChunk>, amounts: Vec<u64>) -> Resu
         worker.add_lamports(*amount)?;
     }
 
-    let task = &mut ctx.accounts.task;
     task.remaining_lamports = task
         .remaining_lamports
         .checked_sub(total)
         .ok_or(CrowdLensError::Overflow)?;
     task.chunks_paid = task.chunks_paid.saturating_add(1);
-    Ok(())
+    store_task(&ctx.accounts.task, &task)
 }

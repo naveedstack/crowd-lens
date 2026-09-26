@@ -1,0 +1,5 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "cd ../.. && bun install && bun run --filter=db generate",
+  "buildCommand": "cd ../.. && bunx esbuild apps/api/src/main.ts --bundle --platform=node --format=cjs --outfile=apps/api/dist/server.cjs --external:@prisma/client"
+}

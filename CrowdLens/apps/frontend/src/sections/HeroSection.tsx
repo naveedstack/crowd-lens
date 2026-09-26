@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import Button from '../components/Button';
 import { Youtube, BarChart, Code } from 'lucide-react';
 import Image from 'next/image';
@@ -45,7 +46,7 @@ const HeroSection: React.FC = () => {
           <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="inline-flex items-center py-1 px-3 mb-6 bg-violet-900/30 border border-violet-700/50 rounded-full text-violet-400 text-sm font-medium">
               <span className="flex h-2 w-2 rounded-full bg-violet-400 mr-2"></span>
-              Powered by Solana x DePIN Network
+              Decentralized community-powered content oracle
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6">
               <span className="block text-4xl">Optimize Your Content with</span>
@@ -58,13 +59,13 @@ const HeroSection: React.FC = () => {
             </p>
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-8">
               <Button size="lg" onClick={handleGetStarted}>
-                Get Started Free
+                Get Started
               </Button>
-              <a href="/voter">
+              <Link href="/voter">
                 <Button variant="outline" size="lg" className="w-full">
                   Vote as a validator
                 </Button>
-              </a>
+              </Link>
             </div>
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-400">
               <span className="flex items-center">

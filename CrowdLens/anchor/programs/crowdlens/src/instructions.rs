@@ -3,6 +3,7 @@ pub mod create_task;
 pub mod commit_votes;
 pub mod settle_chunk;
 pub mod close_task;
+pub mod task_account;
 
 pub use initialize::*;
 pub use create_task::*;

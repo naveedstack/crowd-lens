@@ -6,7 +6,7 @@ pub enum CrowdLensError {
     Unauthorized,
     #[msg("Task nonce does not match the creator's next nonce")]
     BadNonce,
-    #[msg("Escrow amount must equal required votes times lamports per vote")]
+    #[msg("Escrow amount must be greater than zero")]
     BadAmount,
     #[msg("Vote commitment has already been set")]
     VotesAlreadyCommitted,
@@ -36,4 +36,6 @@ pub enum CrowdLensError {
     EscrowNotEmpty,
     #[msg("Required vote count must be greater than zero")]
     BadRequired,
+    #[msg("Task account is invalid")]
+    InvalidTask,
 }

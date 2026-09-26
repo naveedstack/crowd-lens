@@ -1,5 +1,5 @@
 import { prismaClient } from "db/client";
-import { SignInRole, SettleStatus } from "@prisma/client";
+import { SignInRole, SettleStatus, TxnStatus } from "@prisma/client";
 import { Router } from "express";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { workerAuthMiddleware } from "../middleware";
@@ -206,6 +206,14 @@ router.post("/submission", workerAuthMiddleware, submissionRateLimit, async (req
     })
 })
 
+async function lastSuccessfulPayout(workerId: number) {
+    return prismaClient.payouts.findFirst({
+        where: { worker_id: workerId, status: TxnStatus.Success },
+        orderBy: { created_at: "desc" },
+        select: { amount: true, signature: true },
+    });
+}
+
 router.get("/balance", workerAuthMiddleware, async (req, res) => {
     const userId = req.userId;
 
@@ -214,6 +222,7 @@ router.get("/balance", workerAuthMiddleware, async (req, res) => {
             id: Number(userId)
         }
     })
+    const lastPaid = userId === undefined ? null : await lastSuccessfulPayout(Number(userId));
 
     res.json({
         pendingBal: worker?.pending_amount ?? 0,
@@ -223,6 +232,8 @@ router.get("/balance", workerAuthMiddleware, async (req, res) => {
         alignedVotes: worker?.aligned_votes ?? 0,
         outlierVotes: worker?.outlier_votes ?? 0,
         minPayout: await minPayoutLamports(),
+        lastPaidLamports: lastPaid?.amount ?? 0,
+        lastPaidSignature: lastPaid?.signature ?? null,
     })
 })
 
@@ -278,7 +289,7 @@ router.get("/stats", workerAuthMiddleware, async (req, res) => {
         return;
     }
 
-    const [worker, votesSubmitted, earned] = await Promise.all([
+    const [worker, votesSubmitted, earned, lastPaid] = await Promise.all([
         prismaClient.worker.findUnique({
             where: { id: userId },
         }),
@@ -289,6 +300,7 @@ router.get("/stats", workerAuthMiddleware, async (req, res) => {
             where: { worker_id: userId },
             _sum: { amount: true },
         }),
+        lastSuccessfulPayout(userId),
     ]);
 
     res.json({
@@ -298,6 +310,8 @@ router.get("/stats", workerAuthMiddleware, async (req, res) => {
         minPayout: await minPayoutLamports(),
         votesSubmitted,
         totalEarned: earned._sum.amount ?? 0,
+        lastPaidLamports: lastPaid?.amount ?? 0,
+        lastPaidSignature: lastPaid?.signature ?? null,
         reputation: worker?.reputation ?? 50,
         alignedVotes: worker?.aligned_votes ?? 0,
         outlierVotes: worker?.outlier_votes ?? 0,

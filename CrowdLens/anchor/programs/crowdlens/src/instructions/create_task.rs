@@ -39,10 +39,7 @@ pub fn handle_create_task(
     nonce: u64,
 ) -> Result<()> {
     require!(required > 0, CrowdLensError::BadRequired);
-    let expected = (required as u64)
-        .checked_mul(LAMPORTS_PER_VOTE)
-        .ok_or(CrowdLensError::Overflow)?;
-    require!(amount == expected, CrowdLensError::BadAmount);
+    require!(amount > 0, CrowdLensError::BadAmount);
     require!(nonce == ctx.accounts.creator_stats.task_count, CrowdLensError::BadNonce);
 
     if ctx.accounts.creator_stats.creator == Pubkey::default() {
@@ -74,6 +71,7 @@ pub fn handle_create_task(
     task.vote_commitment = [0u8; 32];
     task.chunks_paid = 0;
     task.settled = false;
+    task.winner_option_id = 0;
 
     ctx.accounts.creator_stats.task_count = nonce
         .checked_add(1)

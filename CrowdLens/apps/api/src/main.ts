@@ -79,17 +79,23 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
     sendError(res, 500, "Internal server error");
 });
 
-async function start() {
+async function reconcileOnBoot() {
     try {
         await reconcileProcessingPayouts();
         await reconcileEscrowSettles();
     } catch (err) {
         console.error("Payout reconcile failed", err);
     }
-
-    app.listen(env.PORT, () => {
-        console.log(`API server running on http://localhost:${env.PORT}`);
-    });
 }
 
-start();
+export default app;
+
+if (process.env.VERCEL) {
+    void reconcileOnBoot();
+} else {
+    void reconcileOnBoot().finally(() => {
+        app.listen(env.PORT, () => {
+            console.log(`API server running on http://localhost:${env.PORT}`);
+        });
+    });
+}

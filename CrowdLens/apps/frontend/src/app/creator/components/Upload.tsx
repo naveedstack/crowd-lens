@@ -323,6 +323,7 @@ export const Upload = () => {
           <label className="text-sm font-medium text-slate-400">
             Image Options <span className="font-normal">({images.length}/{MAX_OPTIONS}, min {MIN_OPTIONS})</span>
           </label>
+          <p className="text-xs text-slate-500">Select several images at once. Only image files are accepted.</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {images.map((image, index) => (
               <div key={`${image}-${index}`} className="relative group rounded-lg overflow-hidden shadow-md border border-slate-800">
@@ -344,6 +345,7 @@ export const Upload = () => {
             {images.length < MAX_OPTIONS && (
               <UploadImage
                 disabled={loading}
+                maxFiles={MAX_OPTIONS - images.length}
                 onImageAdded={(imageUrl) => {
                   setImages((current) =>
                     current.length >= MAX_OPTIONS ? current : [...current, imageUrl],

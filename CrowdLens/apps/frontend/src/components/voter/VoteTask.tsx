@@ -98,14 +98,25 @@ export function VoteTask() {
       }
 
       const trimmed = comment.trim();
-      await api.post("/submission", {
+      const response = await api.post<{ amount?: number }>("/submission", {
         taskId: currentTask.id.toString(),
         selection: selectedOptionId.toString(),
         ...(trimmed ? { comment: trimmed.slice(0, COMMENT_MAX) } : {}),
       });
 
       notifyPayouts();
-      toast.success("Vote recorded");
+      const paid = typeof response.data.amount === "number" ? response.data.amount : 0;
+      if (paid > 0 && economics.settlementMode === "onchain") {
+        toast.success(
+          `Vote recorded. ${formatUsdAndSol(paid, economics.solUsd)} sent to your Devnet wallet.`,
+        );
+      } else if (paid > 0) {
+        toast.success(
+          `Vote recorded. ${formatUsdAndSol(paid, economics.solUsd)} added to pending.`,
+        );
+      } else {
+        toast.success("Vote recorded");
+      }
       router.push("/voter");
     } catch (err) {
       const message = axios.isAxiosError(err)
@@ -189,7 +200,7 @@ export function VoteTask() {
         {submitting && <span className="text-blue-500 animate-pulse">Submitting...</span>}
       </div>
       <p className="text-center text-sm text-slate-400 pt-3">
-        Rewards settle when the batch fills. Wait a few seconds before voting.
+        When this batch fills, ~$0.50 of Devnet SOL is sent to your connected wallet. Switch Phantom to Devnet to see it.
       </p>
       {error && <div className="max-w-xl mx-auto mt-4 text-center text-sm text-red-500">{error}</div>}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-8">

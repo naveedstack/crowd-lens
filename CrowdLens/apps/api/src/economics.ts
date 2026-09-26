@@ -85,6 +85,25 @@ export async function minPayoutLamports(): Promise<number> {
   return quote.voterLamports;
 }
 
+/** True when pending is a full voter payout, including a price move that still displays as $0.50. */
+export function pendingMeetsMinimum(
+  pendingLamports: number,
+  minLamports: number,
+  solUsd: number,
+): boolean {
+  if (!(pendingLamports > 0) || !(minLamports > 0)) {
+    return false;
+  }
+  if (pendingLamports >= minLamports) {
+    return true;
+  }
+  if (!(solUsd > 0)) {
+    return false;
+  }
+  const shownUsd = Math.round(((pendingLamports / LAMPORTS_PER_SOL) * solUsd) * 100) / 100;
+  return shownUsd >= VOTER_USD_PER_VOTE;
+}
+
 export function isOnchainSettlement() {
   return env.SETTLEMENT_MODE === "onchain";
 }

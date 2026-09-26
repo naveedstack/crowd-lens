@@ -82,7 +82,7 @@ async function main() {
   await expectFail(
     () =>
       program.methods
-        .createTask(new BN(amount + 1), required, new BN(1))
+        .createTask(new BN(0), required, new BN(1))
         .accounts({
           creator,
           config,
@@ -101,7 +101,7 @@ async function main() {
   await expectFail(
     () =>
       program.methods
-        .commitVotes([...voteCommitment])
+        .commitVotes([...voteCommitment], 0)
         .accounts({ authority: stranger.publicKey, config, task })
         .signers([stranger])
         .rpc(),
@@ -109,16 +109,17 @@ async function main() {
   );
 
   await program.methods
-    .commitVotes([...voteCommitment])
+    .commitVotes([...voteCommitment], 7)
     .accounts({ authority: creator, config, task })
     .rpc();
   const committed = await program.account.taskEscrow.fetch(task);
   assert.deepEqual(Buffer.from(committed.voteCommitment), voteCommitment);
+  assert.equal(committed.winnerOptionId, 7);
 
   await expectFail(
     () =>
       program.methods
-        .commitVotes([...Buffer.alloc(32, 9)])
+        .commitVotes([...Buffer.alloc(32, 9)], 7)
         .accounts({ authority: creator, config, task })
         .rpc(),
     /VotesAlreadyCommitted|custom program error/i,
@@ -162,6 +163,36 @@ async function main() {
   assert.equal(closed, null);
   const afterCreator = await provider.connection.getBalance(creator);
   assert.ok(afterCreator > beforeCreator, "rent should return to creator");
+
+  const partialNonce = 1;
+  const partialAmount = 2 * LAMPORTS_PER_VOTE;
+  const partialTask = taskPda(program.programId, creator, partialNonce);
+  await program.methods
+    .createTask(new BN(partialAmount), required, new BN(partialNonce))
+    .accounts({ creator, config, creatorStats, task: partialTask })
+    .rpc();
+  await program.methods
+    .commitVotes([...voteCommitment], 0)
+    .accounts({ authority: creator, config, task: partialTask })
+    .rpc();
+  await program.methods
+    .settleChunk([new BN(LAMPORTS_PER_VOTE)])
+    .accounts({ authority: creator, config, task: partialTask })
+    .remainingAccounts([
+      { pubkey: workerA.publicKey, isWritable: true, isSigner: false },
+    ])
+    .rpc();
+  const beforeSweep = await provider.connection.getBalance(creator);
+  await program.methods
+    .closeTask()
+    .accounts({ authority: creator, config, task: partialTask, creator })
+    .rpc();
+  const afterSweep = await provider.connection.getBalance(creator);
+  assert.ok(
+    afterSweep - beforeSweep >= LAMPORTS_PER_VOTE,
+    "platform share should return to the authority",
+  );
+  assert.equal(await provider.connection.getAccountInfo(partialTask), null);
 
   console.log("ok crowdlens escrow program");
 }

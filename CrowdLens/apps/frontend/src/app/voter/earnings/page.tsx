@@ -8,7 +8,8 @@ export default function EarningsPage() {
         Earnings
       </h1>
       <p className="mb-8 max-w-2xl text-slate-400">
-        Pending SOL can be withdrawn once it reaches one vote payout ($0.50 at the live SOL rate).
+        On-chain votes send ~$0.50 of Devnet SOL straight to the connected wallet. Switch Phantom
+        to Devnet to see it. Withdraw is only for leftover pending from older custodial tasks.
       </p>
       <EarningsStats />
       <PayoutHistory showEmpty />

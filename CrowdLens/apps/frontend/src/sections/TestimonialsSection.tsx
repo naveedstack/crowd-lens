@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import SectionHeading from "../components/SectionHeading";
 
 const points = [
@@ -38,9 +39,9 @@ const TestimonialsSection: React.FC = () => {
           ))}
         </div>
         <p className="mt-8 text-center">
-          <a href="/case-studies" className="text-sm text-violet-400 hover:text-violet-300">
+          <Link href="/case-studies" className="text-sm text-violet-400 hover:text-violet-300">
             View case studies
-          </a>
+          </Link>
         </p>
       </div>
     </section>

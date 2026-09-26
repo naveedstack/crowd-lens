@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { TaskList } from "./components/TaskList";
 
 export default function DashboardPage() {
@@ -12,12 +13,12 @@ export default function DashboardPage() {
             Open and finished batches. Open a task to see the winner, progress, and export.
           </p>
         </div>
-        <a
+        <Link
           href="/creator/new"
           className="inline-flex h-10 items-center justify-center rounded-lg bg-violet-600 px-4 text-sm font-medium text-white hover:bg-violet-500"
         >
           New task
-        </a>
+        </Link>
       </div>
       <TaskList />
     </div>

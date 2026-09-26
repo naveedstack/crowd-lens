@@ -17,6 +17,8 @@ type Stats = {
   minPayout: number;
   votesSubmitted: number;
   totalEarned: number;
+  lastPaidLamports?: number;
+  lastPaidSignature?: string | null;
   reputation: number;
   alignedVotes: number;
   outlierVotes: number;
@@ -111,9 +113,16 @@ export function EarningsStats() {
     return null;
   }
 
+  const onchain = economics.settlementMode === "onchain";
   const cards = [
     { label: "Total earned", value: formatUsdAndSol(stats.totalEarned, economics.solUsd) },
-    { label: "Pending", value: formatUsdAndSol(stats.pendingBal, economics.solUsd) },
+    {
+      label: onchain ? "Last paid to wallet" : "Pending",
+      value: formatUsdAndSol(
+        onchain ? stats.lastPaidLamports ?? 0 : stats.pendingBal,
+        economics.solUsd,
+      ),
+    },
     { label: "Settling", value: formatUsdAndSol(stats.unsettledBal, economics.solUsd) },
     { label: "Locked", value: formatUsdAndSol(stats.lockedBal, economics.solUsd) },
     { label: "Votes submitted", value: String(stats.votesSubmitted) },

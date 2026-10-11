@@ -62,9 +62,12 @@ async function main() {
     maxVotes: number;
   };
   assert(economics.usdPerVoteCreator === 1, "creators should pay $1 per vote");
-  assert(economics.usdPerVoteVoter === 0.5, "voters should earn $0.50 per vote");
+  assert(economics.usdPerVoteVoter === 0.8, "voters should earn $0.80 per vote");
   assert(economics.lamportsPerVote > 0, "lamportsPerVote should be converted from live SOL/USD");
-  assert(economics.lamportsPerVotePayout === Math.floor(economics.lamportsPerVote / 2), "voter payout should be half of creator pay-in");
+  assert(
+    economics.lamportsPerVotePayout === Math.floor((economics.lamportsPerVote * 4) / 5),
+    "voter payout should be 80% of creator pay-in",
+  );
   assert(economics.minVotes === 1 && economics.maxVotes >= 1, "vote count range missing");
   console.log("ok economics", economics);
 

@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from "uuid";
 import { env } from "../env";
 import { isUniqueConstraintError, sendError } from "../http";
 import { issueNonce, verifySignedNonce } from "../auth/nonce";
+import { issueTokenFromPeerSession } from "../auth/sessionExchange";
 import { authRateLimit, exportRateLimit, presignRateLimit } from "../rateLimit";
 import {
     acceptQuotedCreatorLamports,
@@ -50,6 +51,8 @@ interface Option {
 interface VoteRow {
     option_id: number;
     option: Option;
+    comment: string | null;
+    created_at: Date;
 }
 
 router.get("/economics", async (_req, res) => {
@@ -205,11 +208,20 @@ router.get("/task", authMiddleware, async (req, res) => {
         result[r.option_id].count++;
     })
 
+    const comments = responses
+        .filter((row) => Boolean(row.comment?.trim()))
+        .map((row) => ({
+            optionId: row.option_id,
+            comment: row.comment,
+            createdAt: row.created_at,
+        }));
+
     const analytics = await taskAnalytics(taskDetails.id);
 
     res.json({
         result,
         analytics,
+        comments,
         taskDetails: {
             title: taskDetails.title,
             done: taskDetails.done,
@@ -425,18 +437,24 @@ router.post("/signin/nonce", authRateLimit, async (req, res) => {
     await issueNonce(req, res, SignInRole.User);
 });
 
-router.post("/signin", authRateLimit, async (req, res) => {
-    await verifySignedNonce(req, res, SignInRole.User, env.JWT_SECRET, async (address) => {
-        const existing = await prismaClient.user.findUnique({
-            where: { address },
-        });
-        if (existing) {
-            return existing;
-        }
-        return prismaClient.user.create({
-            data: { address },
-        });
+async function ensureUser(address: string) {
+    const existing = await prismaClient.user.findUnique({
+        where: { address },
     });
+    if (existing) {
+        return existing;
+    }
+    return prismaClient.user.create({
+        data: { address },
+    });
+}
+
+router.post("/signin", authRateLimit, async (req, res) => {
+    await verifySignedNonce(req, res, SignInRole.User, env.JWT_SECRET, ensureUser);
+});
+
+router.post("/signin/from-session", authRateLimit, async (req, res) => {
+    await issueTokenFromPeerSession(req, res, env.WORKER_JWT_SECRET, env.JWT_SECRET, ensureUser);
 });
 
 function snippet(value: string, max = 80): string {

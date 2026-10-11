@@ -1,47 +1,34 @@
-import React from 'react';
-import Link from 'next/link';
-import Button from '../components/Button';
+import Link from "next/link";
+import Button from "../components/Button";
 
 const CTASection: React.FC = () => {
   return (
-    <section className="py-20 bg-gradient-to-b from-slate-900 to-slate-950 relative overflow-hidden">
-      {/* Decorative elements */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-violet-500 to-transparent opacity-30"></div>
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-violet-600 rounded-full filter blur-3xl opacity-10"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-600 rounded-full filter blur-3xl opacity-10"></div>
-      </div>
-
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-white">
-            Ready to Boost Your <span className="bg-gradient-to-r from-violet-500 to-cyan-400 bg-clip-text text-transparent">Content Performance</span>?
+    <section className="relative overflow-hidden py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-3xl rounded-2xl border border-slate-800 bg-slate-900 px-8 py-12 text-center">
+          <h2 className="font-display text-3xl font-bold text-white md:text-4xl">
+            Upload images. See which option people choose.
           </h2>
-          
-          <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
-            Upload your images and see which option people actually choose.
+          <p className="mx-auto mt-4 max-w-xl text-slate-400">
+            Image comparison tasks. Winner and export when the batch fills. Settled in Devnet SOL.
           </p>
-          
-          <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-12">
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <Link href="/creator/new">
-              <Button size="lg" className="px-8">
-                Create a task
-              </Button>
+              <Button size="lg">Create a task</Button>
             </Link>
-            <Link href="/voter">
+            <Link href="/validators">
               <Button variant="outline" size="lg">
                 Vote as a validator
               </Button>
             </Link>
           </div>
-
-          <div className="mx-auto grid max-w-3xl grid-cols-1 gap-4 text-left sm:grid-cols-2">
-            <div className="rounded-xl border border-slate-700 bg-slate-800/50 p-4">
-              <p className="text-sm text-slate-400">Task</p>
+          <div className="mx-auto mt-10 grid max-w-lg grid-cols-1 gap-4 text-left sm:grid-cols-2">
+            <div className="rounded-xl border border-slate-800 bg-slate-950 px-4 py-3">
+              <p className="text-sm text-slate-500">Task</p>
               <p className="mt-1 font-medium text-white">Image comparison</p>
             </div>
-            <div className="rounded-xl border border-slate-700 bg-slate-800/50 p-4">
-              <p className="text-sm text-slate-400">Result</p>
+            <div className="rounded-xl border border-slate-800 bg-slate-950 px-4 py-3">
+              <p className="text-sm text-slate-500">Result</p>
               <p className="mt-1 font-medium text-white">Winner and export</p>
             </div>
           </div>

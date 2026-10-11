@@ -25,7 +25,7 @@ The API container already runs `prisma migrate deploy` on boot.
 
 Create **one** project. Root directory: `apps/frontend` (port 3000 locally).
 
-Landing is `/`. Creators use `/creator`. Voters use `/voter`.
+Landing is `/`. Creators use `/creator`. Validators use `/validators` (guide) and `/validators/votes`.
 
 Env:
 
@@ -56,13 +56,13 @@ Local `http://localhost:3000` can stay in the same policy while developing.
 
 ## 4. Treasury
 
-Withdrawals send SOL from `TREASURY_SECRET_KEY` on **devnet**. Airdrop that wallet enough SOL that a $0.50 voter payout plus fees succeeds (`https://faucet.solana.com`).
+Withdrawals send SOL from `TREASURY_SECRET_KEY` on **devnet**. Airdrop that wallet enough SOL that a $0.80 voter payout plus fees succeeds (`https://faucet.solana.com`).
 
 Keep a treasury airdrop only as fee payer / oracle signer. Do not switch this on mainnet.
 
 ## 5. Smoke test
 
-1. Open `/voter`, set Phantom to **devnet**, faucet if needed, connect, vote on a seeded demo task.
+1. Open `/validators/votes`, set Phantom to **devnet**, faucet if needed, connect, vote on a seeded demo task.
 2. Open `/creator`, connect a **different** wallet, create a 2-image task, pay **$1 in SOL** (1 vote) or more.
 3. The first wallet should then be able to vote on that new task (not its own).
 4. Voter **Withdraw** should land a devnet tx on the explorer.

@@ -18,17 +18,17 @@ const PricingSection: React.FC = () => {
   const voterTotal = votes * economics.lamportsPerVotePayout;
 
   return (
-    <section id="pricing" className="py-20 bg-slate-950">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="pricing" className="py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           title="Simple pricing"
-          subtitle="Creators pay $1 per vote. Voters earn $0.50 per vote. You always pay and get paid in SOL at the live rate."
+          subtitle="Creators pay $1 per vote. Voters earn $0.80 per vote (80% of escrow). You always pay and get paid in SOL at the live rate."
           centered
           light
         />
 
         <div className="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-2">
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
             <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-violet-500/15 text-violet-400">
               <Coins className="h-5 w-5" />
             </div>
@@ -41,7 +41,7 @@ const PricingSection: React.FC = () => {
               {formatUsdAndSol(economics.lamportsPerVote, economics.solUsd)}
             </p>
           </div>
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
             <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400">
               <Users className="h-5 w-5" />
             </div>
@@ -56,7 +56,7 @@ const PricingSection: React.FC = () => {
           </div>
         </div>
 
-        <div className="mx-auto mt-8 max-w-4xl rounded-2xl border border-slate-800 bg-slate-900/40 p-6 sm:p-8">
+        <div className="mx-auto mt-8 max-w-4xl rounded-2xl border border-slate-800 bg-slate-900 p-6 sm:p-8">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-sm font-medium text-slate-400">How many votes do you need?</p>

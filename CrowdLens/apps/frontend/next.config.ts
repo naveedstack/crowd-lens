@@ -2,6 +2,14 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   transpilePackages: ["crowdlens-idl"],
+  async redirects() {
+    return [
+      { source: "/voter", destination: "/validators/votes", permanent: false },
+      { source: "/voter/task/:taskId", destination: "/validators/task/:taskId", permanent: false },
+      { source: "/voter/history", destination: "/validators/history", permanent: false },
+      { source: "/voter/earnings", destination: "/validators/earnings", permanent: false },
+    ];
+  },
   images: {
     remotePatterns: [
       {

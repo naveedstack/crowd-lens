@@ -1,0 +1,1787 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>CrowdLens Protocol | Solana Devnet Human Oracle</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-tint": "#d0bcff",
+            "on-background": "#dce1fb",
+            "on-tertiary-container": "#00311f",
+            "on-secondary-container": "#00424e",
+            "surface-container-low": "#151b2d",
+            "on-surface": "#dce1fb",
+            "surface": "#0c1324",
+            "surface-variant": "#2e3447",
+            "surface-container": "#191f31",
+            "error": "#ffb4ab",
+            "on-error": "#690005",
+            "on-secondary-fixed-variant": "#004e5c",
+            "primary-container": "#a078ff",
+            "outline": "#958ea0",
+            "on-surface-variant": "#cbc3d7",
+            "surface-bright": "#33394c",
+            "on-error-container": "#ffdad6",
+            "inverse-primary": "#6d3bd7",
+            "surface-dim": "#0c1324",
+            "on-secondary": "#003640",
+            "outline-variant": "#494454",
+            "on-primary-container": "#340080",
+            "primary": "#d0bcff",
+            "inverse-surface": "#dce1fb",
+            "on-tertiary": "#003824",
+            "inverse-on-surface": "#2a3043",
+            "surface-container-highest": "#2e3447",
+            "surface-container-lowest": "#070d1f",
+            "tertiary-container": "#00a572",
+            "error-container": "#93000a",
+            "on-tertiary-fixed-variant": "#005236",
+            "on-secondary-fixed": "#001f26",
+            "tertiary": "#4edea3",
+            "secondary-fixed": "#acedff",
+            "on-tertiary-fixed": "#002113",
+            "surface-container-high": "#23293c",
+            "on-primary": "#3c0091",
+            "background": "#0c1324",
+            "secondary": "#4cd7f6",
+            "secondary-fixed-dim": "#4cd7f6",
+            "on-primary-fixed": "#23005c",
+            "on-primary-fixed-variant": "#5516be",
+            "primary-fixed": "#e9ddff",
+            "primary-fixed-dim": "#d0bcff",
+            "tertiary-fixed": "#6ffbbe",
+            "tertiary-fixed-dim": "#4edea3",
+            "secondary-container": "#03b5d3"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          spacing: {
+            "space-lg": "1.5rem",
+            "space-xl": "2.5rem",
+            "margin-mobile": "1rem",
+            "space-sm": "0.5rem",
+            "space-xs": "0.25rem",
+            "gutter": "1.5rem",
+            "margin": "2rem",
+            "space-md": "1rem",
+            "gutter-mobile": "1rem"
+          },
+          fontFamily: {
+            "body-lg": ["Inter", "sans-serif"],
+            "label-caps": ["Inter", "sans-serif"],
+            "label-numeric": ["Inter", "sans-serif"],
+            "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+            "body-sm": ["Inter", "sans-serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "display-hero-mobile": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-sm": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+            "display-hero": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-lg-mobile": ["Plus Jakarta Sans", "sans-serif"]
+          },
+          fontSize: {
+            "body-lg": ["16px", { lineHeight: "26px", letterSpacing: "-0.005em", fontWeight: "400" }],
+            "label-caps": ["11px", { lineHeight: "16px", letterSpacing: "0.06em", fontWeight: "600" }],
+            "label-numeric": ["13px", { lineHeight: "18px", letterSpacing: "0.02em", fontWeight: "500" }],
+            "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "600" }],
+            "body-sm": ["12px", { lineHeight: "18px", letterSpacing: "0.01em", fontWeight: "400" }],
+            "body-md": ["14px", { lineHeight: "22px", letterSpacing: "0", fontWeight: "400" }],
+            "display-hero-mobile": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "headline-sm": ["18px", { lineHeight: "26px", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "headline-md": ["24px", { lineHeight: "32px", letterSpacing: "-0.015em", fontWeight: "600" }],
+            "display-hero": ["48px", { lineHeight: "56px", letterSpacing: "-0.03em", fontWeight: "700" }],
+            "headline-lg-mobile": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "600" }]
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    /* Custom subtle scrollbars and transitions */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #070d1f;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+    .gradient-heading {
+      background: linear-gradient(135deg, #d0bcff 0%, #4cd7f6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .pulse-ring {
+      box-shadow: 0 0 0 0 rgba(76, 215, 246, 0.4);
+      animation: pulse-ring 2s infinite cubic-bezier(0.66, 0, 0, 1);
+    }
+    @keyframes pulse-ring {
+      to {
+        box-shadow: 0 0 0 8px rgba(76, 215, 246, 0);
+      }
+    }
+    .custom-ring-violet {
+      box-shadow: 0 0 0 3px #a078ff;
+    }
+    .custom-glow-cyan {
+      box-shadow: 0 0 25px -5px rgba(76, 215, 246, 0.25);
+    }
+  </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface antialiased min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container font-body-md text-body-md overflow-x-hidden">
+<!-- ========================================== -->
+<!-- 0. PERSISTENT PROTOCOL TOP CONTROLLER / ROUTER -->
+<!-- ========================================== -->
+<header class="bg-surface-container-lowest border-b border-outline-variant py-2 px-space-md z-50 text-body-sm font-body-sm">
+<div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+<!-- Left cluster: Status pill and Mode tabs -->
+<div class="flex items-center gap-3 overflow-x-auto py-1">
+<div class="flex items-center gap-2 px-2.5 py-1 rounded bg-surface-container-high border border-outline-variant text-secondary font-label-caps text-label-caps">
+<span class="w-2 h-2 rounded-full bg-secondary pulse-ring"></span>
+<span>DEVNET CLUSTER: 1,842 TPS</span>
+</div>
+<span class="text-outline-variant">|</span>
+<div class="flex items-center space-x-1" id="screen-tabs">
+<button class="screen-nav-btn px-2.5 py-1 rounded text-primary font-medium bg-surface-container-high" data-tab="screen-landing" onclick="setScreen('screen-landing')">Overview</button>
+<button class="screen-nav-btn px-2.5 py-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container" data-tab="screen-stats" onclick="setScreen('screen-stats')">Metrics</button>
+<button class="screen-nav-btn px-2.5 py-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container" data-tab="screen-creator" onclick="setScreen('screen-creator')">Creator Hub</button>
+<button class="screen-nav-btn px-2.5 py-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container" data-tab="screen-create-task" onclick="setScreen('screen-create-task')">Create Task</button>
+<button class="screen-nav-btn px-2.5 py-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container" data-tab="screen-creator-detail" onclick="setScreen('screen-creator-detail')">Task Audit</button>
+<button class="screen-nav-btn px-2.5 py-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container" data-tab="screen-voter" onclick="setScreen('screen-voter')">Validator Feed</button>
+<button class="screen-nav-btn px-2.5 py-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container" data-tab="screen-vote-detail" onclick="setScreen('screen-vote-detail')">Cast Consensus</button>
+<button class="screen-nav-btn px-2.5 py-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container" data-tab="screen-voter-history" onclick="setScreen('screen-voter-history')">Vote Ledger</button>
+<button class="screen-nav-btn px-2.5 py-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container" data-tab="screen-voter-earnings" onclick="setScreen('screen-voter-earnings')">Validator Payouts</button>
+<button class="screen-nav-btn px-2.5 py-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container" data-tab="screen-case-studies" onclick="setScreen('screen-case-studies')">Case Studies</button>
+</div>
+</div>
+<!-- Right cluster: Viewport simulator & Devnet Sol Quick action -->
+<div class="flex items-center gap-2">
+<button class="text-secondary hover:text-on-surface font-label-caps text-label-caps flex items-center gap-1 bg-surface-container px-2.5 py-1 rounded border border-outline-variant hover:border-secondary transition-colors" onclick="triggerFaucetModal()">
+<span class="material-symbols-outlined text-[14px]">water_drop</span>
+<span>Need Devnet SOL?</span>
+</button>
+<button class="px-2.5 py-1 rounded bg-surface-container-high border border-outline-variant text-on-surface font-label-caps text-label-caps flex items-center gap-1.5 hover:bg-surface-variant" id="viewport-toggle-btn" onclick="toggleMobileViewport()">
+<span class="material-symbols-outlined text-[15px]" id="viewport-icon">smartphone</span>
+<span id="viewport-label">Mobile (390px)</span>
+</button>
+</div>
+</div>
+</header>
+<!-- ========================================== -->
+<!-- 1. SHARED COMPONENT: TopNavBar (Web Header) -->
+<!-- ========================================== -->
+<header class="bg-surface-container-low dark:bg-surface-container-low text-primary dark:text-primary docked full-width top-0 sticky z-40 border-b border-outline-variant dark:border-outline-variant">
+<div class="flex justify-between items-center w-full px-space-md md:px-margin max-w-7xl mx-auto h-16">
+<!-- Brand & Mark -->
+<div class="flex items-center gap-6">
+<a class="flex items-center gap-2.5 group" href="javascript:void(0)" onclick="setScreen('screen-landing')">
+<div class="w-9 h-9 rounded-lg bg-surface-container-high border border-outline-variant flex items-center justify-center text-primary group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-[20px] text-secondary">bar_chart</span>
+</div>
+<span class="text-headline-md font-headline-md font-bold tracking-tight text-on-surface dark:text-on-surface">CrowdLens</span>
+<span class="text-[10px] font-label-caps tracking-wider px-1.5 py-0.5 rounded bg-surface-container-highest text-secondary border border-outline-variant">DEVNET</span>
+</a>
+<!-- Desktop Navigation Links from JSON: Tasks, New Task, Votes, History, Earnings, Faucet -->
+<nav class="hidden md:flex items-center gap-6 ml-4" id="main-nav-links"><a class="nav-link text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface transition-colors pb-1 font-body-md text-body-md" href="#features">Features</a><a class="nav-link text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface transition-colors pb-1 font-body-md text-body-md" href="#how-it-works">How It Works</a><a class="nav-link text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface transition-colors pb-1 font-body-md text-body-md" href="#pricing-calculator">Pricing</a><a class="nav-link text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface transition-colors pb-1 font-body-md text-body-md" href="#results">Results</a><a class="nav-link text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface transition-colors pb-1 font-body-md text-body-md" data-dest="screen-stats" href="javascript:void(0)" onclick="setScreen('screen-stats')">Stats</a><button class="nav-link text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface transition-colors pb-1 font-body-md text-body-md" data-dest="screen-voter" onclick="setScreen('screen-voter')"><span class="material-symbols-outlined text-[16px]">how_to_vote</span>Validators</button><a class="nav-link text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface transition-colors pb-1 font-body-md text-body-md" href="#faq">FAQ</a><button class="nav-link text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface transition-colors pb-1 font-body-md text-body-md" onclick="triggerFaucetModal()">Faucet</button></nav>
+</div>
+<!-- Trailing actions: Notifications & Phantom Wallet pill -->
+<div class="flex items-center gap-3">
+<button class="p-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" onclick="showToast('No new on-chain alerts')" title="Notifications">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<!-- Dynamic Phantom Wallet Element -->
+<div class="relative" id="wallet-module">
+<button class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-surface-container border border-outline-variant hover:border-primary transition-all text-on-surface text-body-sm font-body-sm" id="wallet-btn" onclick="toggleWalletState()">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-mono text-body-sm font-body-sm" id="wallet-text">9wgk...ph8x</span>
+<span class="text-outline-variant">|</span>
+<span class="text-secondary font-label-numeric text-label-numeric font-medium" id="wallet-balance">14.28 DEV SOL</span>
+<span class="material-symbols-outlined text-[16px]">account_balance_wallet</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<!-- ========================================== -->
+<!-- TOAST NOTIFICATION STACK CONTAINER -->
+<!-- ========================================== -->
+<div class="fixed bottom-20 right-6 z-50 flex flex-col gap-2 pointer-events-none" id="toast-container"></div>
+<!-- ========================================== -->
+<!-- MAIN APP CANVAS / VIEWPORT WRAPPER -->
+<!-- Supports standard desktop max-w-7xl and 390px mobile simulation -->
+<!-- ========================================== -->
+<main class="flex-grow w-full max-w-7xl mx-auto px-space-md md:px-margin py-8 transition-all duration-300" id="app-canvas-container">
+<!-- **************************************** -->
+<!-- SCREEN 1: LANDING PAGE (/) -->
+<!-- **************************************** -->
+<section class="screen-view active-screen" id="screen-landing"><!-- Hero Bento Section with side-by-side A/B product preview and 80% unit economics --><div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mb-16"><div class="lg:col-span-7 bg-surface-container-low border border-outline-variant rounded-xl p-8 flex flex-col justify-between relative overflow-hidden"><div class="absolute -top-24 -right-24 w-72 h-72 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div><div><div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container border border-secondary/30 text-secondary font-label-caps text-label-caps mb-6"><span class="material-symbols-outlined text-[14px]">bolt</span>SUB-SECOND SOLANA HUMAN VERIFICATION</div><h1 class="text-display-hero font-display-hero font-extrabold tracking-tight text-on-surface mb-4">Real Humans Validate Your Content Before Launch.</h1><p class="text-on-surface-variant font-body-lg text-body-lg max-w-xl mb-6">CrowdLens creates instant decentralized human consensus on thumbnails, titles, and creative variants. Zero synthetic bias, verifiable payouts on Solana Devnet with an 80% validator reward pool.</p><div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container border border-tertiary/30 text-tertiary text-body-sm mb-6"><span class="material-symbols-outlined text-[16px]">payments</span><span>Transparent Unit Economics: <strong>$1.00 / vote</strong> creator fee → <strong>80% ($0.80)</strong> directly to validators</span></div></div><div class="flex flex-wrap items-center gap-4 pt-4 border-t border-outline-variant"><button class="px-5 py-2.5 rounded-lg bg-primary text-on-primary hover:bg-primary-container font-medium flex items-center gap-2 transition-all shadow-lg shadow-primary/20" onclick="setScreen('screen-create-task')"><span class="material-symbols-outlined text-[18px]">add_task</span><span>Deploy Creator Task</span></button><button class="px-5 py-2.5 rounded-lg bg-surface-container border border-outline-variant hover:border-secondary text-on-surface font-medium flex items-center gap-2 transition-all" onclick="setScreen('screen-voter')"><span class="material-symbols-outlined text-[18px]">how_to_vote</span><span>Earn $0.80 as Validator</span></button><a class="text-secondary hover:underline text-body-sm font-medium ml-auto flex items-center gap-1" href="#pricing-calculator"><span>Interactive Calculator</span><span class="material-symbols-outlined text-[16px]">arrow_forward</span></a></div></div><!-- Side-by-Side A/B Product Preview Tile --><div class="lg:col-span-5 bg-surface-container-low border border-outline-variant rounded-xl p-6 flex flex-col justify-between"><div class="flex justify-between items-center mb-4"><div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-secondary pulse-ring"></span><span class="text-label-caps font-label-caps text-secondary uppercase">Live Consensus In-Flight</span></div><span class="font-mono text-tertiary text-label-caps bg-tertiary/10 border border-tertiary/20 px-2 py-0.5 rounded">80% POOL ACTIVE</span></div><!-- Side-by-side A/B Cards --><div class="grid grid-cols-2 gap-3 mb-4"><div class="p-2.5 rounded-lg bg-surface-container border-2 border-primary relative"><span class="absolute top-1.5 right-1.5 px-1.5 py-0.2 rounded bg-primary text-on-primary text-[9px] font-bold">LEADING 74%</span><img class="w-full h-24 object-cover rounded mb-2" data-alt="Variant A thumbnail preview showing sleek futuristic studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6zGkETLhcFIZTFulQaKs4FIrHZ0gJU78flud0_NYrw0PjIxQueGKJMwrTKpTrA-qKM12XHcANRiJ35Ehdgfx9K-W49jcU5YYOuZi0KmjZDeMTmBSTQw_inn59dAMiJKJQgIVEPMLMKcK1JNUVzU9NU_ICrkADdH-OCznabV064eDZUPHAcdJft1OngdMdvo9Wgsgr-KP-FZ0bctQJIYMM1h_hOSUefPJD5DIrbFDO6E3NICu9tdzU"><div class="text-body-sm font-medium text-on-surface truncate">Variant A: High Contrast</div><div class="text-tertiary font-mono text-[11px]">37 of 50 votes</div></div><div class="p-2.5 rounded-lg bg-surface-container border border-outline-variant opacity-75"><span class="text-[9px] text-on-surface-variant block mb-1 font-mono">VARIANT B (26%)</span><img class="w-full h-24 object-cover rounded mb-2" data-alt="Variant B thumbnail preview showing minimalist neutral desk setup" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLEYhuwW9ChF1P09Qg9L6Wzmaz-3ayUkwVstvqa_bmV43n2pK7czS9KiSsOWruNeITF6uzw-93msQqExZFX3mAjFRhMWPtAC_ldDY4IiCD8Aqizk9aoTRka6ttwuC5mdha6kQC-gTK6L5Bq85Qhazgrf8hXBZM_iglyWzxJ5CxhnYpgl1X_goaAJMl1HMWYxgsBsRuyIgTLOhvmkAfO1xOhOvX3DcLj4P-zMpE3m08CLw2pP79zTEU"><div class="text-body-sm font-medium text-on-surface truncate">Variant B: Minimal Studio</div><div class="text-on-surface-variant font-mono text-[11px]">13 of 50 votes</div></div></div><div class="p-3 rounded-lg bg-surface-container border border-outline-variant space-y-2 text-body-sm"><div class="flex justify-between items-center"><span class="text-on-surface-variant">Task Escrow Pool:</span><span class="font-mono font-medium text-on-surface">$50.00 (0.4150 SOL)</span></div><div class="flex justify-between items-center"><span class="text-on-surface-variant">80% Validator Allocation:</span><span class="font-mono font-bold text-tertiary">$40.00 (0.3320 SOL)</span></div><div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden"><div class="bg-tertiary h-full rounded-full" style="width: 80%"></div></div><div class="text-[11px] text-on-surface-variant text-right">$0.80 paid directly to each voter's wallet on finality</div></div></div></div><!-- 6 Core Features Section --><section class="mb-16" id="features"><div class="mb-8"><span class="text-label-caps font-label-caps text-secondary uppercase tracking-widest">Architecture</span><h2 class="text-headline-lg font-headline-lg font-bold text-on-surface mt-1">6 Core Protocol Safeguards</h2><p class="text-on-surface-variant font-body-md text-body-md mt-1">Built specifically for verifiable human feedback with cryptographic incentives on Solana Devnet.</p></div><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><div class="bg-surface-container-low border border-outline-variant rounded-xl p-6 hover:border-outline transition-colors"><div class="w-10 h-10 rounded-lg bg-surface-container-high border border-outline-variant flex items-center justify-center text-primary mb-4"><span class="material-symbols-outlined">fingerprint</span></div><h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold mb-2">Sybil-Resistant Graph</h3><p class="text-on-surface-variant font-body-md text-body-md">Validators stake Devnet SOL bonding reputation. Anomalous click farms and bot clusters are slashed on-chain.</p></div><div class="bg-surface-container-low border border-outline-variant rounded-xl p-6 hover:border-outline transition-colors"><div class="w-10 h-10 rounded-lg bg-surface-container-high border border-outline-variant flex items-center justify-center text-secondary mb-4"><span class="material-symbols-outlined">payments</span></div><h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold mb-2">80% Validator Revenue</h3><p class="text-on-surface-variant font-body-md text-body-md">Transparent economics: 80% ($0.80/vote) goes directly to validators, while 20% powers protocol dispute slashing.</p></div><div class="bg-surface-container-low border border-outline-variant rounded-xl p-6 hover:border-outline transition-colors"><div class="w-10 h-10 rounded-lg bg-surface-container-high border border-outline-variant flex items-center justify-center text-tertiary mb-4"><span class="material-symbols-outlined">analytics</span></div><h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold mb-2">Statistical Significance</h3><p class="text-on-surface-variant font-body-md text-body-md">Automatic confidence interval &amp; p-value computation to guarantee decisions aren't within standard variance.</p></div><div class="bg-surface-container-low border border-outline-variant rounded-xl p-6 hover:border-outline transition-colors"><div class="w-10 h-10 rounded-lg bg-surface-container-high border border-outline-variant flex items-center justify-center text-primary mb-4"><span class="material-symbols-outlined">lock_clock</span></div><h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold mb-2">Atomic Escrow Release</h3><p class="text-on-surface-variant font-body-md text-body-md">Funds lock safely in Solana PDA smart contracts, streaming immediately to voter wallets as quorum finalizes.</p></div><div class="bg-surface-container-low border border-outline-variant rounded-xl p-6 hover:border-outline transition-colors"><div class="w-10 h-10 rounded-lg bg-surface-container-high border border-outline-variant flex items-center justify-center text-secondary mb-4"><span class="material-symbols-outlined">speed</span></div><h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold mb-2">Sub-5 Minute Quorums</h3><p class="text-on-surface-variant font-body-md text-body-md">High validator throughput on Solana delivers conclusive voting consensus in under 5 minutes for rapid launches.</p></div><div class="bg-surface-container-low border border-outline-variant rounded-xl p-6 hover:border-outline transition-colors"><div class="w-10 h-10 rounded-lg bg-surface-container-high border border-outline-variant flex items-center justify-center text-tertiary mb-4"><span class="material-symbols-outlined">receipt_long</span></div><h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold mb-2">Verifiable Audit Proofs</h3><p class="text-on-surface-variant font-body-md text-body-md">Every evaluation carries a cryptographic block signature. Export raw vote tallies, distributions, and CSV proofs.</p></div></div></section><!-- 4-Step How It Works Timeline --><section class="mb-16" id="how-it-works"><div class="mb-8"><span class="text-label-caps font-label-caps text-secondary uppercase tracking-widest">Lifecycle</span><h2 class="text-headline-lg font-headline-lg font-bold text-on-surface mt-1">How CrowdLens Operates</h2><p class="text-on-surface-variant font-body-md text-body-md mt-1">Four automated steps connecting content creators with global human validators.</p></div><div class="grid grid-cols-1 md:grid-cols-4 gap-6"><div class="bg-surface-container-low border border-outline-variant rounded-xl p-5 relative"><div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container font-mono font-bold flex items-center justify-center mb-4">1</div><h4 class="text-headline-sm font-headline-sm font-semibold text-on-surface mb-2">Upload Variants</h4><p class="text-on-surface-variant text-body-sm font-body-sm">Deploy 2 to 5 creative variants with target quorum size from 10 to 1000 votes.</p></div><div class="bg-surface-container-low border border-outline-variant rounded-xl p-5 relative"><div class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container font-mono font-bold flex items-center justify-center mb-4">2</div><h4 class="text-headline-sm font-headline-sm font-semibold text-on-surface mb-2">Fund Solana Escrow</h4><p class="text-on-surface-variant text-body-sm font-body-sm">Deposit $1.00 per vote in SOL. 80% ($0.80) is earmarked into the validator reward pool.</p></div><div class="bg-surface-container-low border border-outline-variant rounded-xl p-5 relative"><div class="w-8 h-8 rounded-full bg-surface-container-high text-secondary font-mono font-bold flex items-center justify-center mb-4">3</div><h4 class="text-headline-sm font-headline-sm font-semibold text-on-surface mb-2">Human Consensus</h4><p class="text-on-surface-variant text-body-sm font-body-sm">Bonded validators blind-evaluate variants with optional qualitative feedback notes.</p></div><div class="bg-surface-container-low border border-outline-variant rounded-xl p-5 relative"><div class="w-8 h-8 rounded-full bg-tertiary-container text-on-tertiary-container font-mono font-bold flex items-center justify-center mb-4">4</div><h4 class="text-headline-sm font-headline-sm font-semibold text-on-surface mb-2">Settlement &amp; Lift</h4><p class="text-on-surface-variant text-body-sm font-body-sm">Payouts disperse atomically ($0.80 per vote), unlocking statistical winner report.</p></div></div></section><!-- Pricing & Interactive Escrow Calculator (10 to 1000 votes, 80% validator pool) --><section class="mb-16" id="pricing-calculator"><div class="bg-surface-container-low border border-outline-variant rounded-xl p-8"><div class="max-w-2xl mb-8"><span class="text-label-caps font-label-caps text-secondary uppercase tracking-widest">Unit Economics &amp; Escrow</span><h2 class="text-headline-lg font-headline-lg font-bold text-on-surface mt-1">Interactive Escrow Calculator</h2><p class="text-on-surface-variant font-body-md text-body-md mt-1">Adjust required quorum between <strong>10 and 1,000 votes</strong>. Validators receive an <strong>80% share ($0.80 per vote)</strong> directly upon quorum finality.</p></div><div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"><div class="lg:col-span-7 space-y-6"><div class="p-5 rounded-lg bg-surface-container border border-outline-variant"><div class="flex flex-wrap justify-between items-center gap-3 mb-4"><label class="text-label-caps font-label-caps text-on-surface-variant uppercase">Target Quorum Size (10 – 1,000 Votes)</label><!-- Stepper: [-] [input] [+] --><div class="flex items-center gap-1 bg-surface-container-high border border-outline-variant rounded-lg p-1"><button class="w-8 h-8 rounded hover:bg-surface-container flex items-center justify-center text-on-surface font-bold" onclick="stepCalcVotes(-10)">−</button><input class="w-20 bg-surface-container-lowest border border-outline-variant rounded text-center text-on-surface font-mono py-1 text-body-sm" id="escrow-calc-input" max="1000" min="10" oninput="updateEscrowLive(this.value)" type="number" value="50"><button class="w-8 h-8 rounded hover:bg-surface-container flex items-center justify-center text-on-surface font-bold" onclick="stepCalcVotes(10)">+</button></div></div><!-- Range slider --><input class="w-full accent-primary bg-surface-container-lowest h-2.5 rounded cursor-pointer" id="escrow-calc-slider" max="1000" min="10" oninput="updateEscrowLive(this.value)" step="5" type="range" value="50"><div class="flex justify-between text-[11px] text-on-surface-variant mt-2 font-mono"><span>10 Votes (Min)</span><span>100 (High-Confidence)</span><span>500 (Enterprise)</span><span>1,000 (Max)</span></div></div><div class="grid grid-cols-2 gap-4"><div class="p-4 rounded-lg bg-surface-container border border-outline-variant"><div class="text-label-caps font-label-caps text-on-surface-variant">CREATOR COST RATE</div><div class="text-headline-sm font-headline-sm font-bold text-on-surface mt-1">$1.00 / vote</div><div class="text-body-sm font-body-sm text-secondary">0.0083 SOL equivalent</div></div><div class="p-4 rounded-lg bg-surface-container border border-tertiary/30"><div class="text-label-caps font-label-caps text-tertiary">VALIDATOR REWARD SHARE</div><div class="text-headline-sm font-headline-sm font-bold text-tertiary mt-1">80% ($0.80 / vote)</div><div class="text-body-sm font-body-sm text-tertiary/80">0.00664 SOL equivalent</div></div></div></div><!-- Output Escrow Card --><div class="lg:col-span-5 bg-surface-container border border-outline-variant rounded-xl p-6 space-y-4"><h3 class="text-headline-sm font-headline-sm font-bold text-on-surface pb-3 border-b border-outline-variant">Live Escrow Settlement</h3><div class="space-y-3"><div class="p-3 rounded-lg bg-surface-container-high border border-outline-variant"><div class="text-label-caps font-label-caps text-on-surface-variant">YOU PAY (CREATOR TOTAL)</div><div class="text-headline-md font-headline-md font-bold text-on-surface mt-1" id="calc-pay-usd">You pay: $50.00</div><div class="text-body-sm font-body-sm text-secondary font-mono" id="calc-pay-sol">0.4150 SOL in escrow</div></div><div class="p-3 rounded-lg bg-surface-container-high border border-tertiary/40"><div class="text-label-caps font-label-caps text-tertiary">VALIDATORS EARN (80% POOL)</div><div class="text-headline-md font-headline-md font-bold text-tertiary mt-1" id="calc-earn-usd">Validators earn: $40.00</div><div class="text-body-sm font-body-sm text-tertiary font-mono" id="calc-earn-sol">80% pool: 0.3320 SOL distributed</div></div></div><div class="text-[11px] text-on-surface-variant">Program fee of 20% reserved for dispute arbitration, cluster hosting, and sybil slashing pools.</div><button class="w-full py-3 rounded-lg bg-primary-container text-on-primary-container hover:bg-primary font-medium flex items-center justify-center gap-2 transition-all" onclick="setScreen('screen-create-task')"><span class="material-symbols-outlined text-[18px]">rocket_launch</span><span>Launch Verification With This Quorum</span></button></div></div></div></section><!-- Results & Verifiable Proofs Section --><section class="mb-16" id="results"><div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8"><div><span class="text-label-caps font-label-caps text-secondary uppercase tracking-widest">Empirical Lift</span><h2 class="text-headline-lg font-headline-lg font-bold text-on-surface mt-1">Results &amp; Verifiable Case Proofs</h2><p class="text-on-surface-variant font-body-md text-body-md mt-1">Independent creators and studio media networks tested thumbnails on Solana Devnet.</p></div><button class="px-4 py-2 rounded-lg bg-surface-container border border-outline-variant text-secondary text-body-sm font-body-sm hover:border-secondary flex items-center gap-1.5" onclick="setScreen('screen-case-studies')"><span class="material-symbols-outlined text-[16px]">visibility</span><span>View Detailed Case Ledger</span></button></div><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="bg-surface-container-low border border-outline-variant rounded-xl p-6 flex flex-col justify-between"><div><div class="flex justify-between items-center mb-3"><span class="font-label-caps text-label-caps text-secondary bg-surface-container px-2 py-0.5 rounded border border-outline-variant">HARDWARE REVIEW · 480K SUBS</span><span class="text-tertiary font-mono font-bold">+42.6% CTR Lift</span></div><h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold mb-2">M4 Studio: Exploded View vs Neutral Setup</h3><p class="text-on-surface-variant font-body-md text-body-md mb-4">Quorum of 100 validators selected Variant A (82% preference). Published CTR jumped from 4.2% to 6.0%.</p><div class="flex items-center gap-2 text-body-sm font-mono text-secondary mb-2"><span class="material-symbols-outlined text-[16px]">verified</span><span>Devnet Tx: 5XJm...9vKq ($80.00 validator payout settled)</span></div></div><div class="pt-4 border-t border-outline-variant flex justify-between items-center text-body-sm"><span class="text-on-surface-variant">Total Views: <strong class="text-on-surface">314,000</strong></span><span class="text-tertiary font-mono">p &lt; 0.001 (Conclusive)</span></div></div><div class="bg-surface-container-low border border-outline-variant rounded-xl p-6 flex flex-col justify-between"><div><div class="flex justify-between items-center mb-3"><span class="font-label-caps text-label-caps text-secondary bg-surface-container px-2 py-0.5 rounded border border-outline-variant">GAMING DEVLOG · 1.2M SUBS</span><span class="text-tertiary font-mono font-bold">+67.1% CTR Lift</span></div><h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold mb-2">Isometric Gameplay vs Shocked Reaction Face</h3><p class="text-on-surface-variant font-body-md text-body-md mb-4">Consensus strongly favored gameplay footage (76%) over tired face reactions. Outperformed benchmark by 67%.</p><div class="flex items-center gap-2 text-body-sm font-mono text-secondary mb-2"><span class="material-symbols-outlined text-[16px]">verified</span><span>Devnet Tx: 3P4r...1yTz ($80.00 validator payout settled)</span></div></div><div class="pt-4 border-t border-outline-variant flex justify-between items-center text-body-sm"><span class="text-on-surface-variant">Total Views: <strong class="text-on-surface">892,000</strong></span><span class="text-tertiary font-mono">p &lt; 0.001 (Conclusive)</span></div></div></div></section><!-- Live Oracle Telemetry Stats Snapshot --><section class="mb-16"><div class="bg-surface-container-low border border-outline-variant rounded-xl p-6"><div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6"><div><span class="text-label-caps font-label-caps text-secondary uppercase tracking-widest">Solana Devnet Cluster</span><h3 class="text-headline-sm font-headline-sm font-bold text-on-surface mt-1">Live Oracle Telemetry Snapshot</h3></div><button class="text-secondary text-body-sm font-body-sm hover:underline flex items-center gap-1" onclick="setScreen('screen-stats')"><span>Open Full Stats View</span><span class="material-symbols-outlined text-[16px]">arrow_forward</span></button></div><div class="grid grid-cols-2 md:grid-cols-4 gap-4"><div class="p-4 rounded-lg bg-surface-container border border-outline-variant"><div class="text-label-caps font-label-caps text-on-surface-variant">RESOLVED TASKS</div><div class="text-headline-md font-headline-md font-bold text-on-surface mt-1">14,291</div><div class="text-tertiary text-body-sm mt-1">+18.4% this week</div></div><div class="p-4 rounded-lg bg-surface-container border border-outline-variant"><div class="text-label-caps font-label-caps text-on-surface-variant">VALIDATOR PAYOUTS (80%)</div><div class="text-headline-md font-headline-md font-bold text-tertiary mt-1">$11,432.80</div><div class="text-on-surface-variant text-[11px] font-mono mt-1">95.8 SOL Distributed</div></div><div class="p-4 rounded-lg bg-surface-container border border-outline-variant"><div class="text-label-caps font-label-caps text-on-surface-variant">ACTIVE VALIDATORS</div><div class="text-headline-md font-headline-md font-bold text-secondary mt-1">1,842</div><div class="text-secondary text-body-sm mt-1">Online in cluster</div></div><div class="p-4 rounded-lg bg-surface-container border border-outline-variant"><div class="text-label-caps font-label-caps text-on-surface-variant">AVERAGE QUORUM FINALITY</div><div class="text-headline-md font-headline-md font-bold text-on-surface mt-1">4m 48s</div><div class="text-on-surface-variant text-body-sm mt-1">Sub-second block confirmation</div></div></div></div></section><!-- FAQ Accordion Section --><section class="mb-16" id="faq"><div class="mb-8"><span class="text-label-caps font-label-caps text-secondary uppercase tracking-widest">Answers</span><h2 class="text-headline-lg font-headline-lg font-bold text-on-surface mt-1">Frequently Asked Questions</h2><p class="text-on-surface-variant font-body-md text-body-md mt-1">Everything you need to know about staking, validator pools, and quorum mechanics.</p></div><div class="space-y-4"><details class="bg-surface-container-low border border-outline-variant rounded-xl p-5 group cursor-pointer" open=""><summary class="flex justify-between items-center font-headline-sm font-headline-sm font-semibold text-on-surface list-none"><span>How does the 80% validator reward pool work?</span><span class="material-symbols-outlined text-on-surface-variant group-open:rotate-180 transition-transform">expand_more</span></summary><p class="text-on-surface-variant text-body-md font-body-md mt-3 pt-3 border-t border-outline-variant">When a creator submits a task, they escrow $1.00 per required vote in Devnet SOL. Exactly 80% ($0.80 per vote) is locked directly into the voter escrow reward pool. As each vote completes and the quorum reaches finality, the smart contract disperses $0.80 per vote to each validator's wallet automatically.</p></details><details class="bg-surface-container-low border border-outline-variant rounded-xl p-5 group cursor-pointer"><summary class="flex justify-between items-center font-headline-sm font-headline-sm font-semibold text-on-surface list-none"><span>What is the minimum and maximum quorum size?</span><span class="material-symbols-outlined text-on-surface-variant group-open:rotate-180 transition-transform">expand_more</span></summary><p class="text-on-surface-variant text-body-md font-body-md mt-3 pt-3 border-t border-outline-variant">You can deploy tasks requiring anywhere between 10 votes (for quick exploratory checks) up to 1,000 votes (for high-stakes channel uploads or enterprise campaigns). The interactive calculator lets you choose any value within this 10–1,000 range with live escrow updates.</p></details><details class="bg-surface-container-low border border-outline-variant rounded-xl p-5 group cursor-pointer"><summary class="flex justify-between items-center font-headline-sm font-headline-sm font-semibold text-on-surface list-none"><span>How does CrowdLens prevent bots and Sybil attacks?</span><span class="material-symbols-outlined text-on-surface-variant group-open:rotate-180 transition-transform">expand_more</span></summary><p class="text-on-surface-variant text-body-md font-body-md mt-3 pt-3 border-t border-outline-variant">Validators must maintain lightweight Devnet SOL reputation bonding. Anomalous latency, fingerprint similarity, or clicking patterns outside human cognitive thresholds are flagged by the validator graph. Slashing mechanisms remove malicious nodes from consensus pools.</p></details><details class="bg-surface-container-low border border-outline-variant rounded-xl p-5 group cursor-pointer"><summary class="flex justify-between items-center font-headline-sm font-headline-sm font-semibold text-on-surface list-none"><span>Do validators need to request withdrawals?</span><span class="material-symbols-outlined text-on-surface-variant group-open:rotate-180 transition-transform">expand_more</span></summary><p class="text-on-surface-variant text-body-md font-body-md mt-3 pt-3 border-t border-outline-variant">No! CrowdLens has zero balance withdrawal thresholds. As soon as a quorum reaches finality, the escrow contract sends the $0.80 (in Devnet SOL) directly to your connected Phantom wallet.</p></details></div></section></section>
+<!-- **************************************** -->
+<!-- SCREEN 2: PLATFORM STATS (/stats) -->
+<!-- **************************************** -->
+<section class="screen-view hidden" id="screen-stats">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8">
+<div>
+<span class="text-label-caps font-label-caps text-secondary uppercase tracking-widest">Global Telemetry</span>
+<h2 class="text-headline-lg font-headline-lg font-bold text-on-surface mt-1">Platform Consensus Stats</h2>
+<p class="text-on-surface-variant font-body-md text-body-md mt-1">Real-time health of the Solana Devnet human verification cluster.</p>
+</div>
+<div class="flex items-center gap-3">
+<span class="px-3 py-1 rounded bg-surface-container border border-outline-variant text-label-caps font-label-caps text-on-surface">Epoch 722</span>
+<button class="px-3 py-1.5 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant text-secondary text-body-sm font-body-sm flex items-center gap-1.5" onclick="showToast('Stats synced from RPC block 294,102,891')">
+<span class="material-symbols-outlined text-[16px]">refresh</span>
+<span>Refresh Telemetry</span>
+</button>
+</div>
+</div>
+<!-- 4 Core Metric Tiles -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-6">
+<div class="flex justify-between items-start">
+<span class="text-label-caps font-label-caps text-on-surface-variant">TOTAL TASKS RESOLVED</span>
+<span class="material-symbols-outlined text-primary text-[20px]">task_alt</span>
+</div>
+<div class="text-display-hero-mobile font-display-hero-mobile font-bold text-on-surface mt-3">14,291</div>
+<div class="text-body-sm font-body-sm text-tertiary mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span>+18.4% this week</span>
+</div>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-6">
+<div class="flex justify-between items-start">
+<span class="text-label-caps font-label-caps text-on-surface-variant">VALIDATOR PAYOUTS</span>
+<span class="material-symbols-outlined text-tertiary text-[20px]">monetization_on</span>
+</div>
+<div class="text-display-hero-mobile font-display-hero-mobile font-bold text-tertiary mt-3">$7,145.50</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant mt-2 font-mono">59.88 SOL Total Distributed</div>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-6">
+<div class="flex justify-between items-start">
+<span class="text-label-caps font-label-caps text-on-surface-variant">ACTIVE HUMAN VALIDATORS</span>
+<span class="material-symbols-outlined text-secondary text-[20px]">group</span>
+</div>
+<div class="text-display-hero-mobile font-display-hero-mobile font-bold text-on-surface mt-3">1,842</div>
+<div class="text-body-sm font-body-sm text-secondary mt-2">Active in last 24h</div>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-6">
+<div class="flex justify-between items-start">
+<span class="text-label-caps font-label-caps text-on-surface-variant">AVG FINALITY TIME</span>
+<span class="material-symbols-outlined text-primary text-[20px]">speed</span>
+</div>
+<div class="text-display-hero-mobile font-display-hero-mobile font-bold text-on-surface mt-3">4m 48s</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant mt-2">Median time to 50 votes</div>
+</div>
+</div>
+<!-- Network Performance & Category Breakdown -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<div class="lg:col-span-8 bg-surface-container-low border border-outline-variant rounded-xl p-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Consensus Volume Trend (24h)</h3>
+<span class="text-label-caps font-label-caps text-secondary font-mono">15.2 VOTES / MINUTE</span>
+</div>
+<!-- Bar Graph Visualization -->
+<div class="h-48 flex items-end gap-2 pt-6 border-b border-outline-variant pb-2">
+<div class="flex-1 bg-surface-container-high rounded-t hover:bg-primary transition-all h-[40%]" title="00:00 - 120 votes"></div>
+<div class="flex-1 bg-surface-container-high rounded-t hover:bg-primary transition-all h-[55%]" title="03:00 - 180 votes"></div>
+<div class="flex-1 bg-surface-container-high rounded-t hover:bg-primary transition-all h-[35%]" title="06:00 - 110 votes"></div>
+<div class="flex-1 bg-surface-container-high rounded-t hover:bg-primary transition-all h-[65%]" title="09:00 - 240 votes"></div>
+<div class="flex-1 bg-surface-container-high rounded-t hover:bg-primary transition-all h-[80%]" title="12:00 - 310 votes"></div>
+<div class="flex-1 bg-surface-container-high rounded-t hover:bg-primary transition-all h-[95%]" title="15:00 - 390 votes"></div>
+<div class="flex-1 bg-primary-container rounded-t h-[88%]" title="18:00 - 355 votes"></div>
+<div class="flex-1 bg-secondary rounded-t h-[72%]" title="21:00 - 290 votes"></div>
+</div>
+<div class="flex justify-between text-label-caps font-label-caps text-on-surface-variant pt-2">
+<span>00:00 UTC</span>
+<span>06:00 UTC</span>
+<span>12:00 UTC</span>
+<span>18:00 UTC</span>
+<span>NOW</span>
+</div>
+</div>
+<div class="lg:col-span-4 bg-surface-container-low border border-outline-variant rounded-xl p-6">
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-4">Task Categories</h3>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-body-sm font-body-sm mb-1">
+<span class="text-on-surface">YouTube Thumbnails</span>
+<span class="text-secondary font-mono">54%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 54%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-body-sm font-body-sm mb-1">
+<span class="text-on-surface">Tech Reviews &amp; Benchmarks</span>
+<span class="text-primary font-mono">28%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 28%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-body-sm font-body-sm mb-1">
+<span class="text-on-surface">Podcast Title &amp; Artwork</span>
+<span class="text-tertiary font-mono">12%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full rounded-full" style="width: 12%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-body-sm font-body-sm mb-1">
+<span class="text-on-surface">eCommerce Product Covers</span>
+<span class="text-outline font-mono">6%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-outline h-full rounded-full" style="width: 6%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- **************************************** -->
+<!-- SCREEN 3: CASE STUDIES (/case-studies) -->
+<!-- **************************************** -->
+<section class="screen-view hidden" id="screen-case-studies">
+<div class="mb-8">
+<span class="text-label-caps font-label-caps text-secondary uppercase tracking-widest">Empirical Outcomes</span>
+<h2 class="text-headline-lg font-headline-lg font-bold text-on-surface mt-1">Creator Performance Proofs</h2>
+<p class="text-on-surface-variant font-body-md text-body-md mt-1">Before &amp; after metrics from channels testing on CrowdLens before publishing.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Study 1 -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-6 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-center mb-4">
+<span class="px-2.5 py-0.5 rounded bg-surface-container-high text-secondary border border-outline-variant font-label-caps text-label-caps">HARDWARE REVIEW · 480K SUBS</span>
+<span class="text-tertiary font-mono text-body-sm font-body-sm">+42.6% CTR Lift</span>
+</div>
+<h3 class="text-headline-md font-headline-md font-semibold text-on-surface mb-3">M4 Mac Studio: Clean Studio vs. Exploded View</h3>
+<p class="text-on-surface-variant font-body-md text-body-md mb-6">
+              Creator pre-tested 2 thumbnail variants across 100 human validators for $100.00. Variant A received 82% consensus due to stark contrast and yellow component callouts.
+            </p>
+<div class="grid grid-cols-2 gap-4 mb-4">
+<div class="p-3 rounded-lg bg-surface-container border border-primary/40 relative">
+<span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container text-[10px] font-bold">WINNER 82%</span>
+<img class="w-full h-28 object-cover rounded mb-2" data-alt="A cinematic product review thumbnail of a sleek metallic workstation computer on an obsidian dark studio table with glowing cyan blueprint schematics floating above it in sharp crisp detail." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6zGkETLhcFIZTFulQaKs4FIrHZ0gJU78flud0_NYrw0PjIxQueGKJMwrTKpTrA-qKM12XHcANRiJ35Ehdgfx9K-W49jcU5YYOuZi0KmjZDeMTmBSTQw_inn59dAMiJKJQgIVEPMLMKcK1JNUVzU9NU_ICrkADdH-OCznabV064eDZUPHAcdJft1OngdMdvo9Wgsgr-KP-FZ0bctQJIYMM1h_hOSUefPJD5DIrbFDO6E3NICu9tdzU">
+<div class="text-body-sm font-body-sm text-on-surface font-medium">Variant A (Engineered)</div>
+<div class="text-tertiary text-[12px]">82 of 100 votes</div>
+</div>
+<div class="p-3 rounded-lg bg-surface-container border border-outline-variant opacity-60">
+<span class="text-[10px] text-on-surface-variant block mb-1">RUNNER UP 18%</span>
+<img class="w-full h-28 object-cover rounded mb-2" data-alt="A minimalist desk setup with a computer monitor displaying gray neutral editing software under flat diffused ambient lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLEYhuwW9ChF1P09Qg9L6Wzmaz-3ayUkwVstvqa_bmV43n2pK7czS9KiSsOWruNeITF6uzw-93msQqExZFX3mAjFRhMWPtAC_ldDY4IiCD8Aqizk9aoTRka6ttwuC5mdha6kQC-gTK6L5Bq85Qhazgrf8hXBZM_iglyWzxJ5CxhnYpgl1X_goaAJMl1HMWYxgsBsRuyIgTLOhvmkAfO1xOhOvX3DcLj4P-zMpE3m08CLw2pP79zTEU">
+<div class="text-body-sm font-body-sm text-on-surface font-medium">Variant B (Minimalist)</div>
+<div class="text-on-surface-variant text-[12px]">18 of 100 votes</div>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant flex justify-between items-center text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Solana TX: <span class="font-mono text-secondary">5XJm...9vKq</span></span>
+<span class="text-on-surface-variant">Published Views: <strong class="text-on-surface">314,000</strong></span>
+</div>
+</div>
+<!-- Study 2 -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-6 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-center mb-4">
+<span class="px-2.5 py-0.5 rounded bg-surface-container-high text-secondary border border-outline-variant font-label-caps text-label-caps">GAMING DEVLOG · 1.2M SUBS</span>
+<span class="text-tertiary font-mono text-body-sm font-body-sm">+67.1% CTR Lift</span>
+</div>
+<h3 class="text-headline-md font-headline-md font-semibold text-on-surface mb-3">Procedural Dungeon Engine Launch</h3>
+<p class="text-on-surface-variant font-body-md text-body-md mb-6">
+              Tested character portrait reaction vs. raw isometric gameplay screen. Consensus revealed overwhelming fatigue with face thumbnails in tech dev audiences.
+            </p>
+<div class="grid grid-cols-2 gap-4 mb-4">
+<div class="p-3 rounded-lg bg-surface-container border border-primary/40 relative">
+<span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container text-[10px] font-bold">WINNER 76%</span>
+<img class="w-full h-28 object-cover rounded mb-2" data-alt="A dramatic isometric gaming preview showing a glowing subterranean labyrinth with glowing cyan torches and high contrast dark slate cavern walls." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjkCYc78pVt13n6K6yPospI0WCnGAxJUVlSgcdBBhWQpsKB8LHwSSOVx7XelQGeK3sIzMOcYbyr3MJIEt_7aS0hThHOoAcPsCZ6ePMRLzUpfvb-BGrMEb7k7cQcthgByZEpqOJIjzcXefLgUgvReeiB3QpS3_uHtuoiA_vQDuF7SaI2h7FunjpIXCwUwiuOeFg1s1BOWDV9TyL1oiUJ6cSWJiv2krw8AkJ5zmL-a5dhmq9dLXlyp16">
+<div class="text-body-sm font-body-sm text-on-surface font-medium">Variant B (Isometric Game)</div>
+<div class="text-tertiary text-[12px]">76 of 100 votes</div>
+</div>
+<div class="p-3 rounded-lg bg-surface-container border border-outline-variant opacity-60">
+<span class="text-[10px] text-on-surface-variant block mb-1">RUNNER UP 24%</span>
+<img class="w-full h-28 object-cover rounded mb-2" data-alt="A portrait of a male video creator with an exaggerated shocked facial expression against a neon gradient studio backdrop." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdgRVBdmngWrOAFvheY8A8K85LSm4T4DGLXErmhDPLEqobdarSOgqeo6hEFgiHRJ8ObFJgHVF2-X94nWqPTpKPqE6MoyJhQCDUnEVn5ry5tfiJ5S0ofmkAvhkjducc-c7YEQl9efuAcSKnyBqYDZ4GpB2ajesWWf1eioKFRcDwwIeHjjIpkW0FEb9bFNcHmyO4Gs6Eb6DzrnmeAofS8rqqB0dM8lKnm4YSN4Mxe_w48dwg2_3IZUGn">
+<div class="text-body-sm font-body-sm text-on-surface font-medium">Variant A (Reaction Face)</div>
+<div class="text-on-surface-variant text-[12px]">24 of 100 votes</div>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant flex justify-between items-center text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Solana TX: <span class="font-mono text-secondary">3P4r...1yTz</span></span>
+<span class="text-on-surface-variant">Published Views: <strong class="text-on-surface">892,000</strong></span>
+</div>
+</div>
+</div>
+</section>
+<!-- **************************************** -->
+<!-- SCREEN 4 & 5: CREATOR TASKS LIST (/creator) -->
+<!-- Contains State Switcher: Active, Empty, Loading, Error, Disconnected -->
+<!-- **************************************** -->
+<section class="screen-view hidden" id="screen-creator">
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+<div>
+<span class="text-label-caps font-label-caps text-secondary uppercase tracking-widest">Creator Console</span>
+<h2 class="text-headline-lg font-headline-lg font-bold text-on-surface mt-1">My Content Verifications</h2>
+</div>
+<div class="flex items-center gap-3">
+<!-- State Switcher pill for testing reviewer -->
+<div class="flex items-center bg-surface-container-high border border-outline-variant rounded-lg p-1 text-label-caps font-label-caps">
+<span class="text-on-surface-variant px-2">State:</span>
+<button class="px-2 py-0.5 rounded bg-surface-container text-secondary font-medium" id="cstate-active" onclick="setCreatorState('active')">Active (3)</button>
+<button class="px-2 py-0.5 rounded text-on-surface-variant hover:text-on-surface" id="cstate-empty" onclick="setCreatorState('empty')">Empty</button>
+<button class="px-2 py-0.5 rounded text-on-surface-variant hover:text-on-surface" id="cstate-loading" onclick="setCreatorState('loading')">Loading</button>
+<button class="px-2 py-0.5 rounded text-on-surface-variant hover:text-on-surface" id="cstate-error" onclick="setCreatorState('error')">Error</button>
+</div>
+<button class="px-4 py-2 rounded-lg bg-primary-container text-on-primary-container hover:bg-primary font-medium flex items-center gap-1.5 transition-colors" onclick="setScreen('screen-create-task')">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>New Task</span>
+</button>
+</div>
+</div>
+<!-- State: ACTIVE LIST -->
+<div class="space-y-4" id="creator-state-active">
+<!-- Task 1: Complete with clear winner -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-5 hover:border-outline transition-all cursor-pointer" onclick="setScreen('screen-creator-detail')">
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<div class="w-20 h-14 rounded-lg overflow-hidden border border-primary/50 relative flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A sleek high-end technological smartphone review thumbnail on a dark table surface with glowing cyan lighting accents and a crisp visual layout." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADeIHwovWoQVhWdb5CGY72_fMIwVwaJnML1RSZo6JE-WLM3rgjZQ9XMIo0zcBwE1sT3S4wU1b7DVSyrEtBGjbk0hW1KG3Tg11DqEePVFt9ABnYZZJ3DXnKis7mMJRhu-lO2Fbfv6xYcYKRRocKuwyvCJdWmgPiEFgbVyHbhQYdL8FiBU1ZkDK1GKyCNiYX9LGlv6yBrMlNNPJEEb2YbPI7Oar_Qq9z2CC-JUgOSaALrjeltBjwjVu5">
+<span class="absolute bottom-1 right-1 bg-primary text-on-primary text-[8px] font-bold px-1 rounded">WINNER</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="text-label-caps font-label-caps text-tertiary bg-tertiary/10 border border-tertiary/20 px-2 py-0.5 rounded flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">check_circle</span>
+                    RESOLVED
+                  </span>
+<span class="text-on-surface-variant text-body-sm font-body-sm font-mono">Task #CL-9821</span>
+<span class="text-outline-variant">·</span>
+<span class="text-on-surface-variant text-body-sm font-body-sm">48m ago</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold mt-1">Next-Gen Flagship Phone Breakdown (3 Variants)</h3>
+</div>
+</div>
+<div class="flex items-center gap-6 self-end md:self-auto">
+<div class="text-right">
+<div class="text-body-sm font-body-sm text-on-surface-variant">Quorum Reached</div>
+<div class="text-headline-sm font-headline-sm font-mono text-on-surface font-bold">50 / 50 Votes</div>
+</div>
+<div class="text-right">
+<div class="text-body-sm font-body-sm text-on-surface-variant">Escrow Settled</div>
+<div class="text-headline-sm font-headline-sm font-mono text-secondary font-bold">$50.00 · 0.415 SOL</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Task 2: In-flight / Open Voting -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-5 hover:border-outline transition-all cursor-pointer" onclick="setScreen('screen-creator-detail')">
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<div class="w-20 h-14 rounded-lg overflow-hidden border border-outline-variant relative flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A vibrant coding setup with ultra-wide curved screens displaying colorful terminal code lines in an ambient dark room with subtle violet backlighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQG4sz75Wy0hHFNtzNaU3P5d_jjma9q5nMvNgidB7ak_8nQCH3khy9x8UQ4w0KCt6o7G_CCFhB5yGZXA-8xYnkXwyAQKAMom_9njWhAABXWnyOwms67aY7KJs-2DlnftrAbQ0YilCubQrpIKPo0Z6gxV4ZEvk9k6VA1m4XXQU8DLalG0Vn-aKKwmPUISjR43wDJafslqhEAtDdYjbPWGSpB5w1def92QiYwFwS5vdpJWBBo0gHUDbG">
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="text-label-caps font-label-caps text-secondary bg-secondary/10 border border-secondary/20 px-2 py-0.5 rounded flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary pulse-ring"></span>
+                    ACTIVE CONSENSUS
+                  </span>
+<span class="text-on-surface-variant text-body-sm font-body-sm font-mono">Task #CL-9824</span>
+<span class="text-outline-variant">·</span>
+<span class="text-on-surface-variant text-body-sm font-body-sm">12m ago</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold mt-1">Rust vs Zig in Production 2025 (2 Variants)</h3>
+</div>
+</div>
+<div class="flex items-center gap-6 self-end md:self-auto">
+<div class="text-right">
+<div class="text-body-sm font-body-sm text-on-surface-variant">Progress</div>
+<div class="text-headline-sm font-headline-sm font-mono text-secondary font-bold">28 / 40 Votes</div>
+</div>
+<div class="text-right">
+<div class="text-body-sm font-body-sm text-on-surface-variant">Cost Escrowed</div>
+<div class="text-headline-sm font-headline-sm font-mono text-on-surface font-bold">$40.00 · 0.332 SOL</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Task 3: In-flight / Fast Filling -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-5 hover:border-outline transition-all cursor-pointer" onclick="setScreen('screen-creator-detail')">
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<div class="w-20 h-14 rounded-lg overflow-hidden border border-outline-variant relative flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A clean studio podcast recording setup with two professional condenser microphones, acoustic wall panels, and deep moody violet mood lights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYG6L_IpVN7ncqn_IXXyCNhFpKZ8_wLLUNM43r9Yto8ZMl-iII6sN4vA7ceAPcoE1PmUJRvNsuR-G4EM7SXP8hvjvQ2eGriV3PXVG50SSYJGCa-4Ce_4ywzp04E7kMbLomAXJ1-vBjkSkEYOT6upU04NCE7L2jsXsFmVPE9t5J9NemFbWaGATF6WvNBru2HL6vj3PoC3YmDXUozE0MRaOEUjSbIRRCQkKXW4egvLjsgIAYEdxmF8TW">
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="text-label-caps font-label-caps text-secondary bg-secondary/10 border border-secondary/20 px-2 py-0.5 rounded flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary pulse-ring"></span>
+                    ACTIVE CONSENSUS
+                  </span>
+<span class="text-on-surface-variant text-body-sm font-body-sm font-mono">Task #CL-9829</span>
+<span class="text-outline-variant">·</span>
+<span class="text-on-surface-variant text-body-sm font-body-sm">3m ago</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold mt-1">Founder Ep. 42: Scaling to $10M ARR Cover</h3>
+</div>
+</div>
+<div class="flex items-center gap-6 self-end md:self-auto">
+<div class="text-right">
+<div class="text-body-sm font-body-sm text-on-surface-variant">Progress</div>
+<div class="text-headline-sm font-headline-sm font-mono text-secondary font-bold">11 / 25 Votes</div>
+</div>
+<div class="text-right">
+<div class="text-body-sm font-body-sm text-on-surface-variant">Cost Escrowed</div>
+<div class="text-headline-sm font-headline-sm font-mono text-on-surface font-bold">$25.00 · 0.2075 SOL</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+<!-- State: EMPTY -->
+<div class="hidden bg-surface-container-low border border-dashed border-outline-variant rounded-xl p-12 text-center" id="creator-state-empty">
+<div class="w-16 h-16 rounded-full bg-surface-container mx-auto flex items-center justify-center text-on-surface-variant mb-4">
+<span class="material-symbols-outlined text-[32px]">folder_open</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface font-semibold">No Content Verifications Yet</h3>
+<p class="text-on-surface-variant max-w-md mx-auto mt-2 text-body-md font-body-md">
+          Upload 2 to 5 thumbnail or title variants to gather unbiased, statistically backed feedback from verified human validators.
+        </p>
+<button class="mt-6 px-5 py-2.5 rounded-lg bg-primary-container text-on-primary-container font-medium inline-flex items-center gap-2" onclick="setScreen('screen-create-task')">
+<span class="material-symbols-outlined">add</span>
+<span>Create Your First Verification</span>
+</button>
+</div>
+<!-- State: LOADING -->
+<div class="hidden space-y-4" id="creator-state-loading">
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-6 animate-pulse flex justify-between items-center">
+<div class="flex items-center gap-4">
+<div class="w-20 h-14 bg-surface-container rounded-lg"></div>
+<div class="space-y-2">
+<div class="w-32 h-4 bg-surface-container rounded"></div>
+<div class="w-64 h-5 bg-surface-container rounded"></div>
+</div>
+</div>
+<div class="w-24 h-8 bg-surface-container rounded"></div>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-6 animate-pulse flex justify-between items-center">
+<div class="flex items-center gap-4">
+<div class="w-20 h-14 bg-surface-container rounded-lg"></div>
+<div class="space-y-2">
+<div class="w-28 h-4 bg-surface-container rounded"></div>
+<div class="w-72 h-5 bg-surface-container rounded"></div>
+</div>
+</div>
+<div class="w-24 h-8 bg-surface-container rounded"></div>
+</div>
+</div>
+<!-- State: ERROR -->
+<div class="hidden bg-surface-container-low border border-error/40 rounded-xl p-8 text-center" id="creator-state-error">
+<span class="material-symbols-outlined text-error text-[40px] mb-2">error</span>
+<h3 class="text-headline-sm font-headline-sm text-error font-semibold">RPC Connection Interrupted</h3>
+<p class="text-on-surface-variant text-body-md font-body-md max-w-sm mx-auto mt-1 mb-4">
+          Unable to fetch escrow account states from Solana Devnet cluster endpoint.
+        </p>
+<button class="px-4 py-2 rounded bg-surface-container border border-outline-variant text-on-surface text-body-sm font-body-sm hover:border-error" onclick="setCreatorState('active')">
+          Retry RPC Request
+        </button>
+</div>
+</section>
+<!-- **************************************** -->
+<!-- SCREEN 6: CREATE A TASK (/creator/new) -->
+<!-- Interactive Upload Grid (2-5), Vote Counter (1-100), Live SOL/USD Math -->
+<!-- **************************************** -->
+<section class="screen-view hidden" id="screen-create-task">
+<div class="max-w-4xl mx-auto">
+<div class="mb-8">
+<button class="text-secondary text-body-sm font-body-sm flex items-center gap-1 hover:underline mb-2" onclick="setScreen('screen-creator')">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+            Back to Tasks
+          </button>
+<h2 class="text-headline-lg font-headline-lg font-bold text-on-surface">Deploy Content Verification</h2>
+<p class="text-on-surface-variant font-body-md text-body-md mt-1">Submit 2 to 5 creative variants for rapid on-chain validator consensus.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left: Task Form -->
+<div class="lg:col-span-7 space-y-6">
+<!-- Title -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-5">
+<label class="block text-label-caps font-label-caps text-on-surface-variant uppercase mb-2">Audit Title / Video Concept</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant focus:border-primary rounded-lg px-4 py-2.5 text-on-surface font-body-md text-body-md focus:outline-none transition-colors" id="task-title-input" placeholder="e.g. My Next YouTube Thumbnail Test" type="text" value="Ultimate Studio Tour: M4 Ultra Rig Reveal">
+</div>
+<!-- Image Upload Slots (2 to 5 variants) -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-5">
+<div class="flex justify-between items-center mb-3">
+<label class="text-label-caps font-label-caps text-on-surface-variant uppercase">Thumbnail Variants (2 to 5)</label>
+<span class="text-body-sm font-body-sm text-secondary font-mono" id="slot-count-badge">3 Variants Uploaded</span>
+</div>
+<div class="grid grid-cols-3 gap-3" id="variant-slot-grid">
+<!-- Slot 1 -->
+<div class="border border-primary/60 bg-surface-container rounded-lg p-2 relative group">
+<span class="absolute top-3 left-3 bg-primary-container text-on-primary-container text-[10px] font-bold px-1.5 py-0.5 rounded">Option A</span>
+<img class="w-full h-24 object-cover rounded" data-alt="A clean high key studio camera view of a creator desk with neon cyan backlighting and a high-end black monitor with custom glowing PC casing." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA25blXQYyRSpweRx2hf4krsX5_1_flkx5g6KFebb6aKeRCyYB16ICkaor0n95x1JoQrREGLd0roFBGYyt5dFS3psg3mTTNu-bwN7QHKErIzF3PV3xSFDc2RrXr6ZUpaoP2XhMIcKnRpiZd0rumeXdt_64RLS_UzwUkcFwms5_N5FNh1a_hI_nTZgXH_gFFbaWGRtHQ26qDm9CR5owGRfRW6NS0CvLzGqUSIXAz5Bex38pm-gX4JZbD">
+<div class="text-[11px] text-on-surface truncate mt-1.5 font-medium">Cyan_Glow_V1.png</div>
+</div>
+<!-- Slot 2 -->
+<div class="border border-outline-variant bg-surface-container rounded-lg p-2 relative group">
+<span class="absolute top-3 left-3 bg-surface-container-high text-on-surface text-[10px] font-bold px-1.5 py-0.5 rounded">Option B</span>
+<img class="w-full h-24 object-cover rounded" data-alt="A moody dark room studio with warm amber mood lights casting long dramatic shadows across high-end sound engineering gear and audio mixing console." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6hnRe27a_p1pT3O-zq3rMyBta-AqCNEaI6MqTmZkGFtnEGqOfo5ernzt_Ba0dK72P2lVXysTczKtF_P7Qh42azz7P3agTJ_U9_XRpUVNRaeGRyKIxSHT7NhjCsVLlugQtHskYz_VuqRsnGw92Ss-rLGmXg_5PVBf65AomtXcO5JWxPjpnwJfaP5Cai2D4cyrztmocMDZMW2ckdClnm1NhJXezDHQJwccjXysIPAcsihgWC81X_OTj">
+<div class="text-[11px] text-on-surface truncate mt-1.5 font-medium">Warm_Shadow_V2.png</div>
+</div>
+<!-- Slot 3 -->
+<div class="border border-outline-variant bg-surface-container rounded-lg p-2 relative group">
+<span class="absolute top-3 left-3 bg-surface-container-high text-on-surface text-[10px] font-bold px-1.5 py-0.5 rounded">Option C</span>
+<img class="w-full h-24 object-cover rounded" data-alt="An eye-level dramatic portrait of an audio producer sitting in a soundproof editing studio surrounded by glowing violet LED strips." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAb9uoc9J8rd2tD997HVQ3dPtawlby_CE5bcSYMogIQ1pxBlLn0EM4pXSWhGGH7QxM6i0EM7FmBpwxh11mlnGerGzotW2suEgw5Bd22lN3uWLa6SIq4nl3biK_CjWPANwrTSFiKSiLcBO0jRKulXwlNDHq_v8SwUnQTHdKeHbEeQ2F5GL1vqdstLt9baX3uCDW5W4Ggk1H4dbDjIIJEyMUi3rh0ZsWm7F4eQtxGYxU1EfAkVs-SNqIO">
+<div class="text-[11px] text-on-surface truncate mt-1.5 font-medium">Producer_Focus.png</div>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-outline-variant flex items-center justify-between">
+<button class="text-body-sm font-body-sm text-secondary hover:text-on-surface flex items-center gap-1" onclick="simulateAddVariant()">
+<span class="material-symbols-outlined text-[16px]">add_circle</span>
+<span>Add 4th Variant Slot</span>
+</button>
+<span class="text-[11px] text-on-surface-variant">Recommended: 16:9 1920x1080</span>
+</div>
+</div>
+<!-- Interactive Vote Counter Slider (1-100) -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-5">
+<div class="flex justify-between items-center mb-2">
+<label class="text-label-caps font-label-caps text-on-surface-variant uppercase">Consensus Quorum (Votes)</label>
+<div class="flex items-center gap-1.5">
+<input class="w-16 bg-surface-container border border-outline-variant rounded text-center text-on-surface font-mono py-1 text-body-sm" id="vote-number-input" max="100" min="1" oninput="syncVoteSlider(this.value)" type="number" value="50">
+<span class="text-body-sm text-on-surface-variant">Validators</span>
+</div>
+</div>
+<input class="w-full accent-primary bg-surface-container h-2 rounded cursor-pointer mt-2" id="vote-range-slider" max="100" min="1" oninput="syncVoteInput(this.value)" type="range" value="50">
+<div class="flex justify-between text-[11px] text-on-surface-variant mt-2 font-mono">
+<span>1 Vote (Min)</span>
+<span>25 (Exploratory)</span>
+<span class="text-secondary font-medium">50 (Stat. Sig.)</span>
+<span>100 (Max)</span>
+</div>
+</div>
+</div>
+<!-- Right: Escrow Summary & SOL Payment -->
+<div class="lg:col-span-5">
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-6 sticky top-24">
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-bold mb-4">Escrow Deposit Breakdown</h3>
+<div class="space-y-3 pb-4 border-b border-outline-variant text-body-sm font-body-sm">
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Unit Creator Rate:</span>
+<span class="text-on-surface font-mono">$1.00 · 0.0083 SOL</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Validators Required:</span>
+<span class="text-on-surface font-mono font-medium" id="escrow-votes-display">50 Voters</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Validator Reward Pool:</span>
+<span class="text-tertiary font-mono" id="escrow-validator-pool">$25.00 · 0.2075 SOL</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Protocol Anti-Sybil Fee:</span>
+<span class="text-on-surface-variant font-mono">$0.00 · (Free on Devnet)</span>
+</div>
+</div>
+<!-- Total calculation -->
+<div class="py-4">
+<div class="text-label-caps font-label-caps text-on-surface-variant uppercase">TOTAL ESCROW REQUIRED</div>
+<div class="flex items-baseline justify-between mt-1">
+<span class="text-headline-lg font-headline-lg font-bold text-on-surface" id="total-usd-cost">$50.00</span>
+<span class="text-headline-sm font-headline-sm font-mono text-secondary font-semibold" id="total-sol-cost">0.4150 SOL</span>
+</div>
+<div class="text-[11px] text-tertiary mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">lock</span>
+<span>Locked in Solana Program Escrow until consensus</span>
+</div>
+</div>
+<!-- Action buttons & states -->
+<div class="mt-4 space-y-3" id="task-creation-actions">
+<button class="w-full py-3 rounded-lg bg-primary text-on-primary hover:bg-primary-container font-medium flex items-center justify-center gap-2 transition-all shadow-lg shadow-primary/20" id="deploy-task-btn" onclick="executeTaskCreation()">
+<span class="material-symbols-outlined text-[18px]">lock_open</span>
+<span id="deploy-btn-text">Sign &amp; Escrow 0.4150 SOL</span>
+</button>
+<div class="text-center">
+<span class="text-[11px] text-on-surface-variant">Wallet Balance: 14.28 DEV SOL · Devnet Cluster</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- **************************************** -->
+<!-- SCREEN 7: CREATOR TASK DETAIL (/creator/task/123) -->
+<!-- Winner Banner (Violet Ring), % Comparison, Tie State Toggle, CSV/JSON Export -->
+<!-- **************************************** -->
+<section class="screen-view hidden" id="screen-creator-detail">
+<div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div>
+<button class="text-secondary text-body-sm font-body-sm flex items-center gap-1 hover:underline mb-2" onclick="setScreen('screen-creator')">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+            Back to Creator List
+          </button>
+<div class="flex items-center gap-3">
+<h2 class="text-headline-lg font-headline-lg font-bold text-on-surface">Next-Gen Flagship Phone Breakdown</h2>
+<span class="px-2.5 py-0.5 rounded bg-tertiary/10 border border-tertiary/20 text-tertiary font-label-caps text-label-caps">FINALIZED</span>
+</div>
+<p class="text-on-surface-variant text-body-sm font-body-sm mt-1 font-mono">TASK ID: CL-9821 · Program Account: 8vhP...X92w · Quorum: 50/50 Verified Humans</p>
+</div>
+<!-- Export & Tie Toggle Simulator -->
+<div class="flex flex-wrap items-center gap-2">
+<button class="px-3 py-1.5 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant text-body-sm font-body-sm text-on-surface flex items-center gap-1.5" id="tie-toggle-btn" onclick="toggleTieSimulation()">
+<span class="material-symbols-outlined text-[16px]">balance</span>
+<span id="tie-toggle-label">Simulate Tie State (50/50)</span>
+</button>
+<button class="px-3 py-1.5 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant text-body-sm font-body-sm text-on-surface flex items-center gap-1.5" onclick="exportAuditData('csv')">
+<span class="material-symbols-outlined text-[16px]">table_view</span>
+<span>Export CSV</span>
+</button>
+<button class="px-3 py-1.5 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant text-body-sm font-body-sm text-secondary flex items-center gap-1.5" onclick="exportAuditData('json')">
+<span class="material-symbols-outlined text-[16px]">code</span>
+<span>Export JSON</span>
+</button>
+</div>
+</div>
+<!-- Winner / Resolution Status Banner -->
+<div class="bg-primary/10 border border-primary/40 rounded-xl p-5 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4" id="winner-banner-container">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">trophy</span>
+</div>
+<div>
+<div class="text-headline-sm font-headline-sm font-bold text-on-surface" id="winner-banner-title">Conclusive Winner: Option A (Cyan Exploded View)</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant" id="winner-banner-subtitle">Statistical Confidence: 99.4% (p &lt; 0.001) over 50 Devnet validator votes.</div>
+</div>
+</div>
+<div class="text-right flex-shrink-0">
+<span class="text-headline-md font-headline-md font-mono font-bold text-primary" id="winner-banner-pct">68% Share</span>
+<div class="text-label-caps font-label-caps text-on-surface-variant">34 PREFERENCE VOTES</div>
+</div>
+</div>
+<!-- Comparison Cards Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" id="comparison-cards-grid">
+<!-- Variant A (Winner with Violet Ring) -->
+<div class="bg-surface-container-low border-2 border-primary rounded-xl p-5 relative custom-glow-cyan" id="card-option-a">
+<div class="flex justify-between items-center mb-3">
+<span class="px-2 py-0.5 rounded bg-primary-container text-on-primary-container text-label-caps font-label-caps font-bold">OPTION A</span>
+<span class="text-primary font-mono text-body-sm font-body-sm font-bold" id="card-a-votes">34 Votes (68%)</span>
+</div>
+<div class="aspect-video w-full rounded-lg overflow-hidden border border-outline-variant mb-4 relative">
+<img class="w-full h-full object-cover" data-alt="A clean studio product photography thumbnail of a dark flagship phone on a glossy slate surface surrounded by glowing blue cyan light flares." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCusuHxK9omNT_ALSfJd2_cf0KqnG1fO8IyXC1Cr5qvf-gnlpLeb9oryG7wwH_btjZ1REC0wNgOBODomfKNzuTGI7dsYhI4R3grH5jPzlc3enzBDujjHSxV2DXMYz1l5wfckPSH-rpTseG2lrUu1ddXxT94qCc8KxZ-uPi9xhDnU5E2MbavCiQ5f6Ze7eOxdscrWMk4RTCzkk83tAx2cU_xTlM7ZiwAW2tPskrfKlO_WnFkqbctz7Lb">
+<div class="absolute inset-0 border-2 border-primary pointer-events-none rounded-lg"></div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Relative CTR Power:</span>
+<span class="text-tertiary font-bold">+28.4% Est.</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full transition-all duration-500" id="bar-a" style="width: 68%"></div>
+</div>
+<div class="text-[12px] text-on-surface-variant pt-2">
+              Voter Sentiment: <em>"Stark contrast phone angle pulls the eye immediately against YouTube dark mode."</em>
+</div>
+</div>
+</div>
+<!-- Variant B -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-5" id="card-option-b">
+<div class="flex justify-between items-center mb-3">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant text-label-caps font-label-caps font-bold">OPTION B</span>
+<span class="text-on-surface-variant font-mono text-body-sm font-body-sm" id="card-b-votes">11 Votes (22%)</span>
+</div>
+<div class="aspect-video w-full rounded-lg overflow-hidden border border-outline-variant mb-4">
+<img class="w-full h-full object-cover" data-alt="A reviewer hand holding a smartphone device against an out of focus studio lighting background with blurred camera monitors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCn8rDax8JJJ84FtnHd776MFnVndrckYh0uvAF-Bxrs_l9bjd_reTm7OMcFCrnkDavjSW0UfWBYiCam1X0_r9-WTW3rL_MrpxAA-ye4jYTV1GQrka-kuMx5YZzJDew6RWSAyW7yzqe-tF3yjknX5yIP56V6R43K3MgzUFhCIdZZaKCyYUQfoOVWdJWPPgA8sVZvGtnNEgVt8-wjxsHh4jXSnG3ea7lCxBIwzmkP5GZsShcrpF90_oo-">
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Relative CTR Power:</span>
+<span class="text-on-surface-variant">Neutral Baseline</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-surface-container-highest h-full rounded-full transition-all duration-500" id="bar-b" style="width: 22%"></div>
+</div>
+<div class="text-[12px] text-on-surface-variant pt-2">
+              Voter Sentiment: <em>"Hand in frame covers half the device chassis."</em>
+</div>
+</div>
+</div>
+<!-- Variant C -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-5" id="card-option-c">
+<div class="flex justify-between items-center mb-3">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant text-label-caps font-label-caps font-bold">OPTION C</span>
+<span class="text-on-surface-variant font-mono text-body-sm font-body-sm" id="card-c-votes">5 Votes (10%)</span>
+</div>
+<div class="aspect-video w-full rounded-lg overflow-hidden border border-outline-variant mb-4">
+<img class="w-full h-full object-cover" data-alt="A graphic heavy thumbnail with bright yellow typography arrows and exclamation marks pointing to a phone camera lens." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAI85CBq_Cyga2ZCo_lmsPHeiYY-JqnE6X5AZZoYe_rwT8i0oyTx8b-pD2D00_3uK06tUnF8VsiiLzkWBReuRV3fZC2AB929A5T1E8kWk15lbiQEey87S0EGcRiMMN2E5bxMNEIdA2xGu-reF-nxrp_A3A6L9UPP-3WCgOaCpvFZpJMHb14o_ppGa-BQAJ3oO5_z5BbYaVM0KEvla1MmYGY7Gh6wzvrt0RhU2QcOR-Vdu4K71yBOVPs">
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Relative CTR Power:</span>
+<span class="text-error font-medium">-14.2% Est.</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-surface-container-highest h-full rounded-full transition-all duration-500" id="bar-c" style="width: 10%"></div>
+</div>
+<div class="text-[12px] text-on-surface-variant pt-2">
+              Voter Sentiment: <em>"Too much clutter with graphic text overlays."</em>
+</div>
+</div>
+</div>
+</div>
+<!-- Human Qualitative Validator Feedback Table -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-6">
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold mb-4">Validator Audit Notes (Sample)</h3>
+<div class="divide-y divide-outline-variant">
+<div class="py-3 flex items-start justify-between gap-4 text-body-sm font-body-sm">
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-mono text-[10px] font-bold">OPTION A</span>
+<span class="text-on-surface">"The blueprint grid makes this look like an exclusive leaked engineering schematic. High click drive."</span>
+</div>
+<span class="text-on-surface-variant font-mono text-body-sm font-body-sm flex-shrink-0">Validator #7x9p</span>
+</div>
+<div class="py-3 flex items-start justify-between gap-4 text-body-sm font-body-sm">
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-mono text-[10px] font-bold">OPTION A</span>
+<span class="text-on-surface">"Cyan reflections match premium hardware aesthetics. Much cleaner than option C."</span>
+</div>
+<span class="text-on-surface-variant font-mono text-body-sm font-body-sm flex-shrink-0">Validator #4kLm</span>
+</div>
+<div class="py-3 flex items-start justify-between gap-4 text-body-sm font-body-sm">
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-mono text-[10px] font-bold">OPTION B</span>
+<span class="text-on-surface">"Feels more authentic to see someone holding it, but the lighting is somewhat dull."</span>
+</div>
+<span class="text-on-surface-variant font-mono text-body-sm font-body-sm flex-shrink-0">Validator #9wQt</span>
+</div>
+</div>
+</div>
+</section>
+<!-- **************************************** -->
+<!-- SCREEN 8 & 9: OPEN VOTES (/voter) -->
+<!-- Feed with Emerald Reward Pills, Batch Progress -->
+<!-- **************************************** -->
+<section class="screen-view hidden" id="screen-voter">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-6">
+<div>
+<span class="text-label-caps font-label-caps text-tertiary uppercase tracking-widest">Oracle Consensus Feed</span>
+<h2 class="text-headline-lg font-headline-lg font-bold text-on-surface mt-1">Open Verification Tasks</h2>
+<p class="text-on-surface-variant font-body-md text-body-md mt-1">Cast unbiased evaluations and earn Devnet SOL instantly on quorum completion.</p>
+</div>
+<!-- Filter pills -->
+<div class="flex items-center gap-2">
+<span class="px-3 py-1.5 rounded bg-surface-container border border-outline-variant text-label-caps font-label-caps text-secondary font-mono">
+            EARN RATE: $0.50 · 0.0042 SOL / VOTE
+          </span>
+</div>
+</div>
+<!-- Feed Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Vote Card 1 -->
+<div class="bg-surface-container-low border border-outline-variant hover:border-primary/60 rounded-xl p-5 flex flex-col justify-between transition-all">
+<div>
+<div class="flex justify-between items-center mb-3">
+<span class="text-label-caps font-label-caps text-on-surface-variant font-mono">TASK #CL-9824</span>
+<span class="px-2.5 py-0.5 rounded-full bg-tertiary/10 border border-tertiary/20 text-tertiary font-label-caps text-label-caps font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">monetization_on</span>
+<span>$0.50 · 0.0042 SOL</span>
+</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold mb-3">Rust vs Zig in Production 2025</h3>
+<div class="grid grid-cols-2 gap-2 mb-4">
+<div class="aspect-video rounded overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A dual comparison thumbnail with vivid orange Rust crab insignia and glowing cyan Zig symbol side by side on dark carbon background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDhbuNNPkQl4ql8Var_-IozhHjIL-zHQPh-SRhYbwuwtvvxPjC7H6ueGcC614P9AImuIR3kczQzbV6aknw3IFZ27Ak7gidHPc7LlvxsQrtgiKxBa7hxEH-aN-4byq3R0UUtFwGTSnRvicW34c4-OWa6zOxhhYIEtn9mNeQ56Cn2qCwttW4gKdJlYKYBQSsyXNQ7mJaAzoOLqZXO80YRiugt-rG-Tq04Ktk9NzlXV86SHLqxQKecD_E">
+</div>
+<div class="aspect-video rounded overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A code terminal screen showing compiler speed benchmark bar graphs with high contrast terminal text." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPqZaMG0obrxHYZFBtPBDKxojW2fbuhYPv2qBi-0wfv3ScqCoU7vOs5eb19KbaFDhSG8u_UpZ6-UfqXaNbkefKobh8LLwiF2dHhIwu-7D7SdlB_pHMh0QQ1AocteLHa_EOKz3yfPeh1FO097w2bJKHHUkhJ0lcPR83DWFVhUy7SeX91aMU_LsDrSXmZGQaVLGWCLxBaUoUgKsCb_SJtgJGuI9sBVHitGJvbG4QSNj5OSlGMNoit2Yl">
+</div>
+</div>
+<!-- Progress -->
+<div class="space-y-1.5 mb-4">
+<div class="flex justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Batch Quorum:</span>
+<span class="text-secondary font-mono">28 / 40 Votes</span>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 70%"></div>
+</div>
+</div>
+</div>
+<button class="w-full py-2.5 rounded-lg bg-surface-container hover:bg-primary-container hover:text-on-primary-container text-on-surface border border-outline-variant font-medium flex items-center justify-center gap-2 transition-colors" onclick="setScreen('screen-vote-detail')">
+<span class="material-symbols-outlined text-[18px]">how_to_vote</span>
+<span>Review &amp; Cast Vote</span>
+</button>
+</div>
+<!-- Vote Card 2 -->
+<div class="bg-surface-container-low border border-outline-variant hover:border-primary/60 rounded-xl p-5 flex flex-col justify-between transition-all">
+<div>
+<div class="flex justify-between items-center mb-3">
+<span class="text-label-caps font-label-caps text-on-surface-variant font-mono">TASK #CL-9829</span>
+<span class="px-2.5 py-0.5 rounded-full bg-tertiary/10 border border-tertiary/20 text-tertiary font-label-caps text-label-caps font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">monetization_on</span>
+<span>$0.50 · 0.0042 SOL</span>
+</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold mb-3">Founder Ep. 42: Scaling to $10M ARR Cover</h3>
+<div class="grid grid-cols-2 gap-2 mb-4">
+<div class="aspect-video rounded overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A high contrast black and white interview portrait with bold neon green typography overlay stating 10M ARR." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_pvavWFBxYaEwuyR6msDjDcIPYdiYjUvBR9xRB1mLGYGR_Uw3hohE9RZdAAYkhbbA7cL5VFoK2oxMD-q5eAK58MQeo763TAQb75A_lby9yLYy5dfXd9xijLC1qVMU3aJUrpLVxP7YaTAjyarzkgXF5U9ab-217EJBRS0k5H_94Af-1skpCL5av9UvUIT4MvtkvmuzXkzk-ojV6yBWKRmSt6wryiOirQVW4AGUAqT4Em7e-w2Z4tHi">
+</div>
+<div class="aspect-video rounded overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A split screen podcast interview layout showing two speakers talking into studio microphones with soundwave graphic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvq24idABrEWP8UQX7awi01OSMtakv7VeW2kGOcqijbF6ymTfGcG9m2jFy_WI9cfvRpgffF8PB8-o10c31v8yUlMnBIHj1qGHUq31BWb7bl53ASp5RA3zUBm0KfqD4FbrcgG4oKtXfwQrNurGBO-rgp4FUNePEjg8bHi0pkQHwCruGT9b6dMUqAWKq9IuErSuVBMwe-rxOX1Q_GeZWAUHsYbgklI1D8XzfhmaP0kF94o2pxeq0vteP">
+</div>
+</div>
+<!-- Progress -->
+<div class="space-y-1.5 mb-4">
+<div class="flex justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Batch Quorum:</span>
+<span class="text-secondary font-mono">11 / 25 Votes</span>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 44%"></div>
+</div>
+</div>
+</div>
+<button class="w-full py-2.5 rounded-lg bg-surface-container hover:bg-primary-container hover:text-on-primary-container text-on-surface border border-outline-variant font-medium flex items-center justify-center gap-2 transition-colors" onclick="setScreen('screen-vote-detail')">
+<span class="material-symbols-outlined text-[18px]">how_to_vote</span>
+<span>Review &amp; Cast Vote</span>
+</button>
+</div>
+<!-- Vote Card 3 -->
+<div class="bg-surface-container-low border border-outline-variant hover:border-primary/60 rounded-xl p-5 flex flex-col justify-between transition-all">
+<div>
+<div class="flex justify-between items-center mb-3">
+<span class="text-label-caps font-label-caps text-on-surface-variant font-mono">TASK #CL-9831</span>
+<span class="px-2.5 py-0.5 rounded-full bg-tertiary/10 border border-tertiary/20 text-tertiary font-label-caps text-label-caps font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">monetization_on</span>
+<span>$0.50 · 0.0042 SOL</span>
+</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold mb-3">Cyberpunk Unreal Engine 5.6 Teaser</h3>
+<div class="grid grid-cols-2 gap-2 mb-4">
+<div class="aspect-video rounded overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A rainy futuristic street at night with neon signs reflecting in puddles and a shadowy protagonist figure in cinematic wide angle." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1x2d1uf6SZbaASmMAA5wEYJ1UM7xXjl500tsZtNRm9b7_oJ5tOBKfvCnCJojhEqIUewQhrel8DtrlnuMxrDLMWnXORPqAVvUAqOuTYmz81krfOBMVptk9ffvYR_0UGMOuUp1rrhVI2f2UgdhVjr1RTRpvZs7PtGp38AlycT2x_niujKXPeUsmRFb7592VoAD_2XGMz9K27LzhoHRylE9ezPNhVa-G6VsvmrKG7Or3Mx2F64cMfEoA">
+</div>
+<div class="aspect-video rounded overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A futuristic armored cyber vehicle racing down a highway with neon light trails and motion blur." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsccs90VBpbLVdhV8wV-Av-Xice5Cv__m6puNr_fEPhh6Rd5GR_enbsMCoQlAySh6-DRemSqRRID-gUNFXrWt_HEmX81gcYQivfXSNutR3eEsUlcBYAA0y7BeOV5IwfpfDrjiytFjpYmrbhzzaMBuvuMt3lT00nTyXChTWNMnAvhKTuXzjt8UMd_RSo0wAu-0ezmvni-K2--AszjgqbCsH7bQRS17Sy5wAoVE1_54kC5KrxvEVpqXu">
+</div>
+</div>
+<!-- Progress -->
+<div class="space-y-1.5 mb-4">
+<div class="flex justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Batch Quorum:</span>
+<span class="text-secondary font-mono">82 / 100 Votes</span>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 82%"></div>
+</div>
+</div>
+</div>
+<button class="w-full py-2.5 rounded-lg bg-surface-container hover:bg-primary-container hover:text-on-primary-container text-on-surface border border-outline-variant font-medium flex items-center justify-center gap-2 transition-colors" onclick="setScreen('screen-vote-detail')">
+<span class="material-symbols-outlined text-[18px]">how_to_vote</span>
+<span>Review &amp; Cast Vote</span>
+</button>
+</div>
+</div>
+</section>
+<!-- **************************************** -->
+<!-- SCREEN 10: VOTE DETAIL (/voter/task/123) -->
+<!-- Interactive thumbnail selection (violet ring), 0/280 comment counter, vote submission, toast alert -->
+<!-- **************************************** -->
+<section class="screen-view hidden" id="screen-vote-detail">
+<div class="max-w-4xl mx-auto">
+<div class="flex justify-between items-start mb-6">
+<div>
+<button class="text-secondary text-body-sm font-body-sm flex items-center gap-1 hover:underline mb-2" onclick="setScreen('screen-voter')">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+              Back to Task Feed
+            </button>
+<h2 class="text-headline-lg font-headline-lg font-bold text-on-surface">Evaluate Thumbnail Variant</h2>
+<p class="text-on-surface-variant text-body-md font-body-md mt-1">Select the variant you would be genuinely more likely to click on.</p>
+</div>
+<div class="text-right">
+<span class="px-3 py-1 rounded-full bg-tertiary/10 border border-tertiary/20 text-tertiary font-label-caps text-label-caps font-bold">
+              EARN $0.50 · 0.0042 SOL
+            </span>
+</div>
+</div>
+<!-- Task Banner info -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-4 mb-6 flex flex-wrap justify-between items-center text-body-sm font-body-sm">
+<div><span class="text-on-surface-variant">Video Title:</span> <strong class="text-on-surface">Rust vs Zig in Production 2025</strong></div>
+<div class="font-mono text-secondary">Quorum Progress: 28 / 40 (70%)</div>
+</div>
+<!-- Interactive Selection Bays -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<!-- Option A -->
+<div class="bg-surface-container-low border border-outline-variant hover:border-primary/80 rounded-xl p-5 cursor-pointer transition-all" id="voter-option-card-A" onclick="selectVoteOption('A')">
+<div class="flex justify-between items-center mb-3">
+<span class="px-2.5 py-0.5 rounded bg-surface-container-high text-on-surface font-label-caps text-label-caps font-bold">VARIANT A</span>
+<span class="material-symbols-outlined text-outline-variant vote-check-icon text-[22px]" id="check-icon-A">radio_button_unchecked</span>
+</div>
+<div class="aspect-video w-full rounded-lg overflow-hidden border border-outline-variant mb-3">
+<img class="w-full h-full object-cover" data-alt="A dual comparison thumbnail with vivid orange Rust crab insignia and glowing cyan Zig symbol side by side on dark carbon background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3NFbB_aQXNlIOscS0g1rjypq05thkmv8I8n5PrNCQdZvyF3KRn2e0RfCVDAI8SKHfOqmV8a-07PULQA04RAny-25Xlek-xNb5RX8wApeWjwqOoptJv9hcBW5RniDm92Ij9D8uwW7K0xoDJ7Rndvl1ahOQ3RdwLrkP8WIZaZ0YcRZKKqq1M3A4KhVGBH2anHzS3UTuN9267PGfaTgx-WHMfPXFBZ_F3wKZwZldMBt8Hyxy6T7ABiSG">
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Dual emblem composition with dark carbon texture background.</p>
+</div>
+<!-- Option B -->
+<div class="bg-surface-container-low border border-outline-variant hover:border-primary/80 rounded-xl p-5 cursor-pointer transition-all" id="voter-option-card-B" onclick="selectVoteOption('B')">
+<div class="flex justify-between items-center mb-3">
+<span class="px-2.5 py-0.5 rounded bg-surface-container-high text-on-surface font-label-caps text-label-caps font-bold">VARIANT B</span>
+<span class="material-symbols-outlined text-outline-variant vote-check-icon text-[22px]" id="check-icon-B">radio_button_unchecked</span>
+</div>
+<div class="aspect-video w-full rounded-lg overflow-hidden border border-outline-variant mb-3">
+<img class="w-full h-full object-cover" data-alt="A code terminal screen showing compiler speed benchmark bar graphs with high contrast terminal text." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKbsY77cDXwEOseI3uTbmbBSVLKuqJ68Y-m6vb9R9zGldPcb59i9dHm2XeM3HAnRt_viJQOy3PYByULyxGICssgMXeI1gKlEGvO2T1quLcq_itWPg_BYlcR7SGUWSIAa_S1HpFXt-ugc2BCQEm9zA7K-E9uslk0l7TiIRrGrBpP8cM8jHrmVTIE7Tnd2dQRP-9ASaPece0rebfY2qXJ3HLGqny7ACdguAasAXCAoVIC-08pkSr6Tpd">
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Real terminal compiler benchmark with visual bar metrics.</p>
+</div>
+</div>
+<!-- Optional Qualitative Reasoning + 0/280 Counter -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-5 mb-6">
+<div class="flex justify-between items-center mb-2">
+<label class="text-label-caps font-label-caps text-on-surface-variant uppercase">Feedback for Creator (Optional)</label>
+<span class="text-body-sm font-body-sm text-on-surface-variant font-mono" id="comment-char-counter">0 / 280</span>
+</div>
+<textarea class="w-full bg-surface-container border border-outline-variant focus:border-primary rounded-lg p-3 text-body-md font-body-md text-on-surface placeholder:text-outline-variant focus:outline-none transition-colors" id="vote-comment-input" maxlength="280" oninput="updateCommentCounter(this.value)" placeholder="Why did you select this thumbnail? E.g. Higher contrast, clearer text, more intrigue..." rows="3"></textarea>
+</div>
+<!-- Submit Bar -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-secondary text-[18px]">lock</span>
+<span>Recorded to Solana Devnet with zero gas fees (protocol-sponsored).</span>
+</div>
+<button class="w-full sm:w-auto px-6 py-2.5 rounded-lg bg-primary text-on-primary font-medium hover:bg-primary-container disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all" id="submit-vote-btn" onclick="submitConsensusVote()">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span id="submit-vote-btn-text">Submit Consensus Vote</span>
+</button>
+</div>
+</div>
+</section>
+<!-- **************************************** -->
+<!-- SCREEN 11: HISTORY (/voter/history) -->
+<!-- Submitted Votes & Payout Statuses -->
+<!-- **************************************** -->
+<section class="screen-view hidden" id="screen-voter-history">
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+<div>
+<span class="text-label-caps font-label-caps text-secondary uppercase tracking-widest">Audit Archive</span>
+<h2 class="text-headline-lg font-headline-lg font-bold text-on-surface mt-1">My Evaluated Tasks</h2>
+<p class="text-on-surface-variant font-body-md text-body-md mt-1">Full immutable trail of consensus votes submitted from this wallet.</p>
+</div>
+<div class="font-mono text-tertiary bg-tertiary/10 border border-tertiary/20 px-3 py-1.5 rounded text-body-sm font-body-sm">
+          Lifetime Approved: 68 Votes
+        </div>
+</div>
+<!-- History Table Container -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left text-body-sm font-body-sm">
+<thead class="bg-surface-container text-label-caps font-label-caps text-on-surface-variant uppercase border-b border-outline-variant">
+<tr>
+<th class="px-6 py-3.5">Task &amp; Category</th>
+<th class="px-6 py-3.5">Your Choice</th>
+<th class="px-6 py-3.5">Quorum State</th>
+<th class="px-6 py-3.5">Payout Status</th>
+<th class="px-6 py-3.5 text-right">Devnet Tx</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container/50 transition-colors">
+<td class="px-6 py-4">
+<div class="font-medium text-on-surface">Next-Gen Flagship Phone Breakdown</div>
+<div class="text-[11px] text-on-surface-variant font-mono">#CL-9821 · YouTube Tech</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-mono text-[10px] font-bold">OPTION A</span>
+</td>
+<td class="px-6 py-4">
+<span class="text-tertiary flex items-center gap-1 font-mono text-[12px]">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                    Consensus Reached (68%)
+                  </span>
+</td>
+<td class="px-6 py-4">
+<span class="text-tertiary font-bold font-mono">+$0.50 · 0.0042 SOL</span>
+<div class="text-[10px] text-tertiary/80">Paid to Wallet</div>
+</td>
+<td class="px-6 py-4 text-right">
+<a class="text-secondary font-mono hover:underline text-[12px]" href="javascript:void(0)" onclick="showToast('Explorer: Devnet Tx 4G8p...9xLQ Confirmed')">4G8p...9xLQ</a>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container/50 transition-colors">
+<td class="px-6 py-4">
+<div class="font-medium text-on-surface">M4 Mac Studio: Studio vs. Exploded</div>
+<div class="text-[11px] text-on-surface-variant font-mono">#CL-9740 · Hardware</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-mono text-[10px] font-bold">OPTION A</span>
+</td>
+<td class="px-6 py-4">
+<span class="text-tertiary flex items-center gap-1 font-mono text-[12px]">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                    Consensus Reached (82%)
+                  </span>
+</td>
+<td class="px-6 py-4">
+<span class="text-tertiary font-bold font-mono">+$0.50 · 0.0042 SOL</span>
+<div class="text-[10px] text-tertiary/80">Paid to Wallet</div>
+</td>
+<td class="px-6 py-4 text-right">
+<a class="text-secondary font-mono hover:underline text-[12px]" href="javascript:void(0)" onclick="showToast('Explorer: Devnet Tx 2wKm...4mPP Confirmed')">2wKm...4mPP</a>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container/50 transition-colors">
+<td class="px-6 py-4">
+<div class="font-medium text-on-surface">Cyberpunk Unreal Engine 5.6 Teaser</div>
+<div class="text-[11px] text-on-surface-variant font-mono">#CL-9831 · Gaming</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-mono text-[10px] font-bold">OPTION B</span>
+</td>
+<td class="px-6 py-4">
+<span class="text-secondary flex items-center gap-1 font-mono text-[12px]">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary pulse-ring"></span>
+                    Quorum Open (82/100)
+                  </span>
+</td>
+<td class="px-6 py-4">
+<span class="text-on-surface-variant font-mono">Pending Quorum</span>
+<div class="text-[10px] text-on-surface-variant">0.0042 SOL Escrowed</div>
+</td>
+<td class="px-6 py-4 text-right">
+<a class="text-secondary font-mono hover:underline text-[12px]" href="javascript:void(0)" onclick="showToast('Explorer: Devnet Tx 9jRt...3xVq Confirmed')">9jRt...3xVq</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- **************************************** -->
+<!-- SCREEN 12: EARNINGS (/voter/earnings) -->
+<!-- 6 Stat Tiles, On-chain Payout Ledger, Explorer Links -->
+<!-- **************************************** -->
+<section class="screen-view hidden" id="screen-voter-earnings">
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+<div>
+<span class="text-label-caps font-label-caps text-tertiary uppercase tracking-widest">Validator Financials</span>
+<h2 class="text-headline-lg font-headline-lg font-bold text-on-surface mt-1">Earnings &amp; Payout Ledger</h2>
+<p class="text-on-surface-variant font-body-md text-body-md mt-1">Instant program distributions to your connected Phantom Devnet account.</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-4 py-2 rounded-lg bg-tertiary/10 border border-tertiary/30 text-tertiary hover:bg-tertiary/20 font-medium text-body-sm font-body-sm flex items-center gap-1.5" onclick="showToast('Withdrawing not required: CrowdLens pays automatically per vote!')">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span>Zero Balance Threshold (Instant Direct Pay)</span>
+</button>
+</div>
+</div>
+<!-- 6 Stat Tiles Grid -->
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-4">
+<div class="text-label-caps font-label-caps text-on-surface-variant">LIFETIME EARNED</div>
+<div class="text-headline-sm font-headline-sm font-bold text-tertiary mt-2 font-mono">$34.00</div>
+<div class="text-[11px] text-tertiary/80 font-mono">0.2856 SOL</div>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-4">
+<div class="text-label-caps font-label-caps text-on-surface-variant">APPROVED VOTES</div>
+<div class="text-headline-sm font-headline-sm font-bold text-on-surface mt-2 font-mono">68</div>
+<div class="text-[11px] text-on-surface-variant">100% Reliability</div>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-4">
+<div class="text-label-caps font-label-caps text-on-surface-variant">PENDING QUORUM</div>
+<div class="text-headline-sm font-headline-sm font-bold text-secondary mt-2 font-mono">$0.50</div>
+<div class="text-[11px] text-secondary font-mono">1 Active Task</div>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-4">
+<div class="text-label-caps font-label-caps text-on-surface-variant">ACCURACY RANK</div>
+<div class="text-headline-sm font-headline-sm font-bold text-primary mt-2 font-mono">Top 2%</div>
+<div class="text-[11px] text-primary/80">Oracle Consensus</div>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-4">
+<div class="text-label-caps font-label-caps text-on-surface-variant">GAS REIMBURSED</div>
+<div class="text-headline-sm font-headline-sm font-bold text-on-surface mt-2 font-mono">0.0000 SOL</div>
+<div class="text-[11px] text-on-surface-variant">Protocol Paid</div>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-4">
+<div class="text-label-caps font-label-caps text-on-surface-variant">DEVNET SOL AIRDROP</div>
+<button class="text-secondary hover:text-on-surface font-label-caps text-label-caps mt-2 font-mono underline block" onclick="triggerFaucetModal()">
+            REQUEST +2 SOL
+          </button>
+<div class="text-[11px] text-on-surface-variant">Public Faucet</div>
+</div>
+</div>
+<!-- On-Chain Payout Ledger Table -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-6">
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold mb-4">On-Chain Payout Ledger</h3>
+<div class="space-y-3">
+<!-- Item 1 -->
+<div class="p-3 rounded-lg bg-surface-container border border-outline-variant flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-tertiary/10 text-tertiary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[18px]">payments</span>
+</div>
+<div>
+<div class="font-medium text-on-surface text-body-sm font-body-sm">Consensus Reward Payout #CL-9821</div>
+<div class="text-[11px] text-on-surface-variant font-mono">Recipient: 9wgk...ph8x · Block 294,098,112</div>
+</div>
+</div>
+<div class="flex items-center gap-4 self-end sm:self-auto">
+<div class="text-right">
+<span class="text-tertiary font-bold font-mono text-body-sm font-body-sm">+$0.50 · 0.0042 SOL</span>
+<span class="text-[11px] text-tertiary block">CONFIRMED</span>
+</div>
+<button class="p-1.5 rounded hover:bg-surface-container-high text-secondary" onclick="showToast('Solana Explorer: Opening Tx 4G8p...9xLQ')" title="View in Explorer">
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</button>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="p-3 rounded-lg bg-surface-container border border-outline-variant flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-tertiary/10 text-tertiary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[18px]">payments</span>
+</div>
+<div>
+<div class="font-medium text-on-surface text-body-sm font-body-sm">Consensus Reward Payout #CL-9740</div>
+<div class="text-[11px] text-on-surface-variant font-mono">Recipient: 9wgk...ph8x · Block 294,085,410</div>
+</div>
+</div>
+<div class="flex items-center gap-4 self-end sm:self-auto">
+<div class="text-right">
+<span class="text-tertiary font-bold font-mono text-body-sm font-body-sm">+$0.50 · 0.0042 SOL</span>
+<span class="text-[11px] text-tertiary block">CONFIRMED</span>
+</div>
+<button class="p-1.5 rounded hover:bg-surface-container-high text-secondary" onclick="showToast('Solana Explorer: Opening Tx 2wKm...4mPP')" title="View in Explorer">
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</button>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="p-3 rounded-lg bg-surface-container border border-outline-variant flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-tertiary/10 text-tertiary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[18px]">payments</span>
+</div>
+<div>
+<div class="font-medium text-on-surface text-body-sm font-body-sm">Consensus Reward Payout #CL-9682</div>
+<div class="text-[11px] text-on-surface-variant font-mono">Recipient: 9wgk...ph8x · Block 294,011,922</div>
+</div>
+</div>
+<div class="flex items-center gap-4 self-end sm:self-auto">
+<div class="text-right">
+<span class="text-tertiary font-bold font-mono text-body-sm font-body-sm">+$0.50 · 0.0042 SOL</span>
+<span class="text-[11px] text-tertiary block">CONFIRMED</span>
+</div>
+<button class="p-1.5 rounded hover:bg-surface-container-high text-secondary" onclick="showToast('Solana Explorer: Opening Tx 8xTy...11Zz')" title="View in Explorer">
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- ========================================== -->
+<!-- 2. SHARED COMPONENT: BottomNavBar (Mobile Navigation) -->
+<!-- Active state applied dynamically based on active screen -->
+<!-- ========================================== -->
+<nav class="bg-surface-container-lowest dark:bg-surface-container-lowest text-primary dark:text-primary docked full-width bottom-0 fixed z-50 md:hidden border-t border-outline-variant dark:border-outline-variant" id="mobile-bottom-nav">
+<div class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin-mobile py-2 bg-surface-container-lowest border-t border-outline-variant">
+<!-- Item 1: Tasks -->
+<button class="mobile-nav-item flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-3 py-1.5" data-mob-dest="screen-creator" onclick="setScreen('screen-creator')">
+<span class="material-symbols-outlined text-[20px]">grid_view</span>
+<span class="text-label-caps font-label-caps mt-0.5">Tasks</span>
+</button>
+<!-- Item 2: Create -->
+<button class="mobile-nav-item flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-3 py-1.5" data-mob-dest="screen-create-task" onclick="setScreen('screen-create-task')">
+<span class="material-symbols-outlined text-[20px]">add_circle</span>
+<span class="text-label-caps font-label-caps mt-0.5">Create</span>
+</button>
+<!-- Item 3: Votes -->
+<button class="mobile-nav-item flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-3 py-1.5" data-mob-dest="screen-voter" onclick="setScreen('screen-voter')">
+<span class="material-symbols-outlined text-[20px]">how_to_vote</span>
+<span class="text-label-caps font-label-caps mt-0.5">Votes</span>
+</button>
+<!-- Item 4: Earnings -->
+<button class="mobile-nav-item flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-3 py-1.5" data-mob-dest="screen-voter-earnings" onclick="setScreen('screen-voter-earnings')">
+<span class="material-symbols-outlined text-[20px]">payments</span>
+<span class="text-label-caps font-label-caps mt-0.5">Earnings</span>
+</button>
+</div>
+</nav>
+<!-- ========================================== -->
+<!-- 3. SHARED COMPONENT: Footer (Web Footer) -->
+<!-- ========================================== -->
+<footer class="bg-surface-container-lowest dark:bg-surface-container-lowest text-primary dark:text-primary full-width border-t border-outline-variant dark:border-outline-variant mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-space-md md:px-margin max-w-7xl mx-auto py-8 gap-4">
+<div class="flex items-center gap-3">
+<div class="w-6 h-6 rounded bg-surface-container-high border border-outline-variant flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[15px]">bar_chart</span>
+</div>
+<span class="text-headline-sm font-headline-sm font-bold text-on-surface dark:text-on-surface">CrowdLens</span>
+<span class="text-on-surface-variant dark:text-on-surface-variant text-body-sm font-body-sm ml-2">© 2025 CrowdLens Protocol. Solana Devnet Human Oracle.</span>
+</div>
+<div class="flex flex-wrap items-center gap-6 text-body-sm font-body-sm">
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface transition-colors" href="javascript:void(0)" onclick="showToast('Opening CrowdLens Technical Whitepaper')">Documentation</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface transition-colors" href="javascript:void(0)" onclick="triggerFaucetModal()">Devnet Faucet</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface transition-colors" href="javascript:void(0)" onclick="setScreen('screen-stats')">Consensus Spec</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface transition-colors" href="javascript:void(0)" onclick="showToast('Solana Program GitHub: crowdlens-protocol')">GitHub</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface transition-colors" href="javascript:void(0)" onclick="showToast('Terms: Decentralized protocol terms of service')">Terms of Service</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface transition-colors flex items-center gap-1" href="javascript:void(0)" onclick="showToast('Solana Devnet RPC: Operational at 1,842 TPS')">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span>Status</span>
+</a>
+</div>
+</div>
+</footer>
+<!-- ========================================== -->
+<!-- MODAL: SOLANA DEVNET FAUCET -->
+<!-- ========================================== -->
+<div class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4" id="faucet-modal">
+<div class="bg-surface-container-low border border-outline-variant rounded-xl max-w-md w-full p-6 shadow-2xl">
+<div class="flex justify-between items-center mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">water_drop</span>
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-bold">Solana Devnet Faucet</h3>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface" onclick="closeFaucetModal()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant mb-4">
+        Need testnet tokens for escrowing Creator tasks? We will airdrop 2.0 SOL directly from the official Solana Devnet cluster.
+      </p>
+<div class="p-3 bg-surface-container rounded-lg border border-outline-variant font-mono text-body-sm font-body-sm text-secondary mb-4 break-all">
+        Target Address: 9wgk...ph8x (Phantom Connected)
+      </div>
+<div class="flex justify-end gap-3">
+<button class="px-4 py-2 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant text-on-surface text-body-sm font-body-sm" onclick="closeFaucetModal()">Cancel</button>
+<button class="px-4 py-2 rounded bg-primary text-on-primary font-medium text-body-sm font-body-sm flex items-center gap-1.5 hover:bg-primary-container" onclick="requestDevnetSolAirdrop()">
+<span class="material-symbols-outlined text-[16px]">send</span>
+<span>Airdrop 2.0 Devnet SOL</span>
+</button>
+</div>
+</div>
+</div>
+<!-- ========================================== -->
+<!-- JAVASCRIPT: Protocol State, Routing & Interactions -->
+<!-- ========================================== -->
+<script>
+    // State management
+    let currentScreen = 'screen-landing';
+    let isMobileView = false;
+    let walletConnected = true;
+    let selectedVoteOption = null;
+    let isTieSimulated = false;
+
+    // Toast notification manager
+    function showToast(message, type = 'default') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'px-4 py-3 rounded-lg bg-surface-container-high border border-outline-variant text-on-surface shadow-2xl flex items-center gap-2.5 transform transition-all duration-300 translate-y-2 opacity-0 text-body-sm font-body-sm pointer-events-auto max-w-sm';
+      
+      let icon = 'info';
+      let iconColor = 'text-secondary';
+      if (message.includes('Vote recorded') || message.includes('sent') || message.includes('Confirmed') || message.includes('Airdropped')) {
+        icon = 'check_circle';
+        iconColor = 'text-tertiary';
+      } else if (message.includes('Error') || message.includes('Disconnected')) {
+        icon = 'error';
+        iconColor = 'text-error';
+      }
+
+      toast.innerHTML = `
+        <span class="material-symbols-outlined ${iconColor} text-[18px] flex-shrink-0">${icon}</span>
+        <span class="flex-grow">${message}</span>
+      `;
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-x-4');
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // Router / Screen Switcher
+    function setScreen(screenId) {
+      currentScreen = screenId;
+      document.querySelectorAll('.screen-view').forEach(el => el.classList.add('hidden'));
+      const activeEl = document.getElementById(screenId);
+      if (activeEl) activeEl.classList.remove('hidden');
+
+      // Update Top Router Controller Tabs
+      document.querySelectorAll('.screen-nav-btn').forEach(btn => {
+        if (btn.getAttribute('data-tab') === screenId) {
+          btn.className = 'screen-nav-btn px-2.5 py-1 rounded text-primary font-medium bg-surface-container-high';
+        } else {
+          btn.className = 'screen-nav-btn px-2.5 py-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container';
+        }
+      });
+
+      // Update TopNavBar active navigation links according to JSON rules
+      document.querySelectorAll('#main-nav-links .nav-link').forEach(link => {
+        const dest = link.getAttribute('data-dest');
+        if (dest === screenId || (screenId === 'screen-creator-detail' && dest === 'screen-creator')) {
+          link.className = 'nav-link text-primary dark:text-primary border-b-2 border-primary font-medium pb-1 font-body-md text-body-md';
+        } else {
+          link.className = 'nav-link text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface transition-colors pb-1 font-body-md text-body-md';
+        }
+      });
+
+      // Update Mobile BottomNavBar active state according to JSON rules
+      document.querySelectorAll('.mobile-nav-item').forEach(item => {
+        const dest = item.getAttribute('data-mob-dest');
+        if (dest === screenId || (screenId === 'screen-creator-detail' && dest === 'screen-creator') || (screenId === 'screen-vote-detail' && dest === 'screen-voter')) {
+          item.className = 'mobile-nav-item flex flex-col items-center justify-center bg-surface-container-high dark:bg-surface-container-high text-secondary dark:text-secondary rounded-lg px-3 py-1.5';
+        } else {
+          item.className = 'mobile-nav-item flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-3 py-1.5';
+        }
+      });
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Toggle Mobile Frame (390px view simulator)
+    function toggleMobileViewport() {
+      const container = document.getElementById('app-canvas-container');
+      const label = document.getElementById('viewport-label');
+      const icon = document.getElementById('viewport-icon');
+      const mobNav = document.getElementById('mobile-bottom-nav');
+
+      isMobileView = !isMobileView;
+      if (isMobileView) {
+        container.classList.remove('max-w-7xl');
+        container.classList.add('max-w-[410px]', 'border-x', 'border-outline-variant', 'bg-surface-container-lowest', 'shadow-2xl');
+        label.innerText = 'Desktop (1440px)';
+        icon.innerText = 'desktop_windows';
+        mobNav.classList.remove('md:hidden'); // Show mobile bottom bar inside simulation
+        showToast('Switched to 390px Mobile Viewport Canvas');
+      } else {
+        container.classList.add('max-w-7xl');
+        container.classList.remove('max-w-[410px]', 'border-x', 'border-outline-variant', 'shadow-2xl');
+        label.innerText = 'Mobile (390px)';
+        icon.innerText = 'smartphone';
+        mobNav.classList.add('md:hidden');
+        showToast('Restored Desktop 1440px Grid');
+      }
+    }
+
+    // Wallet Toggle simulation
+    function toggleWalletState() {
+      const btn = document.getElementById('wallet-btn');
+      const text = document.getElementById('wallet-text');
+      const bal = document.getElementById('wallet-balance');
+
+      walletConnected = !walletConnected;
+      if (walletConnected) {
+        text.innerText = '9wgk...ph8x';
+        bal.innerText = '14.28 DEV SOL';
+        bal.classList.remove('hidden');
+        showToast('Phantom Devnet Wallet Connected');
+      } else {
+        text.innerText = 'Connect Wallet';
+        bal.classList.add('hidden');
+        showToast('Wallet Disconnected', 'error');
+      }
+    }
+
+    // Hero Calculator
+    function updateHeroCalculator(votes) {
+      document.getElementById('hero-votes-val').innerText = `${votes} Votes`;
+      const creatorUsd = (votes * 1.0).toFixed(2);
+      const creatorSol = (votes * 0.0083).toFixed(4);
+      const validatorUsd = (votes * 0.5).toFixed(2);
+      const validatorSol = (votes * 0.0042).toFixed(4);
+
+      document.getElementById('hero-creator-cost').innerText = `$${creatorUsd}`;
+      document.getElementById('hero-creator-sol').innerText = `${creatorSol} SOL`;
+      document.getElementById('hero-reward-cost').innerText = `$${validatorUsd}`;
+      document.getElementById('hero-reward-sol').innerText = `${validatorSol} SOL`;
+    }
+
+    // Task Creation Calculator
+    function syncVoteSlider(val) {
+      document.getElementById('vote-range-slider').value = val;
+      updateEscrowTotal(val);
+    }
+    function syncVoteInput(val) {
+      document.getElementById('vote-number-input').value = val;
+      updateEscrowTotal(val);
+    }
+    function updateEscrowTotal(votes) {
+      document.getElementById('escrow-votes-display').innerText = `${votes} Voters`;
+      const poolUsd = (votes * 0.5).toFixed(2);
+      const poolSol = (votes * 0.0042).toFixed(4);
+      document.getElementById('escrow-validator-pool').innerText = `$${poolUsd} · ${poolSol} SOL`;
+
+      const totalUsd = (votes * 1.0).toFixed(2);
+      const totalSol = (votes * 0.0083).toFixed(4);
+      document.getElementById('total-usd-cost').innerText = `$${totalUsd}`;
+      document.getElementById('total-sol-cost').innerText = `${totalSol} SOL`;
+      document.getElementById('deploy-btn-text').innerText = `Sign & Escrow ${totalSol} SOL`;
+    }
+
+    // Add variant simulation in task creation
+    function simulateAddVariant() {
+      const grid = document.getElementById('variant-slot-grid');
+      const currentSlots = grid.children.length;
+      if (currentSlots >= 5) {
+        showToast('Maximum of 5 variants allowed per protocol task');
+        return;
+      }
+      const letters = ['A', 'B', 'C', 'D', 'E'];
+      const nextLetter = letters[currentSlots];
+      
+      const newSlot = document.createElement('div');
+      newSlot.className = 'border border-outline-variant bg-surface-container rounded-lg p-2 relative group';
+      newSlot.innerHTML = `
+        <span class="absolute top-3 left-3 bg-surface-container-high text-on-surface text-[10px] font-bold px-1.5 py-0.5 rounded">Option ${nextLetter}</span>
+        <img src="placeholder" data-alt="A tech content thumbnail variant with crisp cinematic lighting highlighting high tech components." class="w-full h-24 object-cover rounded">
+        <div class="text-[11px] text-on-surface truncate mt-1.5 font-medium">Variant_${nextLetter}_Upload.png</div>
+      `;
+      grid.appendChild(newSlot);
+      document.getElementById('slot-count-badge').innerText = `${currentSlots + 1} Variants Uploaded`;
+      showToast(`Added Variant Slot ${nextLetter}`);
+    }
+
+    // Execute Task Creation Flow
+    function executeTaskCreation() {
+      const btn = document.getElementById('deploy-task-btn');
+      const text = document.getElementById('deploy-btn-text');
+      const votes = document.getElementById('vote-number-input').value;
+      const sol = (votes * 0.0083).toFixed(4);
+
+      showToast("Signing in with Phantom Wallet...");
+      text.innerText = "Requesting Signature...";
+      btn.disabled = true;
+
+      setTimeout(() => {
+        showToast(`Sending ${sol} SOL to Solana Program Escrow...`);
+        text.innerText = `Escrowing ${sol} SOL...`;
+
+        setTimeout(() => {
+          showToast("Task created successfully on Devnet!");
+          btn.disabled = false;
+          text.innerText = `Sign & Escrow ${sol} SOL`;
+          setScreen('screen-creator');
+        }, 1400);
+      }, 1000);
+    }
+
+    // Switch between Creator Task States (Active, Empty, Loading, Error)
+    function setCreatorState(state) {
+      document.getElementById('creator-state-active').classList.add('hidden');
+      document.getElementById('creator-state-empty').classList.add('hidden');
+      document.getElementById('creator-state-loading').classList.add('hidden');
+      document.getElementById('creator-state-error').classList.add('hidden');
+
+      const activeBtn = document.getElementById(`cstate-${state}`);
+      document.querySelectorAll('[id^="cstate-"]').forEach(b => {
+        b.className = 'px-2 py-0.5 rounded text-on-surface-variant hover:text-on-surface';
+      });
+      activeBtn.className = 'px-2 py-0.5 rounded bg-surface-container text-secondary font-medium';
+
+      document.getElementById(`creator-state-${state}`).classList.remove('hidden');
+    }
+
+    // Tie simulation toggle in Task Detail
+    function toggleTieSimulation() {
+      isTieSimulated = !isTieSimulated;
+      const banner = document.getElementById('winner-banner-container');
+      const title = document.getElementById('winner-banner-title');
+      const subtitle = document.getElementById('winner-banner-subtitle');
+      const pct = document.getElementById('winner-banner-pct');
+      const toggleLabel = document.getElementById('tie-toggle-label');
+      
+      const cardA = document.getElementById('card-option-a');
+      const barA = document.getElementById('bar-a');
+      const votesA = document.getElementById('card-a-votes');
+
+      const cardB = document.getElementById('card-option-b');
+      const barB = document.getElementById('bar-b');
+      const votesB = document.getElementById('card-b-votes');
+
+      if (isTieSimulated) {
+        banner.className = 'bg-surface-container-high border border-outline-variant rounded-xl p-5 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4';
+        title.innerText = 'Statistical Dead Heat: Option A & Option B Tie';
+        subtitle.innerText = 'Both variants tied at exactly 25 votes each. Recommend 20 additional votes for significance.';
+        pct.innerText = '50% / 50%';
+        toggleLabel.innerText = 'Restore Conclusive Winner (68%)';
+
+        cardA.className = 'bg-surface-container-low border border-secondary rounded-xl p-5 relative';
+        barA.style.width = '50%';
+        votesA.innerText = '25 Votes (50%)';
+
+        cardB.className = 'bg-surface-container-low border border-secondary rounded-xl p-5 relative';
+        barB.style.width = '50%';
+        votesB.innerText = '25 Votes (50%)';
+
+        showToast('Simulated Quorum Dead-Heat (50/50)');
+      } else {
+        banner.className = 'bg-primary/10 border border-primary/40 rounded-xl p-5 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4';
+        title.innerText = 'Conclusive Winner: Option A (Cyan Exploded View)';
+        subtitle.innerText = 'Statistical Confidence: 99.4% (p < 0.001) over 50 Devnet validator votes.';
+        pct.innerText = '68% Share';
+        toggleLabel.innerText = 'Simulate Tie State (50/50)';
+
+        cardA.className = 'bg-surface-container-low border-2 border-primary rounded-xl p-5 relative custom-glow-cyan';
+        barA.style.width = '68%';
+        votesA.innerText = '34 Votes (68%)';
+
+        cardB.className = 'bg-surface-container-low border border-outline-variant rounded-xl p-5';
+        barB.style.width = '22%';
+        votesB.innerText = '11 Votes (22%)';
+
+        showToast('Restored Conclusive Winner State');
+      }
+    }
+
+    // Export Audit Data
+    function exportAuditData(format) {
+      if (format === 'csv') {
+        showToast('Generated & downloaded: task_CL9821_consensus_audit.csv');
+      } else {
+        showToast('Generated & downloaded: task_CL9821_oracle_proof.json');
+      }
+    }
+
+    // Voter interaction
+    function selectVoteOption(opt) {
+      selectedVoteOption = opt;
+      const cardA = document.getElementById('voter-option-card-A');
+      const cardB = document.getElementById('voter-option-card-B');
+      const iconA = document.getElementById('check-icon-A');
+      const iconB = document.getElementById('check-icon-B');
+
+      if (opt === 'A') {
+        cardA.className = 'bg-surface-container-low border-2 border-primary rounded-xl p-5 cursor-pointer transition-all custom-glow-cyan';
+        cardB.className = 'bg-surface-container-low border border-outline-variant hover:border-primary/80 rounded-xl p-5 cursor-pointer transition-all';
+        iconA.innerText = 'check_circle';
+        iconA.className = 'material-symbols-outlined text-primary text-[22px]';
+        iconB.innerText = 'radio_button_unchecked';
+        iconB.className = 'material-symbols-outlined text-outline-variant text-[22px]';
+      } else {
+        cardB.className = 'bg-surface-container-low border-2 border-primary rounded-xl p-5 cursor-pointer transition-all custom-glow-cyan';
+        cardA.className = 'bg-surface-container-low border border-outline-variant hover:border-primary/80 rounded-xl p-5 cursor-pointer transition-all';
+        iconB.innerText = 'check_circle';
+        iconB.className = 'material-symbols-outlined text-primary text-[22px]';
+        iconA.innerText = 'radio_button_unchecked';
+        iconA.className = 'material-symbols-outlined text-outline-variant text-[22px]';
+      }
+    }
+
+    function updateCommentCounter(text) {
+      document.getElementById('comment-char-counter').innerText = `${text.length} / 280`;
+    }
+
+    function submitConsensusVote() {
+      if (!selectedVoteOption) {
+        showToast('Please select either Variant A or B first', 'error');
+        return;
+      }
+      const btn = document.getElementById('submit-vote-btn');
+      const text = document.getElementById('submit-vote-btn-text');
+      btn.disabled = true;
+      text.innerText = 'Submitting Oracle Signature...';
+
+      setTimeout(() => {
+        showToast('Vote recorded. $0.50 · 0.0042 SOL sent to your Devnet wallet.');
+        btn.disabled = false;
+        text.innerText = 'Submit Consensus Vote';
+        setScreen('screen-voter-history');
+      }, 1200);
+    }
+
+    // Faucet Modal triggers
+    function triggerFaucetModal() {
+      document.getElementById('faucet-modal').classList.remove('hidden');
+    }
+    function closeFaucetModal() {
+      document.getElementById('faucet-modal').classList.add('hidden');
+    }
+    function requestDevnetSolAirdrop() {
+      closeFaucetModal();
+      showToast('Airdropping 2.0 Devnet SOL from official faucet...');
+      setTimeout(() => {
+        showToast('Confirmed: +2.0 Devnet SOL credited to 9wgk...ph8x');
+        document.getElementById('wallet-balance').innerText = '16.28 DEV SOL';
+      }, 1500);
+    }
+
+    // Initial setup
+    document.addEventListener('DOMContentLoaded', () => {
+      setScreen('screen-landing');
+    });
+  </script>
+<script>
+  function updateEscrowLive(votes) {
+    votes = parseInt(votes, 10);
+    if (isNaN(votes)) votes = 10;
+    if (votes < 10) votes = 10;
+    if (votes > 1000) votes = 1000;
+
+    const slider = document.getElementById('escrow-calc-slider');
+    const input = document.getElementById('escrow-calc-input');
+    if (slider) slider.value = votes;
+    if (input) input.value = votes;
+
+    const payUsd = (votes * 1.00).toFixed(2);
+    const paySol = (votes * 0.0083).toFixed(4);
+    const earnUsd = (votes * 0.80).toFixed(2);
+    const earnSol = (votes * 0.00664).toFixed(4);
+
+    const payUsdEl = document.getElementById('calc-pay-usd');
+    const paySolEl = document.getElementById('calc-pay-sol');
+    const earnUsdEl = document.getElementById('calc-earn-usd');
+    const earnSolEl = document.getElementById('calc-earn-sol');
+
+    if (payUsdEl) payUsdEl.innerText = `You pay: $${payUsd}`;
+    if (paySolEl) paySolEl.innerText = `${paySol} SOL in escrow`;
+    if (earnUsdEl) earnUsdEl.innerText = `Validators earn: $${earnUsd}`;
+    if (earnSolEl) earnSolEl.innerText = `80% pool: ${earnSol} SOL distributed`;
+  }
+
+  function stepCalcVotes(delta) {
+    const input = document.getElementById('escrow-calc-input');
+    let current = parseInt(input ? input.value : 50, 10) || 50;
+    updateEscrowLive(current + delta);
+  }
+
+  // Initialize on page ready
+  document.addEventListener('DOMContentLoaded', () => {
+    updateEscrowLive(50);
+  });
+</script>
+</body></html>

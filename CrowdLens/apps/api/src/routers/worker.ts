@@ -8,6 +8,7 @@ import { createSubmissionInput } from "../types";
 import { env } from "../env";
 import { HttpError, isUniqueConstraintError, sendError } from "../http";
 import { issueNonce, verifySignedNonce } from "../auth/nonce";
+import { issueTokenFromPeerSession } from "../auth/sessionExchange";
 import { authRateLimit, payoutRateLimit, submissionRateLimit } from "../rateLimit";
 import { submitVote } from "../taskLifecycle";
 import { executePayout } from "../payouts/engine";
@@ -21,32 +22,38 @@ router.post("/signin/nonce", authRateLimit, async (req, res) => {
     await issueNonce(req, res, SignInRole.Worker);
 });
 
-router.post("/signin", authRateLimit, async (req, res) => {
-    await verifySignedNonce(req, res, SignInRole.Worker, env.WORKER_JWT_SECRET, async (address) => {
-        if (env.WALLET_MIN_SIGNATURES > 0) {
-            const connection = new Connection(env.RPC_URL);
-            const signatures = await connection.getSignaturesForAddress(
-                new PublicKey(address),
-                { limit: env.WALLET_MIN_SIGNATURES },
-            );
-            if (signatures.length < env.WALLET_MIN_SIGNATURES) {
-                throw new HttpError(403, "Wallet has too little on-chain activity");
-            }
+async function ensureWorker(address: string) {
+    if (env.WALLET_MIN_SIGNATURES > 0) {
+        const connection = new Connection(env.RPC_URL);
+        const signatures = await connection.getSignaturesForAddress(
+            new PublicKey(address),
+            { limit: env.WALLET_MIN_SIGNATURES },
+        );
+        if (signatures.length < env.WALLET_MIN_SIGNATURES) {
+            throw new HttpError(403, "Wallet has too little on-chain activity");
         }
-        const existing = await prismaClient.worker.findUnique({
-            where: { address },
-        });
-        if (existing) {
-            return existing;
-        }
-        return prismaClient.worker.create({
-            data: {
-                address,
-                pending_amount: 0,
-                locked_amount: 0,
-            },
-        });
+    }
+    const existing = await prismaClient.worker.findUnique({
+        where: { address },
     });
+    if (existing) {
+        return existing;
+    }
+    return prismaClient.worker.create({
+        data: {
+            address,
+            pending_amount: 0,
+            locked_amount: 0,
+        },
+    });
+}
+
+router.post("/signin", authRateLimit, async (req, res) => {
+    await verifySignedNonce(req, res, SignInRole.Worker, env.WORKER_JWT_SECRET, ensureWorker);
+});
+
+router.post("/signin/from-session", authRateLimit, async (req, res) => {
+    await issueTokenFromPeerSession(req, res, env.JWT_SECRET, env.WORKER_JWT_SECRET, ensureWorker);
 });
 
 router.get("/nextTask", workerAuthMiddleware, async (req, res) => {

@@ -8,7 +8,7 @@ Grant MVP is Phases 0–6 (this repo). Lens AI and compressed NFTs are explicitl
 
 | Surface | URL |
 | --- | --- |
-| App | _after Vercel deploy_ (`/` landing, `/creator`, `/voter`) |
+| App | _after Vercel deploy_ (`/` landing, `/creator`, `/validators`) |
 | API health | `GET <api>/health` → `{ "ok": true }` |
 
 📽️ **Demo video:** _paste link after recording_
@@ -16,28 +16,28 @@ Grant MVP is Phases 0–6 (this repo). Lens AI and compressed NFTs are explicitl
 Shot list:
 
 1. Phantom on **devnet**, faucet if the wallet is empty
-2. `/voter`: connect, vote on a seeded demo task (optional comment)
+2. `/validators/votes`: connect, vote on a seeded demo task (optional comment)
 3. `/creator`: upload two images, pick a batch, pay, see the task on the list
-4. `/voter`: vote on that task, open Earnings, withdraw, open the explorer
+4. `/validators/votes`: vote on that task, open Earnings, withdraw, open the explorer
 
 ## How it works
 
 ```
-Next.js (`/` `/creator` `/voter`)  ──  Express API  ──  Postgres (Prisma)
+Next.js (`/` `/creator` `/validators`)  ──  Express API  ──  Postgres (Prisma)
                                            │
                                            ├──  S3 (presigned image upload)
                                            └──  Solana devnet (pay-in + custodial pay-out, optional PDA escrow)
 ```
 
-- **App** (`apps/frontend`, port 3000): landing, creator tasks at `/creator`, voter queue at `/voter`.
+- **App** (`apps/frontend`, port 3000): landing `/`, validator guide `/validators`, votes `/validators/votes`, creator `/creator`.
 - **API** (`apps/api`, port 8080): nonce JWT auth, tasks, votes, custodial treasury.
 - Payouts default to **custodial** (server signs from `TREASURY_SECRET_KEY`). Set `SETTLEMENT_MODE=onchain` after deploying the Anchor program in [`anchor/`](anchor/) to escrow task funds in a PDA.
 
 ## Economics (devnet)
 
-- Creators pay **$1 per vote**, voters earn **$0.50 per vote**, converted to SOL at the live rate
+- Creators pay **$1 per vote**, voters earn **$0.80 per vote** (80% of escrow), converted to SOL at the live rate
 - Vote count is adjustable (**1–100** by default)
-- Minimum worker withdraw: **one vote payout ($0.50 in SOL)**
+- Minimum worker withdraw: **one vote payout ($0.80 in SOL)**
 - Network: **devnet only** — faucet: https://faucet.solana.com
 
 ## Local

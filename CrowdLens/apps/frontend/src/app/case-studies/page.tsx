@@ -17,10 +17,10 @@ const studies = caseStudies as CaseStudy[];
 
 export default function CaseStudiesPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-white">
+    <div className="min-h-screen bg-slate-950 text-slate-200">
       <Navbar />
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16">
-        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-violet-500 to-cyan-400 bg-clip-text text-transparent">
+      <main className="mx-auto max-w-7xl px-4 pt-28 pb-16 sm:px-6 lg:px-8">
+        <h1 className="font-display text-3xl font-bold tracking-tight text-white md:text-4xl">
           Case studies
         </h1>
         <p className="mt-3 text-slate-400 max-w-2xl">
@@ -28,7 +28,7 @@ export default function CaseStudiesPage() {
         </p>
 
         {studies.length === 0 ? (
-          <div className="mt-12 rounded-xl border border-slate-800 bg-slate-900/50 px-6 py-10">
+          <div className="mt-12 rounded-2xl border border-slate-800 bg-slate-900 px-6 py-10">
             <p className="text-slate-300">No published case studies yet.</p>
             <p className="mt-3 text-sm text-slate-400">
               After a pilot batch, add an entry to{" "}
@@ -42,7 +42,7 @@ export default function CaseStudiesPage() {
             {studies.map((study) => (
               <article
                 key={`${study.creatorLabel}-${study.title}`}
-                className="rounded-xl border border-slate-800 bg-slate-900/50 px-6 py-6"
+                className="rounded-2xl border border-slate-800 bg-slate-900 px-6 py-6"
               >
                 <h2 className="text-xl font-semibold">{study.title}</h2>
                 <p className="mt-1 text-sm text-slate-400">

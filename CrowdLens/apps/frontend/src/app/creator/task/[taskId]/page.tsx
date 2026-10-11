@@ -33,6 +33,7 @@ export default function Page({params}: {params: Promise<{ taskId: string }>}) {
         settle_status?: string | null;
     }>({});
     const [analytics, setAnalytics] = useState<PreviewTaskAnalytics | null>(null);
+    const [comments, setComments] = useState<Array<{ optionId: number; comment: string; createdAt: string }>>([]);
     const [exporting, setExporting] = useState<"csv" | "json" | null>(null);
     const [exportError, setExportError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
@@ -50,10 +51,12 @@ export default function Page({params}: {params: Promise<{ taskId: string }>}) {
                     setTaskDetails(MOCK_CAPTION_TASK_DETAILS);
                     setResult(MOCK_CAPTION_TASK_RESULTS);
                     setAnalytics(MOCK_CAPTION_TASK_ANALYTICS);
+                    setComments([{ optionId: 1, comment: "Preview vote", createdAt: new Date().toISOString() }]);
                 } else {
                     setTaskDetails(MOCK_TASK_DETAILS);
                     setResult(MOCK_TASK_RESULTS);
                     setAnalytics(MOCK_TASK_ANALYTICS);
+                    setComments([{ optionId: 1, comment: "Preview vote", createdAt: new Date().toISOString() }]);
                 }
                 return;
             }
@@ -78,6 +81,7 @@ export default function Page({params}: {params: Promise<{ taskId: string }>}) {
                 setTaskDetails(response.data.taskDetails);
             }
             setAnalytics(response.data.analytics ?? null);
+            setComments(response.data.comments ?? []);
         } catch (err) {
             const message = axios.isAxiosError(err)
                 ? err.response?.data?.error || err.message
@@ -146,7 +150,7 @@ export default function Page({params}: {params: Promise<{ taskId: string }>}) {
 
     if (waitingForAuth || loading) {
         return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-white">
+        <div>
                 <StatusCard>Loading task details…</StatusCard>
             </div>
         );
@@ -154,7 +158,7 @@ export default function Page({params}: {params: Promise<{ taskId: string }>}) {
 
     if (unauthenticated) {
         return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-white">
+        <div>
                 <StatusCard
                     action={<BackToTasks />}
                 >
@@ -166,7 +170,7 @@ export default function Page({params}: {params: Promise<{ taskId: string }>}) {
 
     if (!token) {
         return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-white">
+        <div>
                 <StatusCard action={<BackToTasks />}>
                     Wallet is connected, but sign-in did not finish. Approve the signature in Phantom, and make sure the API is running.
                 </StatusCard>
@@ -176,14 +180,14 @@ export default function Page({params}: {params: Promise<{ taskId: string }>}) {
 
     if (error) {
         return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-white">
+        <div>
                 <StatusCard
                     action={
                         <div className="flex flex-wrap justify-center gap-3">
                             <button
                                 type="button"
                                 onClick={fetchTaskDetails}
-                                className="px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-500 transition-colors"
+                                className="rounded-lg bg-violet-500 px-4 py-2 text-white hover:bg-violet-600"
                             >
                                 Try again
                             </button>
@@ -214,11 +218,11 @@ export default function Page({params}: {params: Promise<{ taskId: string }>}) {
         : null;
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-white">
+        <div>
             <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
                 <BackToTasks />
-                <div className="text-center mb-12 mt-6">
-                    <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-violet-500 to-cyan-400 bg-clip-text text-transparent mb-4">
+                <div className="mb-12 mt-6 text-center">
+                    <h1 className="font-display mb-4 text-3xl font-bold tracking-tight text-white md:text-4xl">
                         {taskDetails.title || "Untitled Task"}
                     </h1>
                     <div className="flex flex-wrap items-center justify-center gap-3 text-slate-300">
@@ -251,7 +255,7 @@ export default function Page({params}: {params: Promise<{ taskId: string }>}) {
                         <div className="mt-3 flex flex-wrap items-center justify-center gap-3 text-sm">
                             {payInUrl && (
                                 <a
-                                    className="text-cyan-300 hover:text-white"
+                                    className="rounded-full border border-slate-800 bg-slate-900 px-3 py-1 text-cyan-300 hover:text-white"
                                     href={payInUrl}
                                     target="_blank"
                                     rel="noreferrer"
@@ -261,7 +265,7 @@ export default function Page({params}: {params: Promise<{ taskId: string }>}) {
                             )}
                             {escrowUrl && (
                                 <a
-                                    className="text-cyan-300 hover:text-white"
+                                    className="rounded-full border border-slate-800 bg-slate-900 px-3 py-1 text-cyan-300 hover:text-white"
                                     href={escrowUrl}
                                     target="_blank"
                                     rel="noreferrer"
@@ -282,7 +286,7 @@ export default function Page({params}: {params: Promise<{ taskId: string }>}) {
                 </div>
                 
                 {Object.keys(result).length === 0 ? (
-                    <div className="text-center bg-slate-900/50 border border-slate-800 rounded-xl p-8">
+                    <div className="rounded-2xl border border-slate-800 bg-slate-900 p-8 text-center">
                         <div className="text-slate-400 mb-2">No options available for this task yet.</div>
                         <div className="text-sm text-slate-500">Check back later for results.</div>
                     </div>
@@ -313,6 +317,13 @@ export default function Page({params}: {params: Promise<{ taskId: string }>}) {
                         exporting={exporting}
                         exportError={exportError}
                         onExport={downloadExport}
+                        comments={comments}
+                        optionLabels={Object.fromEntries(
+                            Object.entries(result).map(([id], index) => [
+                                id,
+                                `Option ${String.fromCharCode(65 + index)}`,
+                            ]),
+                        )}
                     />
                 )}
             </div>
@@ -360,12 +371,16 @@ function AnalyticsPanel({
     exporting,
     exportError,
     onExport,
+    comments,
+    optionLabels,
 }: {
     analytics: PreviewTaskAnalytics;
     done: boolean;
     exporting: "csv" | "json" | null;
     exportError: string | null;
     onExport: (format: "csv" | "json") => void;
+    comments: Array<{ optionId: number; comment: string; createdAt: string }>;
+    optionLabels: Record<string, string>;
 }) {
     const optionIds = [...new Set(analytics.timeline.flatMap((bucket) => Object.keys(bucket.counts)))];
     const maxTotal = Math.max(
@@ -374,7 +389,7 @@ function AnalyticsPanel({
     );
 
     return (
-        <div className="mt-10 rounded-xl border border-slate-800 bg-slate-900/40 p-6 space-y-6">
+        <div className="mt-10 space-y-6 rounded-2xl border border-slate-800 bg-slate-900 p-6">
             <div className="flex flex-wrap items-center gap-3">
                 <h2 className="text-lg font-semibold text-slate-100">Analytics</h2>
                 {done && analytics.underFiveMinutes && (
@@ -387,7 +402,7 @@ function AnalyticsPanel({
                         type="button"
                         onClick={() => onExport("csv")}
                         disabled={exporting != null}
-                        className="px-3 py-1.5 text-sm rounded-md border border-slate-700 text-slate-200 hover:bg-slate-800 disabled:opacity-40"
+                        className="rounded-md border border-slate-700 px-3 py-1.5 text-sm text-slate-200 hover:bg-slate-800 disabled:opacity-40"
                     >
                         {exporting === "csv" ? "Exporting…" : "Export CSV"}
                     </button>
@@ -395,7 +410,7 @@ function AnalyticsPanel({
                         type="button"
                         onClick={() => onExport("json")}
                         disabled={exporting != null}
-                        className="px-3 py-1.5 text-sm rounded-md bg-violet-600 text-white hover:bg-violet-500 disabled:opacity-40"
+                        className="rounded-md bg-violet-500 px-3 py-1.5 text-sm text-white hover:bg-violet-600 disabled:opacity-40"
                     >
                         {exporting === "json" ? "Exporting…" : "Export JSON"}
                     </button>
@@ -403,19 +418,19 @@ function AnalyticsPanel({
             </div>
             {exportError && <p className="text-sm text-red-400">{exportError}</p>}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-                <div className="rounded-lg border border-slate-800 bg-slate-950/50 px-4 py-3">
+                <div className="rounded-lg border border-slate-800 bg-slate-950 px-4 py-3">
                     <div className="text-slate-400">Completion</div>
                     <div className="mt-1 text-lg font-semibold text-slate-100">
                         {analytics.submissionCount} / {analytics.requiredSubmissions}
                     </div>
                 </div>
-                <div className="rounded-lg border border-slate-800 bg-slate-950/50 px-4 py-3">
+                <div className="rounded-lg border border-slate-800 bg-slate-950 px-4 py-3">
                     <div className="text-slate-400">Turnaround</div>
                     <div className="mt-1 text-lg font-semibold text-slate-100">
                         {formatTurnaround(analytics.turnaroundMs, done)}
                     </div>
                 </div>
-                <div className="rounded-lg border border-slate-800 bg-slate-950/50 px-4 py-3">
+                <div className="rounded-lg border border-slate-800 bg-slate-950 px-4 py-3">
                     <div className="text-slate-400">Fill rate</div>
                     <div className="mt-1 text-lg font-semibold text-slate-100">
                         {Math.round(analytics.completionRate * 100)}%
@@ -461,6 +476,21 @@ function AnalyticsPanel({
                     </div>
                 )}
             </div>
+            {comments.length > 0 ? (
+                <div>
+                    <h3 className="mb-3 text-sm font-semibold text-white">Validator comments</h3>
+                    <div className="space-y-3">
+                        {comments.map((row, index) => (
+                            <div key={`${row.optionId}-${index}`} className="rounded-xl border border-slate-800 bg-slate-950 px-4 py-3">
+                                <p className="text-xs text-cyan-400">
+                                    {optionLabels[String(row.optionId)] ?? `Option ${row.optionId}`}
+                                </p>
+                                <p className="mt-1 text-sm text-slate-300">{row.comment}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            ) : null}
         </div>
     );
 }
@@ -474,7 +504,7 @@ function StatusCard({
 }) {
     return (
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
-            <div className="max-w-lg mx-auto rounded-xl border border-slate-800 bg-slate-900/50 px-6 py-10 text-center">
+            <div className="mx-auto max-w-lg rounded-2xl border border-slate-800 bg-slate-900 px-6 py-10 text-center">
                 <div className="text-lg font-medium text-slate-300">{children}</div>
                 {action && <div className="mt-4">{action}</div>}
             </div>
@@ -495,10 +525,10 @@ function Task({type, content, imageUrl, votes, totalVotes, isWinner, isTie}: {
     const isText = type === "Text";
     
     return (
-        <div className={`group relative bg-slate-900/50 border rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/5 ${
+        <div className={`group relative overflow-hidden rounded-2xl border bg-slate-900 ${
             isWinner
-                ? "border-emerald-400/60 ring-1 ring-emerald-400/40"
-                : "border-slate-800 hover:border-slate-700"
+                ? "border-violet-500 ring-1 ring-violet-500/40"
+                : "border-slate-800"
         }`}>
             <div className="relative aspect-[3/2] w-full">
                 {isText ? (
@@ -515,7 +545,7 @@ function Task({type, content, imageUrl, votes, totalVotes, isWinner, isTie}: {
                 {(isWinner || isTie) && (
                     <div className={`absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-semibold ${
                         isWinner
-                            ? "bg-emerald-500 text-slate-950"
+                            ? "bg-violet-500 text-white"
                             : "bg-slate-800/90 text-amber-300 border border-amber-400/40"
                     }`}>
                         {isWinner ? "Winner" : "Tie"}

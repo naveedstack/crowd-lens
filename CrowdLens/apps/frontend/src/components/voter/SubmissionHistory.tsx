@@ -9,6 +9,7 @@ import { useAuthSession } from "@/lib/voter/use-auth-session";
 import { explorerUrl, isOnChainSignature } from "@/lib/voter/payouts";
 import { useEconomics } from "@/lib/use-economics";
 import { formatUsdAndSol } from "@/lib/money";
+import { StatusPanel } from "@/components/StatusPanel";
 
 type Submission = {
   id: number;
@@ -66,41 +67,41 @@ export function SubmissionHistory() {
   }, [token, waitingForAuth, unauthenticated]);
 
   if (waitingForAuth || loading) {
-    return <StatusCard>Loading history…</StatusCard>;
+    return <StatusPanel>Loading history…</StatusPanel>;
   }
 
   if (unauthenticated) {
-    return <StatusCard>Connect your wallet to see past votes.</StatusCard>;
+    return <StatusPanel>Connect your wallet to see past votes.</StatusPanel>;
   }
 
   if (!token) {
     return (
-      <StatusCard>
-        Wallet is connected, but sign-in did not finish. Approve the signature in Phantom, and make sure the API is running.
-      </StatusCard>
+      <StatusPanel>
+        Wallet is connected, but sign-in did not finish. Approve the signature in Phantom.
+      </StatusPanel>
     );
   }
 
   if (error) {
     return (
-      <StatusCard
+      <StatusPanel
         action={
           <button
             type="button"
             onClick={fetchSubmissions}
-            className="px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-500 transition-colors"
+            className="rounded-lg bg-violet-500 px-4 py-2 text-white hover:bg-violet-600"
           >
             Try again
           </button>
         }
       >
         {error}
-      </StatusCard>
+      </StatusPanel>
     );
   }
 
   if (submissions.length === 0) {
-    return <StatusCard>No votes yet. Pick a task on Vote to get started.</StatusCard>;
+    return <StatusPanel>No votes yet. Pick a task on Votes to get started.</StatusPanel>;
   }
 
   return (
@@ -108,7 +109,7 @@ export function SubmissionHistory() {
       {submissions.map((submission) => (
         <div
           key={submission.id}
-          className="flex gap-4 rounded-xl border border-slate-800 bg-slate-900/50 p-4"
+          className="flex gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-4"
         >
           {submission.option.type === "Text" ? (
             <div className="h-20 w-28 shrink-0 overflow-hidden rounded-md bg-slate-950 p-2 text-xs leading-snug text-slate-400">
@@ -165,17 +166,3 @@ function snippet(value: string, max = 80) {
   return `${trimmed.slice(0, max - 1)}…`;
 }
 
-function StatusCard({
-  children,
-  action,
-}: {
-  children: React.ReactNode;
-  action?: React.ReactNode;
-}) {
-  return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/50 px-6 py-10 text-center">
-      <div className="text-lg font-medium text-slate-300">{children}</div>
-      {action && <div className="mt-4">{action}</div>}
-    </div>
-  );
-}

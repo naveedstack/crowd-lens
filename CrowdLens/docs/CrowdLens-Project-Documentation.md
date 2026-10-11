@@ -18,7 +18,7 @@ A Solana app where creators escrow SOL, real humans vote on which thumbnail or p
 | --- | --- |
 | App | https://crowdlens-bay.vercel.app |
 | Creator | https://crowdlens-bay.vercel.app/creator |
-| Validator | https://crowdlens-bay.vercel.app/voter |
+| Validator | https://crowdlens-bay.vercel.app/validators/votes |
 | API health | https://crowdlens-api.vercel.app/health |
 | Repository | https://github.com/naveedstack/crowd-lens |
 | Program ID | `4DcAdpaXFFvzLVDxjHoswyKojaueMuQBF4cMTY4XNfw4` |
@@ -54,12 +54,13 @@ The result is a readable on-chain winner, not a private spreadsheet poll.
 
 - Wallet sign-in with a one-time nonce (creator and validator roles)
 - `/creator` — upload images, pick a batch size, pay in SOL, list tasks, see results
-- `/voter` — open-task queue, vote (optional comment), history, earnings
+- `/validators` — validator earning guide (80% of creator escrow)
+- `/validators/votes` — open-task queue, vote (optional comment), history, earnings
 - Task results — vote counts per option and the winning option when the batch is done
 - Reputation — aligned votes raise reputation; outlier votes lower it (0–100)
 - Consensus payout split — majority voters receive a larger share; minority votes are haircut
 - Anti-sybil basics — cannot vote on your own task; short dwell after a task is served; minimum gap between votes
-- Live pricing — creator **$1 per vote**, validator **$0.50 per vote**, converted to SOL at the live rate
+- Live pricing — creator **$1 per vote**, validator **$0.80 per vote** (80% of escrow), converted to SOL at the live rate
 - On-chain escrow settlement — creator funds a task PDA; after voting, the API commits the winner, pays voters from escrow, and closes the account
 
 ---
@@ -74,14 +75,14 @@ Phantom must be on **Devnet**. Empty wallets can use https://faucet.solana.com.
 2. Approve the sign-in message.
 3. Create a task: title, two or more images, vote count (1–100).
 4. Pay the quoted SOL. That transaction funds the on-chain escrow PDA.
-5. Share `/voter` so other wallets can fill the batch.
+5. Share `/validators/votes` so other wallets can fill the batch.
 6. Open the task page for vote counts and the winner.
 
 A creator cannot vote on their own task. Use a second wallet as the validator.
 
 ### Validator
 
-1. Open https://crowdlens-bay.vercel.app/voter with a **different** wallet on Devnet.
+1. Open https://crowdlens-bay.vercel.app/validators/votes with a **different** wallet on Devnet.
 2. Connect, sign in, pick an open task, choose an option, vote.
 3. When the required number of votes is reached, escrow pays SOL **directly to this wallet**.
 4. Earnings and History show the amount and an Explorer link for the payout transaction.
@@ -115,7 +116,7 @@ flowchart LR
 
 | Piece | Role |
 | --- | --- |
-| Next.js app | Landing `/`, creator `/creator`, validator `/voter` |
+| Next.js app | Landing `/`, validator guide `/validators`, votes `/validators/votes`, creator `/creator` |
 | Express API | Auth, tasks, votes, quotes, escrow settlement |
 | PostgreSQL + Prisma | Users, workers, tasks, options, submissions, payouts, reputation |
 | AWS S3 | Presigned browser upload of task images |
@@ -149,12 +150,12 @@ Quoted in USD, settled in SOL at a live rate (Jupiter, then CoinGecko fallback).
 | Rule | Value |
 | --- | --- |
 | Creator pays | **$1** per requested vote |
-| Validator base share | **$0.50** per vote (half of the creator lamports, floored) |
+| Validator base share | **$0.80** per vote (80% of the creator lamports, floored) |
 | Batch size | **1–100** votes |
 | Majority vs minority | Aligned voters share a bonus taken from outlier haircuts |
 | Network | Devnet only |
 
-Example: a 1-vote task costs about **$1 in SOL**. The single voter receives about **$0.50 in SOL** in their wallet when the batch closes.
+Example: a 1-vote task costs about **$1 in SOL**. The single voter receives about **$0.80 in SOL** in their wallet when the batch closes. The remaining 20% stays in escrow as protocol share.
 
 ---
 
@@ -184,8 +185,8 @@ Application code lives under `CrowdLens/`.
 1. Set Phantom to **Devnet**. Fund two wallets from https://faucet.solana.com if needed.
 2. Wallet A — open `/creator`, upload at least two images, set **1 vote**, pay the quoted SOL.
 3. Confirm the pay-in on [Solana Explorer (Devnet)](https://explorer.solana.com/?cluster=devnet).
-4. Wallet B — open `/voter`, sign in, vote on that task.
-5. Wallet B should receive ~$0.50 of Devnet SOL. The payout instruction is `SettleChunk`.
+4. Wallet B — open `/validators/votes`, sign in, vote on that task.
+5. Wallet B should receive ~$0.80 of Devnet SOL. The payout instruction is `SettleChunk`.
 6. Wallet A’s task page should show the task as done and the winning option.
 
 API check: `GET https://crowdlens-api.vercel.app/health` → `{ "ok": true }`.

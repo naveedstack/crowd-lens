@@ -98,7 +98,7 @@ async function main() {
   assert(firstTask.submission_count === 0, "new task submission_count should be 0");
   assert(firstTask.required_submissions === 5, "batch size should be 5");
   const expectedReward = rewardFor(taskA.amount, taskA.required_submissions);
-  assert(firstTask.reward === expectedReward, `reward should be half of creator per-vote, got ${firstTask.reward}`);
+  assert(firstTask.reward === expectedReward, `reward should be 80% of creator per-vote, got ${firstTask.reward}`);
 
   const skipped = await workerGet(`/nextTask?exclude=${firstTask.id}`, token);
   const skippedTask = skipped.body.task as { id: number } | null;
@@ -114,7 +114,7 @@ async function main() {
     listRows
       .filter((row) => row.id === taskA.id || row.id === taskB.id)
       .every((row) => row.reward === expectedReward),
-    "list rewards should be half of creator per-vote",
+    "list rewards should be 80% of creator per-vote",
   );
 
   const detail = await workerGet(`/task?taskId=${taskB.id}`, token);

@@ -1,4 +1,4 @@
-import { Appbar } from "./components/Appbar";
+import { AppHeader } from "@/components/AppHeader";
 
 export default function CreatorLayout({
   children,
@@ -6,8 +6,8 @@ export default function CreatorLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-white">
-      <Appbar />
+    <div className="min-h-screen bg-slate-950 text-slate-200">
+      <AppHeader />
       {children}
     </div>
   );

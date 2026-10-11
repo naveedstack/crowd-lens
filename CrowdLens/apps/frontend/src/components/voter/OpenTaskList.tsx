@@ -9,6 +9,7 @@ import { api } from "@/lib/voter/api";
 import { useAuthSession } from "@/lib/voter/use-auth-session";
 import { useEconomics } from "@/lib/use-economics";
 import { formatUsdAndSol } from "@/lib/money";
+import { StatusPanel } from "@/components/StatusPanel";
 
 export function OpenTaskList() {
   const { token, waitingForAuth, unauthenticated } = useAuthSession();
@@ -55,54 +56,54 @@ export function OpenTaskList() {
   }, [token, waitingForAuth, unauthenticated]);
 
   if (waitingForAuth || loading) {
-    return <StatusCard>Loading open votes…</StatusCard>;
+    return <StatusPanel>Loading open votes…</StatusPanel>;
   }
 
   if (unauthenticated) {
-    return <StatusCard>Connect your wallet to see open votes.</StatusCard>;
+    return <StatusPanel>Connect your wallet to see open votes.</StatusPanel>;
   }
 
   if (!token) {
     return (
-      <StatusCard>
-        Wallet is connected, but sign-in did not finish. Approve the signature in Phantom, and make sure the API is running.
-      </StatusCard>
+      <StatusPanel>
+        Wallet is connected, but sign-in did not finish. Approve the signature in Phantom.
+      </StatusPanel>
     );
   }
 
   if (error) {
     return (
-      <StatusCard
+      <StatusPanel
         action={
           <button
             type="button"
             onClick={fetchTasks}
-            className="px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-500 transition-colors"
+            className="rounded-lg bg-violet-500 px-4 py-2 text-white hover:bg-violet-600"
           >
             Try again
           </button>
         }
       >
         {error}
-      </StatusCard>
+      </StatusPanel>
     );
   }
 
   if (tasks.length === 0) {
     return (
-      <StatusCard
+      <StatusPanel
         action={
           <button
             type="button"
             onClick={fetchTasks}
-            className="px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-500 transition-colors"
+            className="rounded-lg bg-violet-500 px-4 py-2 text-white hover:bg-violet-600"
           >
             Refresh
           </button>
         }
       >
         No open votes right now
-      </StatusCard>
+      </StatusPanel>
     );
   }
 
@@ -111,8 +112,8 @@ export function OpenTaskList() {
       {tasks.map((task) => (
         <Link
           key={task.id}
-          href={`/voter/task/${task.id}`}
-          className="flex gap-4 rounded-xl border border-slate-800 bg-slate-900/50 p-4 transition-colors hover:border-violet-500/50"
+          href={`/validators/task/${task.id}`}
+          className="flex gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-4 transition-colors hover:border-violet-500/40"
         >
           {task.optionType === "Text" ? (
             <div className="h-20 w-28 shrink-0 overflow-hidden rounded-md bg-slate-950 p-2 text-xs leading-snug text-slate-400">
@@ -147,17 +148,3 @@ export function OpenTaskList() {
   );
 }
 
-function StatusCard({
-  children,
-  action,
-}: {
-  children: React.ReactNode;
-  action?: React.ReactNode;
-}) {
-  return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/50 px-6 py-10 text-center">
-      <div className="text-lg font-medium text-slate-300">{children}</div>
-      {action && <div className="mt-4">{action}</div>}
-    </div>
-  );
-}

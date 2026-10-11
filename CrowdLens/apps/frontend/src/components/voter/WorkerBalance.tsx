@@ -125,9 +125,9 @@ export function WorkerBalance() {
       : null;
 
   return (
-    <div className="flex items-center gap-3 text-sm">
-      <div className="text-right leading-tight">
-        <div className="text-emerald-400 font-medium">
+    <div className="hidden items-center gap-3 text-sm sm:flex">
+      <div className="rounded-full border border-slate-800 bg-slate-900 px-3 py-1.5 text-right leading-tight">
+        <div className="font-medium text-emerald-400">
           {formatUsdAndSol(shownLamports, economics.solUsd)}
         </div>
         <div className="text-slate-400 text-xs">
@@ -156,7 +156,7 @@ export function WorkerBalance() {
           type="button"
           onClick={withdraw}
           disabled={!canWithdraw}
-          className="rounded-md bg-violet-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-violet-500 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="rounded-md bg-violet-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-violet-600 disabled:cursor-not-allowed disabled:opacity-40"
         >
           {withdrawing ? "Withdrawing..." : "Withdraw"}
         </button>

@@ -3,7 +3,10 @@ import { env } from "./env";
 import { getSolUsd } from "./solPrice";
 
 export const CREATOR_USD_PER_VOTE = 1;
-export const VOTER_USD_PER_VOTE = 0.5;
+/** Validators receive 80% of each creator vote, quoted as $0.80. */
+export const VOTER_USD_PER_VOTE = 0.8;
+const VOTER_SHARE_NUM = 4;
+const VOTER_SHARE_DEN = 5;
 export const TASK_MIN_VOTES = env.TASK_MIN_VOTES;
 export const TASK_MAX_VOTES = env.TASK_MAX_VOTES;
 export const TREASURY_ADDRESS = env.TREASURY_ADDRESS;
@@ -23,13 +26,17 @@ export function usdToLamports(usd: number, solUsd: number): number {
   return Math.max(1, Math.round((usd / solUsd) * LAMPORTS_PER_SOL));
 }
 
+export function voterShareOf(creatorLamports: number): number {
+  return Math.max(1, Math.floor((creatorLamports * VOTER_SHARE_NUM) / VOTER_SHARE_DEN));
+}
+
 export function quoteFromSolUsd(solUsd: number, source: string): VoteQuote {
   const creatorLamports = usdToLamports(CREATOR_USD_PER_VOTE, solUsd);
   return {
     solUsd,
     source,
     creatorLamports,
-    voterLamports: Math.max(1, Math.floor(creatorLamports / 2)),
+    voterLamports: voterShareOf(creatorLamports),
     quotedAt: new Date().toISOString(),
   };
 }
@@ -60,7 +67,7 @@ export function rewardFor(taskAmount: number, requiredSubmissions: number): numb
   if (requiredSubmissions <= 0) {
     return 0;
   }
-  return Math.floor(taskAmount / (2 * requiredSubmissions));
+  return Math.floor((taskAmount * VOTER_SHARE_NUM) / (VOTER_SHARE_DEN * requiredSubmissions));
 }
 
 export function acceptQuotedCreatorLamports(
@@ -85,7 +92,7 @@ export async function minPayoutLamports(): Promise<number> {
   return quote.voterLamports;
 }
 
-/** True when pending is a full voter payout, including a price move that still displays as $0.50. */
+/** True when pending is a full voter payout, including a price move that still displays as $0.80. */
 export function pendingMeetsMinimum(
   pendingLamports: number,
   minLamports: number,

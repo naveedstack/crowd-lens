@@ -27,6 +27,7 @@ const PREVIEW_PAYOUTS: Payout[] = [
     amount: 1_000_000,
     signature: "preview-success",
     status: "Success",
+    source: "Escrow",
     created_at: new Date().toISOString(),
   },
 ];
@@ -72,8 +73,8 @@ export function PayoutHistory({ showEmpty = false }: { showEmpty?: boolean }) {
     }
     return (
       <div>
-        <h2 className="text-lg font-semibold mb-3">Payouts</h2>
-        <div className="rounded-xl border border-slate-800 bg-slate-900/50 px-6 py-8 text-center text-slate-400">
+        <h2 className="font-display mb-3 text-lg font-semibold text-white">Payouts</h2>
+        <div className="rounded-2xl border border-slate-800 bg-slate-900 px-6 py-8 text-center text-slate-400">
           No payouts yet.
         </div>
       </div>
@@ -82,47 +83,61 @@ export function PayoutHistory({ showEmpty = false }: { showEmpty?: boolean }) {
 
   return (
     <div>
-      <h2 className="text-lg font-semibold mb-3">Payouts</h2>
-      <div className="space-y-2">
-        {payouts.map((payout) => (
-          <div
-            key={payout.id}
-            className="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900/50 px-4 py-3 text-sm"
-          >
-            <div>
-              <div className="font-medium">{formatUsdAndSol(payout.amount, economics.solUsd)}</div>
-              <div className="text-xs text-slate-400">
-                {new Date(payout.created_at).toLocaleString()}
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <span
-                className={
-                  payout.status === "Success"
-                    ? "text-emerald-400"
-                    : payout.status === "Failure"
-                      ? "text-red-400"
-                      : "text-amber-400"
-                }
-              >
-              {payout.status}
-              {payout.source === "Escrow" ? " · escrow" : ""}
-              </span>
-              {isOnChainSignature(payout.signature) ? (
-                <a
-                  className="text-violet-400 hover:underline"
-                  href={explorerUrl(payout.signature)}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Explorer
-                </a>
-              ) : (
-                <span className="text-slate-500 text-xs">Pending tx</span>
-              )}
-            </div>
-          </div>
-        ))}
+      <h2 className="font-display mb-3 text-lg font-semibold text-white">Payouts</h2>
+      <div className="overflow-x-auto rounded-2xl border border-slate-800">
+        <table className="w-full text-sm">
+          <thead className="bg-slate-900 text-slate-500">
+            <tr>
+              <th className="px-4 py-3 text-left font-medium">Amount</th>
+              <th className="px-4 py-3 text-left font-medium">Date</th>
+              <th className="px-4 py-3 text-left font-medium">Status</th>
+              <th className="px-4 py-3 text-left font-medium">Source</th>
+              <th className="px-4 py-3 text-left font-medium">Explorer</th>
+            </tr>
+          </thead>
+          <tbody>
+            {payouts.map((payout) => (
+              <tr key={payout.id} className="border-t border-slate-800 bg-slate-900">
+                <td className="px-4 py-3 font-medium text-white">
+                  {formatUsdAndSol(payout.amount, economics.solUsd)}
+                </td>
+                <td className="px-4 py-3 text-slate-400">
+                  {new Date(payout.created_at).toLocaleString()}
+                </td>
+                <td className="px-4 py-3">
+                  <span
+                    className={
+                      payout.status === "Success"
+                        ? "rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-xs text-emerald-400"
+                        : payout.status === "Failure"
+                          ? "rounded-full border border-rose-500/30 bg-rose-500/10 px-2 py-0.5 text-xs text-rose-400"
+                          : "rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-xs text-amber-400"
+                    }
+                  >
+                    {payout.status}
+                  </span>
+                </td>
+                <td className="px-4 py-3 text-slate-400">
+                  {payout.source === "Escrow" ? "Escrow" : "Treasury"}
+                </td>
+                <td className="px-4 py-3">
+                  {isOnChainSignature(payout.signature) ? (
+                    <a
+                      className="text-cyan-400 hover:underline"
+                      href={explorerUrl(payout.signature)}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      View
+                    </a>
+                  ) : (
+                    <span className="text-xs text-slate-500">Pending tx</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

@@ -98,7 +98,7 @@ export function EarningsStats() {
           <button
             type="button"
             onClick={fetchStats}
-            className="px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-500 transition-colors"
+            className="rounded-lg bg-violet-500 px-4 py-2 text-white hover:bg-violet-600"
           >
             Try again
           </button>
@@ -134,10 +134,10 @@ export function EarningsStats() {
       {cards.map((card) => (
         <div
           key={card.label}
-          className="rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-5"
+          className="rounded-2xl border border-slate-800 bg-slate-900 px-4 py-5"
         >
           <div className="text-sm text-slate-400">{card.label}</div>
-          <div className="mt-1 text-2xl font-semibold">{card.value}</div>
+          <div className="mt-1 font-display text-2xl font-semibold text-white">{card.value}</div>
         </div>
       ))}
     </div>
@@ -152,7 +152,7 @@ function StatusCard({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/50 px-6 py-10 text-center mb-8">
+    <div className="mb-8 rounded-2xl border border-slate-800 bg-slate-900 px-6 py-10 text-center">
       <div className="text-lg font-medium text-slate-300">{children}</div>
       {action && <div className="mt-4">{action}</div>}
     </div>

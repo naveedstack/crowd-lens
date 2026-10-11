@@ -1,110 +1,73 @@
 "use client";
 
-import React, { useState } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
-import SectionHeading from '../components/SectionHeading';
+import React, { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import SectionHeading from "../components/SectionHeading";
 
-interface FAQItem {
-  question: string;
-  answer: string;
-  isOpen?: boolean;
-}
+const ITEMS = [
+  {
+    question: "How do votes work?",
+    answer:
+      "A validator connects a wallet, opens a task, picks an image, and can leave an optional comment. Creators cannot vote on their own task. When the required number of votes is in, the batch closes.",
+  },
+  {
+    question: "How is a task priced?",
+    answer:
+      "Creators pay $1 per vote, converted to SOL at the live Solana price. Voters earn $0.80 per vote (80% of that escrow), also paid in SOL. You pick how many votes you need (1–100).",
+  },
+  {
+    question: "Where does the SOL go?",
+    answer:
+      "On-chain tasks escrow creator SOL in a program PDA. After voting, the API pays validators from that escrow. Switch Phantom to Devnet to see the transfer. Withdraw is only for leftover pending from older custodial tasks.",
+  },
+  {
+    question: "What do I get when the batch finishes?",
+    answer:
+      "You see the vote split, the winning image (or a tie), turnaround, and you can export votes as CSV or JSON. CrowdLens does not invent click-through rates.",
+  },
+  {
+    question: "What can I test?",
+    answer:
+      "Image comparisons only in this MVP: thumbnails, posters, or similar stills. Two to five images per task. Caption and text tasks are not live.",
+  },
+  {
+    question: "Which network is this?",
+    answer: "Solana Devnet only. Use the faucet if your wallet is empty, and keep Phantom on Devnet.",
+  },
+];
 
 const FAQSection: React.FC = () => {
-  const [faqs, setFaqs] = useState<FAQItem[]>([
-    {
-      question: "How does CrowdLens collect feedback from real users?",
-      answer: "CrowdLens leverages the UpRock DePIN network, a decentralized community of real users who provide genuine feedback on your content. These users are verified through blockchain technology and incentivized to give honest opinions. You get data from actual people, not algorithms or bots.",
-      isOpen: false,
-    },
-    {
-      question: "How long does it take to get results?",
-      answer: "Most tests deliver complete results within 2-4 hours, depending on your target audience specifications. Our network includes users worldwide, so you can get feedback 24/7. For highly specific demographics, it might take slightly longer.",
-      isOpen: false,
-    },
-    {
-      question: "How is a task priced?",
-      answer: "Creators pay $1 per vote, converted to SOL at the live Solana price. Voters earn $0.50 per vote, also paid in SOL. You pick how many votes you need; wallet transfers stay on Solana.",
-      isOpen: false,
-    },
-    {
-      question: "What do I get when the batch finishes?",
-      answer: "You see the vote split, the winning image, and how long the batch took. You can export the votes as CSV or JSON. CrowdLens does not invent click-through rates.",
-      isOpen: false,
-    },
-    {
-      question: "Is my content secure when I upload it for testing?",
-      answer: "Yes, we take security seriously. Your thumbnails are encrypted, access-controlled, and only shown to users participating in your specific test. We also have built-in protections against screenshot capturing and unauthorized downloading.",
-      isOpen: false,
-    },
-    {
-      question: "Can I test other content besides thumbnails?",
-      answer: "Yes! While thumbnails are our most popular test type, you can also test video titles, descriptions, channel banners, and even short intro clips to optimize all aspects of your content strategy.",
-      isOpen: false,
-    },
-  ]);
-
-  const toggleFAQ = (index: number) => {
-    setFaqs(
-      faqs.map((faq, i) => {
-        if (i === index) {
-          return { ...faq, isOpen: !faq.isOpen };
-        }
-        return faq;
-      })
-    );
-  };
+  const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="py-20 bg-slate-900">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="faq" className="py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          title="Frequently Asked Questions"
-          subtitle="Everything you need to know about CrowdLens and optimizing your content."
+          title="Frequently asked questions"
+          subtitle="What the live MVP actually does."
           centered
-          light
         />
-
-        <div className="max-w-3xl mx-auto mt-10">
-          {faqs.map((faq, index) => (
-            <div 
-              key={index}
-              className="mb-4 border-b border-slate-800 pb-4 last:border-0 last:pb-0"
-            >
-              <button
-                className="flex justify-between items-center w-full text-left focus:outline-none group"
-                onClick={() => toggleFAQ(index)}
-              >
-                <h3 className="text-xl font-medium text-white">{faq.question}</h3>
-                <span className="ml-4 flex-shrink-0 p-1 rounded-full group-hover:bg-slate-800 transition-colors">
-                  {faq.isOpen ? (
-                    <ChevronUp className="h-6 w-6 text-violet-400" />
+        <div className="mx-auto max-w-3xl space-y-3">
+          {ITEMS.map((item, index) => {
+            const isOpen = open === index;
+            return (
+              <div key={item.question} className="rounded-xl border border-slate-800 bg-slate-900">
+                <button
+                  type="button"
+                  className="flex w-full items-center justify-between px-5 py-4 text-left"
+                  onClick={() => setOpen(isOpen ? null : index)}
+                >
+                  <span className="pr-4 font-medium text-white">{item.question}</span>
+                  {isOpen ? (
+                    <ChevronUp className="h-5 w-5 shrink-0 text-slate-500" />
                   ) : (
-                    <ChevronDown className="h-6 w-6 text-slate-400" />
+                    <ChevronDown className="h-5 w-5 shrink-0 text-slate-500" />
                   )}
-                </span>
-              </button>
-              <div 
-                className={`mt-2 text-slate-400 transition-all duration-300 overflow-hidden ${
-                  faq.isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                }`}
-              >
-                <p className="py-2">{faq.answer}</p>
+                </button>
+                {isOpen ? <p className="px-5 pb-4 text-sm leading-relaxed text-slate-400">{item.answer}</p> : null}
               </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="text-center mt-12">
-          <p className="text-slate-400 mb-6">
-            Still have questions? We are here to help!
-          </p>
-          <a
-            href="#"
-            className="inline-flex items-center text-white bg-gradient-to-r from-violet-600 to-violet-500 hover:from-violet-500 hover:to-violet-400 px-6 py-3 rounded-lg font-medium shadow-lg shadow-violet-600/20 transition-all duration-200"
-          >
-            Contact Support
-          </a>
+            );
+          })}
         </div>
       </div>
     </section>

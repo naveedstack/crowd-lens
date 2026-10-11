@@ -29,7 +29,7 @@ export function VoteCountControl({
         type="button"
         disabled={disabled || value <= min}
         onClick={() => setVotes(value - 1)}
-        className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-700 bg-slate-950 text-slate-200 hover:border-violet-500 disabled:cursor-not-allowed disabled:opacity-40"
+        className="flex h-11 w-11 items-center justify-center rounded-lg border border-slate-800 bg-slate-950 text-slate-200 hover:border-violet-500 disabled:cursor-not-allowed disabled:opacity-40"
         aria-label="Fewer votes"
       >
         <Minus className="h-4 w-4" />
@@ -41,13 +41,13 @@ export function VoteCountControl({
         value={value}
         disabled={disabled}
         onChange={(event) => setVotes(Number(event.target.value))}
-        className="h-10 w-20 rounded-lg border border-slate-700 bg-slate-950 text-center text-sm font-medium text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 disabled:opacity-40 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+        className="h-11 w-24 rounded-lg border border-slate-800 bg-slate-950 text-center text-lg font-semibold text-white focus:border-violet-500 focus:outline-none disabled:opacity-40 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
       />
       <button
         type="button"
         disabled={disabled || value >= max}
         onClick={() => setVotes(value + 1)}
-        className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-700 bg-slate-950 text-slate-200 hover:border-violet-500 disabled:cursor-not-allowed disabled:opacity-40"
+        className="flex h-11 w-11 items-center justify-center rounded-lg border border-slate-800 bg-slate-950 text-slate-200 hover:border-violet-500 disabled:cursor-not-allowed disabled:opacity-40"
         aria-label="More votes"
       >
         <Plus className="h-4 w-4" />

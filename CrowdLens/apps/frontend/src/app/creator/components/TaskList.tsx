@@ -8,6 +8,7 @@ import { api } from "@/lib/api";
 import { useAuthSession } from "@/lib/use-auth-session";
 import { useEconomics } from "@/lib/use-economics";
 import { formatUsdAndSol } from "@/lib/money";
+import { StatusPanel } from "@/components/StatusPanel";
 
 export function TaskList() {
   const { token, waitingForAuth, unauthenticated } = useAuthSession();
@@ -54,53 +55,50 @@ export function TaskList() {
   }, [token, waitingForAuth, unauthenticated]);
 
   if (waitingForAuth || loading) {
-    return <StatusCard>Loading your tasks…</StatusCard>;
+    return <StatusPanel>Loading your tasks…</StatusPanel>;
   }
 
   if (unauthenticated) {
-    return <StatusCard>Connect your wallet to see your tasks.</StatusCard>;
+    return <StatusPanel>Connect your wallet to see your tasks.</StatusPanel>;
   }
 
   if (!token) {
     return (
-      <StatusCard>
-        Wallet is connected, but sign-in did not finish. Approve the signature in Phantom, and make sure the API is running.
-      </StatusCard>
+      <StatusPanel>
+        Wallet is connected, but sign-in did not finish. Approve the signature in Phantom.
+      </StatusPanel>
     );
   }
 
   if (error) {
     return (
-      <StatusCard
+      <StatusPanel
         action={
           <button
             type="button"
             onClick={fetchTasks}
-            className="px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-500 transition-colors"
+            className="rounded-lg bg-violet-500 px-4 py-2 text-white hover:bg-violet-600"
           >
             Try again
           </button>
         }
       >
         {error}
-      </StatusCard>
+      </StatusPanel>
     );
   }
 
   if (tasks.length === 0) {
     return (
-      <StatusCard
+      <StatusPanel
         action={
-          <Link
-            href="/creator/new"
-            className="inline-block rounded-lg bg-violet-600 px-4 py-2 text-white hover:bg-violet-500"
-          >
+          <Link href="/creator/new" className="inline-block rounded-lg bg-violet-500 px-4 py-2 text-white hover:bg-violet-600">
             New task
           </Link>
         }
       >
         No tasks yet
-      </StatusCard>
+      </StatusPanel>
     );
   }
 
@@ -109,28 +107,32 @@ export function TaskList() {
       {tasks.map((task) => {
         const isTie = task.done && task.winner_option_id == null && task.submission_count > 0;
         const status = task.done ? (isTie ? "Done · Tie" : "Done") : "Open";
+        const filled =
+          task.required_submissions > 0
+            ? Math.min(100, Math.round((task.submission_count / task.required_submissions) * 100))
+            : 0;
         return (
           <Link
             key={task.id}
             href={`/creator/task/${task.id}`}
-            className="grid grid-cols-[7rem_minmax(0,1fr)_auto] items-center gap-4 rounded-xl border border-slate-800 bg-slate-900/50 p-4 transition-colors hover:border-violet-500/50"
+            className="grid grid-cols-1 items-center gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-4 transition-colors hover:border-violet-500/40 sm:grid-cols-[8rem_minmax(0,1fr)_auto]"
           >
             {task.optionType === "Text" ? (
-              <div className="h-20 w-28 shrink-0 overflow-hidden rounded-md bg-slate-950 p-2 text-xs leading-snug text-slate-400">
+              <div className="h-20 overflow-hidden rounded-lg bg-slate-950 p-2 text-xs leading-snug text-slate-400">
                 {task.preview || "Caption"}
               </div>
             ) : task.thumbnail ? (
               <img
                 src={task.thumbnail}
                 alt=""
-                className="h-20 w-28 shrink-0 rounded-md object-cover bg-slate-950"
+                className="h-20 w-full rounded-lg bg-slate-950 object-cover sm:w-28"
               />
             ) : (
-              <div className="h-20 w-28 shrink-0 rounded-md bg-slate-950" />
+              <div className="h-20 rounded-lg bg-slate-950 sm:w-28" />
             )}
             <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <h2 className="truncate font-medium">{task.title || "Untitled task"}</h2>
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="truncate font-medium text-white">{task.title || "Untitled task"}</h2>
                 <span
                   className={
                     task.done
@@ -141,31 +143,28 @@ export function TaskList() {
                   {status}
                 </span>
               </div>
-              <div className="mt-2 text-sm text-slate-400">
-                {task.submission_count} / {task.required_submissions} votes
+              <div className="mt-3">
+                <div className="flex justify-between text-sm text-slate-400">
+                  <span>
+                    {task.submission_count} / {task.required_submissions} votes
+                  </span>
+                  <span>{filled}%</span>
+                </div>
+                <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-800">
+                  <div
+                    className={`h-full ${task.done ? "bg-emerald-500" : "bg-violet-500"}`}
+                    style={{ width: `${filled}%` }}
+                  />
+                </div>
               </div>
             </div>
-            <div className="text-right text-sm text-slate-300">
-              {formatUsdAndSol(task.amount, economics.solUsd)}
+            <div className="text-left text-sm text-slate-300 sm:text-right">
+              <p className="text-xs text-slate-500">Escrow</p>
+              <p className="font-medium text-white">{formatUsdAndSol(task.amount, economics.solUsd)}</p>
             </div>
           </Link>
         );
       })}
-    </div>
-  );
-}
-
-function StatusCard({
-  children,
-  action,
-}: {
-  children: React.ReactNode;
-  action?: React.ReactNode;
-}) {
-  return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/50 px-6 py-10 text-center">
-      <div className="text-lg font-medium text-slate-300">{children}</div>
-      {action && <div className="mt-4">{action}</div>}
     </div>
   );
 }

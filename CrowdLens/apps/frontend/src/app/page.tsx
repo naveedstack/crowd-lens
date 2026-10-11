@@ -11,7 +11,7 @@ import ScrollToTop from '../components/ScrollToTop';
 
 function App() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-white overflow-hidden">
+    <div className="min-h-screen bg-slate-950 text-slate-200 overflow-hidden">
       <Navbar />
       <main>
         <HeroSection />

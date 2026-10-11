@@ -57,10 +57,10 @@ export default function StatsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-white">
+    <div className="min-h-screen bg-slate-950 text-slate-200">
       <Navbar />
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16">
-        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-violet-500 to-cyan-400 bg-clip-text text-transparent">
+      <main className="mx-auto max-w-7xl px-4 pt-28 pb-16 sm:px-6 lg:px-8">
+        <h1 className="font-display text-3xl font-bold tracking-tight text-white md:text-4xl">
           Platform stats
         </h1>
         <p className="mt-3 text-slate-400 max-w-2xl">
@@ -181,7 +181,7 @@ function KpiMeter({
 }) {
   const pct = Math.max(0, Math.min(100, Math.round(((ratio ?? (target > 0 ? current / target : 0)) * 100))));
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-5">
+            <div className="rounded-xl border border-slate-800 bg-slate-900 px-4 py-5">
       <div className="text-sm text-slate-400">{label}</div>
       <div className="mt-2 text-2xl font-semibold text-white">{display}</div>
       <div className="mt-3 h-2 rounded-full bg-slate-800 overflow-hidden">
@@ -196,7 +196,7 @@ function KpiMeter({
 
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-5">
+            <div className="rounded-xl border border-slate-800 bg-slate-900 px-4 py-5">
       <div className="text-sm text-slate-400">{label}</div>
       <div className="mt-2 text-2xl font-semibold text-white">{value}</div>
     </div>

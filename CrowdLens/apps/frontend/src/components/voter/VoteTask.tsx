@@ -12,7 +12,7 @@ import { getToken } from "@/lib/voter/auth";
 import { useAuthSession } from "@/lib/voter/use-auth-session";
 import { notifyPayouts } from "@/lib/voter/payouts";
 import { useEconomics } from "@/lib/use-economics";
-import { formatUsdAndSol } from "@/lib/money";
+import { formatUsd, formatUsdAndSol } from "@/lib/money";
 
 const COMMENT_MAX = 280;
 
@@ -89,7 +89,7 @@ export function VoteTask() {
       if (isUiPreview) {
         notifyPayouts();
         toast.success("Vote recorded");
-        router.push("/voter");
+        router.push("/validators/votes");
         return;
       }
 
@@ -117,7 +117,7 @@ export function VoteTask() {
       } else {
         toast.success("Vote recorded");
       }
-      router.push("/voter");
+      router.push("/validators/votes");
     } catch (err) {
       const message = axios.isAxiosError(err)
         ? err.response?.data?.error || err.message
@@ -150,7 +150,7 @@ export function VoteTask() {
     return (
       <VoteStatus
         action={
-          <Link href="/voter" className="px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-500">
+          <Link href="/validators/votes" className="rounded-lg bg-violet-500 px-4 py-2 text-white hover:bg-violet-600">
             Back to votes
           </Link>
         }
@@ -164,7 +164,7 @@ export function VoteTask() {
     return (
       <VoteStatus
         action={
-          <Link href="/voter" className="px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-500">
+          <Link href="/validators/votes" className="rounded-lg bg-violet-500 px-4 py-2 text-white hover:bg-violet-600">
             Back to votes
           </Link>
         }
@@ -179,31 +179,34 @@ export function VoteTask() {
   const showProgress = typeof required === "number" && typeof submitted === "number";
 
   return (
-    <div className="max-w-7xl mx-auto px-4 pb-16">
+    <div className="mx-auto max-w-7xl px-4 pb-16">
       <div className="pt-8">
-        <Link href="/voter" className="text-sm text-slate-400 hover:text-white">
-          ← All votes
+        <Link href="/validators/votes" className="text-sm text-slate-400 hover:text-white">
+          ← All open votes
         </Link>
       </div>
-      <div className="text-2xl pt-6 flex flex-wrap justify-center items-center gap-3">
-        <h1 className="font-semibold">{currentTask.title}</h1>
+      <div className="mt-6 rounded-2xl border border-slate-800 bg-slate-900 p-6">
+      <div className="flex flex-wrap items-center gap-3">
+        <h1 className="font-display text-2xl font-semibold text-white">{currentTask.title}</h1>
         {typeof currentTask.reward === "number" && (
-          <span className="text-sm font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 rounded-full px-3 py-1">
-            {formatUsdAndSol(currentTask.reward, economics.solUsd)}
+          <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-sm font-medium text-emerald-400">
+            Earn {formatUsdAndSol(currentTask.reward, economics.solUsd)}
           </span>
         )}
         {showProgress && (
-          <span className="text-sm font-medium text-slate-300 bg-slate-900 border border-slate-700 rounded-full px-3 py-1">
-            {submitted} / {required}
+          <span className="rounded-full border border-slate-700 bg-slate-950 px-3 py-1 text-sm font-medium text-slate-300">
+            {submitted} / {required} votes filled
           </span>
         )}
-        {submitting && <span className="text-blue-500 animate-pulse">Submitting...</span>}
+        {submitting && <span className="text-sm text-cyan-400 animate-pulse">Submitting…</span>}
       </div>
-      <p className="text-center text-sm text-slate-400 pt-3">
-        When this batch fills, ~$0.50 of Devnet SOL is sent to your connected wallet. Switch Phantom to Devnet to see it.
+      <p className="mt-3 rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-slate-400">
+        When this batch fills, about {formatUsd(economics.usdPerVoteVoter)} of Devnet SOL (80% of the
+        creator escrow) is sent to your connected wallet. Switch Phantom to Devnet to see it.
       </p>
-      {error && <div className="max-w-xl mx-auto mt-4 text-center text-sm text-red-500">{error}</div>}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-8">
+      {error && <div className="mt-4 text-sm text-rose-400">{error}</div>}
+      </div>
+      <div className="grid grid-cols-1 gap-6 pt-8 md:grid-cols-2 lg:grid-cols-3">
         {currentTask.options.map((option) =>
           option.type === "Text" ? (
             <TextOption
@@ -224,9 +227,9 @@ export function VoteTask() {
           ),
         )}
       </div>
-      <div className="max-w-xl mx-auto mt-8 space-y-3">
+      <div className="mx-auto mt-8 max-w-3xl space-y-3 rounded-2xl border border-slate-800 bg-slate-900 p-5">
         <label className="block text-sm text-slate-400">
-          Comment (optional)
+          Why did you pick this? (optional)
           <textarea
             value={comment}
             onChange={(event) => setComment(event.target.value.slice(0, COMMENT_MAX))}
@@ -234,26 +237,30 @@ export function VoteTask() {
             disabled={submitting}
             rows={3}
             placeholder="Why did you pick this?"
-            className="mt-1 w-full rounded-md border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-white placeholder:text-slate-500 resize-y"
+            className="mt-1 w-full resize-y rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-white placeholder:text-slate-500"
           />
-          <span className="mt-1 block text-xs text-right">
+          <span className="mt-1 block text-right text-xs text-slate-500">
             {comment.length}/{COMMENT_MAX}
           </span>
         </label>
-        <div className="flex justify-center gap-3">
+        <div className="flex flex-wrap justify-end gap-3">
           <Link
-            href="/voter"
-            className="px-4 py-2 text-sm rounded-lg border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800"
+            href="/validators/votes"
+            className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 hover:text-white"
           >
-            Back
+            Back to Votes
           </Link>
           <button
             type="button"
             onClick={handleSubmission}
             disabled={submitting || selectedOptionId == null}
-            className="px-6 py-2 text-sm font-medium rounded-md bg-violet-600 text-white hover:bg-violet-500 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="rounded-lg bg-violet-500 px-6 py-2 text-sm font-medium text-white hover:bg-violet-600 disabled:cursor-not-allowed disabled:opacity-40"
           >
-            {submitting ? "Voting..." : "Vote"}
+            {submitting
+              ? "Voting..."
+              : typeof currentTask.reward === "number"
+                ? `Submit vote & earn ${formatUsdAndSol(currentTask.reward, economics.solUsd)}`
+                : "Vote"}
           </button>
         </div>
       </div>
@@ -270,7 +277,7 @@ function VoteStatus({
 }) {
   return (
     <div className="max-w-7xl mx-auto px-4 py-20">
-      <div className="max-w-lg mx-auto rounded-xl border border-slate-800 bg-slate-900/50 px-6 py-10 text-center">
+      <div className="mx-auto max-w-lg rounded-2xl border border-slate-800 bg-slate-900 px-6 py-10 text-center">
         <div className="text-lg font-medium text-slate-300">{children}</div>
         {action && <div className="mt-4">{action}</div>}
       </div>
@@ -291,8 +298,8 @@ function Option({
 }) {
   return (
     <div
-      className={`relative group aspect-[4/3] rounded-lg ${
-        selected ? "ring-2 ring-violet-500 ring-offset-2 ring-offset-slate-950" : ""
+      className={`relative group aspect-[4/3] overflow-hidden rounded-2xl bg-slate-900 ${
+        selected ? "ring-2 ring-violet-500 ring-offset-2 ring-offset-slate-950" : "border border-slate-800"
       }`}
     >
       <img
@@ -324,7 +331,7 @@ function TextOption({
       disabled={disabled}
       className={`min-h-[12rem] rounded-lg border bg-slate-900/70 p-6 text-left transition-colors ${
         selected
-          ? "border-violet-500 ring-2 ring-violet-500 ring-offset-2 ring-offset-slate-950"
+          ? "border-violet-500 ring-2 ring-violet-500"
           : "border-slate-800 hover:border-violet-500/50"
       } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
     >

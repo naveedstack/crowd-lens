@@ -92,14 +92,14 @@ export function UploadImage({ onImageAdded, disabled, maxFiles = 5 }: UploadImag
   }
 
   return (
-    <div className={`flex h-40 w-full items-center justify-center rounded-lg border border-dashed border-slate-700 bg-slate-950/40 text-slate-300 ${disabled || uploading ? "opacity-40 pointer-events-none" : "cursor-pointer hover:border-violet-500"}`}>
-      <div className="h-full flex justify-center flex-col relative w-full">
-        <div className="h-full flex justify-center w-full items-center text-center px-3">
+    <div className={`flex h-full min-h-40 w-full items-center justify-center rounded-xl border border-dashed border-slate-700 bg-slate-950 text-slate-300 ${disabled || uploading ? "pointer-events-none opacity-40" : "cursor-pointer hover:border-violet-500"}`}>
+      <div className="relative flex h-full min-h-40 w-full flex-col justify-center">
+        <div className="flex h-full min-h-40 w-full items-center justify-center px-3 text-center">
           {uploading ? (
             <div className="text-sm text-slate-400">{progress}</div>
           ) : (
             <>
-              <span className="text-sm text-slate-400">Add images</span>
+              <span className="text-sm text-slate-400">Click or drag to add image</span>
               <input
                 className="w-full h-full"
                 type="file"

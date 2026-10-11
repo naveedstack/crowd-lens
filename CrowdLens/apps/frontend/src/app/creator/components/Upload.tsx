@@ -262,7 +262,8 @@ export const Upload = () => {
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <div className="max-w-3xl space-y-8">
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-violet-500 to-cyan-400 bg-clip-text text-transparent md:text-4xl">
+          <p className="text-xs font-semibold tracking-wider text-cyan-400 uppercase">Solana Devnet · content oracle</p>
+          <h1 className="font-display mt-2 text-3xl font-bold tracking-tight text-white md:text-4xl">
             Create a task
           </h1>
           <p className="mt-2 text-slate-400">
@@ -270,21 +271,22 @@ export const Upload = () => {
           </p>
         </div>
 
+        <div className="space-y-6 rounded-2xl border border-slate-800 bg-slate-900 p-5 sm:p-6">
         <div className="space-y-1">
-          <label className="text-sm font-medium text-slate-400">Task Title</label>
+          <label className="text-xs font-semibold tracking-wider text-slate-500 uppercase">Task title</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g. Choose the best thumbnail"
-            className="w-full rounded-md border border-slate-700 bg-slate-950/60 p-3 text-sm text-white shadow-sm placeholder:text-slate-500 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
+            className="w-full rounded-lg border border-slate-800 bg-slate-950 p-3 text-sm text-white placeholder:text-slate-500 focus:border-violet-500 focus:outline-none"
           />
         </div>
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-5 sm:p-6">
+        <div>
           <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <label className="text-sm font-medium text-white">How many votes?</label>
+              <label className="text-xs font-semibold tracking-wider text-slate-500 uppercase">How many votes?</label>
               <p className="mt-1 text-xs text-slate-500">
                 {shownEconomics.minVotes}–{shownEconomics.maxVotes} · {formatUsd(shownEconomics.usdPerVoteCreator)} each
               </p>
@@ -320,23 +322,28 @@ export const Upload = () => {
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-400">
-            Image Options <span className="font-normal">({images.length}/{MAX_OPTIONS}, min {MIN_OPTIONS})</span>
+          <label className="text-xs font-semibold tracking-wider text-slate-500 uppercase">
+            Image options <span className="font-normal lowercase tracking-normal">({images.length}/{MAX_OPTIONS}, min {MIN_OPTIONS})</span>
           </label>
           <p className="text-xs text-slate-500">Select several images at once. Only image files are accepted.</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {images.map((image, index) => (
-              <div key={`${image}-${index}`} className="relative group rounded-lg overflow-hidden shadow-md border border-slate-800">
-                <img
-                  src={image}
-                  alt="Uploaded"
-                  className="w-full h-40 object-cover"
-                />
+              <div key={`${image}-${index}`} className="overflow-hidden rounded-xl border border-slate-800 bg-slate-950">
+                <div className="relative">
+                  <span className="absolute top-2 left-2 rounded-full bg-slate-950/80 px-2 py-0.5 text-xs text-white">
+                    Option {String.fromCharCode(65 + index)}
+                  </span>
+                  <img
+                    src={image}
+                    alt="Uploaded"
+                    className="h-40 w-full object-cover"
+                  />
+                </div>
                 <button
                   type="button"
                   onClick={() => setImages((current) => current.filter((_, i) => i !== index))}
                   disabled={loading}
-                  className="absolute top-2 right-2 rounded-full bg-slate-950/80 text-white text-xs px-2 py-1 hover:bg-slate-950"
+                  className="w-full py-2 text-xs text-rose-400 hover:bg-slate-900"
                 >
                   Remove
                 </button>
@@ -356,15 +363,12 @@ export const Upload = () => {
           </div>
         </div>
 
-        <div className="flex justify-start">
+        <div className="flex flex-col gap-3 border-t border-slate-800 pt-5 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs text-slate-500">Funds stay in Solana Devnet escrow until the batch fills.</p>
           <button
             onClick={isUiPreview || txSignature ? onSubmit : makePayment}
             disabled={loading || !canPay}
-            className={`rounded-lg px-6 py-2.5 text-sm font-medium transition-all ${
-              isUiPreview || txSignature
-                ? "bg-violet-600 text-white hover:bg-violet-500"
-                : "bg-violet-600 text-white hover:bg-violet-500"
-            } ${loading || !canPay ? "opacity-50 cursor-not-allowed" : ""}`}
+            className={`rounded-lg bg-violet-500 px-6 py-2.5 text-sm font-medium text-white hover:bg-violet-600 ${loading || !canPay ? "cursor-not-allowed opacity-50" : ""}`}
           >
             {loading
               ? isUiPreview || txSignature
@@ -374,6 +378,7 @@ export const Upload = () => {
               ? "Submit Task"
               : `Pay ${formatUsdAndSol(priceLamports, shownEconomics.solUsd)}`}
           </button>
+        </div>
         </div>
       </div>
     </div>
@@ -392,7 +397,7 @@ function PriceTile({
   emphasis: "creator" | "voter";
 }) {
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-4">
+    <div className="rounded-xl border border-slate-800 bg-slate-950 px-4 py-4">
       <p className="text-xs font-medium uppercase tracking-wide text-slate-500">{label}</p>
       <p className="mt-2 text-2xl font-semibold text-white">{formatUsd(usd)}</p>
       <p className={`mt-1 text-sm ${emphasis === "voter" ? "text-emerald-400" : "text-cyan-400"}`}>

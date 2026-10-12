@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useRef, useState } from "react";
+import { Menu, X } from "lucide-react";
 import toast from "react-hot-toast";
 import { isUiPreview } from "@/lib/ui-preview";
 import * as creatorAuth from "@/lib/auth";
@@ -52,6 +53,7 @@ export function AppHeader() {
   const [loading, setLoading] = useState(false);
   const hadSession = useRef(false);
   const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const onValidatorPages = pathname.startsWith("/validators");
 
   useEffect(() => {
@@ -129,11 +131,15 @@ export function AppHeader() {
     };
   }, [publicKey, hasSigned, signMessage, connecting, connected]);
 
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
+
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-canvas/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl flex-wrap items-center justify-between gap-3 px-4 sm:px-6">
-        <div className="flex min-w-0 items-center gap-5">
-          <BrandMark />
+      <div className="mx-auto flex h-16 max-w-7xl items-center gap-2 px-4 sm:px-6">
+        <div className="flex min-w-0 items-center gap-3">
+          <BrandMark compact />
           {isUiPreview && (
             <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-xs text-amber-400">
               Preview
@@ -158,32 +164,46 @@ export function AppHeader() {
             })}
           </nav>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="ml-auto flex shrink-0 items-center gap-2">
           {loading && <span className="hidden text-sm text-cyan-400 animate-pulse sm:inline">Signing in…</span>}
           <ThemeToggle />
           <FaucetHint />
           {onValidatorPages ? <WorkerBalance /> : null}
           <WalletButton />
+          <button
+            type="button"
+            className="inline-flex items-center justify-center rounded-md p-2 text-fg-muted hover:text-fg md:hidden"
+            aria-expanded={isMenuOpen}
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            onClick={() => setIsMenuOpen((open) => !open)}
+          >
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
-        <nav className="flex w-full items-center gap-1 overflow-x-auto pb-3 text-sm md:hidden">
-          {NAV.map((item) => {
-            const active = item.active(pathname);
-            return (
-              <Link
-                key={`m-${item.href}`}
-                href={item.href}
-                className={
-                  active
-                    ? "shrink-0 rounded-md bg-subtle px-3 py-1.5 font-medium text-fg"
-                    : "shrink-0 rounded-md px-3 py-1.5 text-fg-muted"
-                }
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
       </div>
+      {isMenuOpen ? (
+        <nav className="border-t border-line bg-canvas/95 md:hidden">
+          <div className="mx-auto max-w-7xl space-y-1 px-4 py-3 sm:px-6">
+            {NAV.map((item) => {
+              const active = item.active(pathname);
+              return (
+                <Link
+                  key={`m-${item.href}`}
+                  href={item.href}
+                  className={
+                    active
+                      ? "block rounded-md bg-subtle px-3 py-2 font-medium text-fg"
+                      : "block rounded-md px-3 py-2 text-fg-muted hover:bg-subtle hover:text-fg"
+                  }
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
+      ) : null}
     </header>
   );
 }

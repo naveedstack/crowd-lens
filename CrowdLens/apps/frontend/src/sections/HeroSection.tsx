@@ -62,7 +62,7 @@ const HeroSection: React.FC = () => {
             <div className="hero-float absolute inset-0 rounded-full bg-gradient-to-r from-violet-500/15 to-cyan-500/15 blur-3xl" />
             <div className="relative rounded-2xl border border-line bg-card p-5">
               <div className="mb-4 flex items-center justify-between text-xs text-fg-muted">
-                <span>Live comparison</span>
+                <span>Example</span>
                 <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-emerald-400">Done</span>
               </div>
               <div className="grid grid-cols-2 gap-4">

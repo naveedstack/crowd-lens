@@ -90,6 +90,27 @@ body {
   line-height: 1 !important;
 }
 
+@media (max-width: 639px) {
+  .wallet-adapter-button {
+    width: 36px !important;
+    min-width: 36px !important;
+    max-width: 36px !important;
+    padding: 0 !important;
+    font-size: 0 !important;
+    justify-content: center !important;
+    gap: 0 !important;
+  }
+
+  .wallet-adapter-button-start-icon {
+    margin: 0 !important;
+  }
+
+  .wallet-adapter-button-start-icon img {
+    width: 18px !important;
+    height: 18px !important;
+  }
+}
+
 .wallet-adapter-button-trigger {
   background: #8b5cf6 !important;
 }

@@ -12,7 +12,7 @@ const PEXELS_C =
 
 export const MOCK_ECONOMICS = {
   treasuryAddress: "5tm9oN2bpTxFdELx9ddcxjFG9HD4NQHdkdz3CYm25EQj",
-  solUsd: 120,
+  solUsd: 0,
   usdPerVoteCreator: 1,
   usdPerVoteVoter: 0.8,
   lamportsPerVote: 8_333_333,
@@ -21,6 +21,7 @@ export const MOCK_ECONOMICS = {
   maxVotes: 100,
   settlementMode: "custodial" as const,
   programId: null as string | null,
+  source: "preview" as const,
 };
 
 export type PreviewTaskRow = {

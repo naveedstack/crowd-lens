@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { AppHeader } from "@/components/AppHeader";
+import { ValidatorsShell } from "./ValidatorsShell";
 
 export const metadata: Metadata = {
   title: "CrowdLens | Validators",
@@ -12,10 +12,5 @@ export default function ValidatorsLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <div className="min-h-screen bg-canvas text-fg">
-      <AppHeader />
-      {children}
-    </div>
-  );
+  return <ValidatorsShell>{children}</ValidatorsShell>;
 }

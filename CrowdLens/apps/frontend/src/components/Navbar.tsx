@@ -24,6 +24,13 @@ const LINKS = [
   { href: "/case-studies", label: "Case studies", page: true },
 ] as const;
 
+function linkHref(href: string, page: boolean | undefined, pathname: string) {
+  if (page) {
+    return href;
+  }
+  return pathname === "/" ? href : `/${href}`;
+}
+
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -36,6 +43,10 @@ const Navbar: React.FC = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     if (isUiPreview) return;
@@ -67,9 +78,9 @@ const Navbar: React.FC = () => {
       }`}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between md:h-20">
-          <BrandMark />
-          <nav className="hidden items-center gap-6 lg:flex">
+        <div className="flex h-16 items-center gap-2 md:h-20">
+          <BrandMark compact />
+          <nav className="ml-4 hidden items-center gap-6 lg:flex">
             {LINKS.map((link) =>
               "page" in link && link.page ? (
                 <Link
@@ -86,7 +97,7 @@ const Navbar: React.FC = () => {
               ) : (
                 <a
                   key={link.href}
-                  href={link.href}
+                  href={linkHref(link.href, false, pathname)}
                   className="text-sm font-medium text-fg-muted hover:text-fg"
                 >
                   {link.label}
@@ -94,29 +105,31 @@ const Navbar: React.FC = () => {
               ),
             )}
           </nav>
-          <div className="hidden items-center gap-3 md:flex">
+          <div className="ml-auto flex shrink-0 items-center gap-2">
             <Link
               href="/creator/new"
-              className="rounded-full px-3 py-1.5 text-sm font-medium text-fg-muted hover:text-fg"
+              className="hidden rounded-full px-3 py-1.5 text-sm font-medium text-fg-muted hover:text-fg md:inline"
             >
               Create a task
             </Link>
             <Link
               href={validatorPaths.votes}
-              className="rounded-full px-3 py-1.5 text-sm font-medium text-fg-muted hover:text-fg"
+              className="hidden rounded-full px-3 py-1.5 text-sm font-medium text-fg-muted hover:text-fg md:inline"
             >
               Vote
             </Link>
             <ThemeToggle />
             <WalletButton />
+            <button
+              type="button"
+              className="inline-flex items-center justify-center rounded-md p-2 text-fg-muted hover:text-fg lg:hidden"
+              aria-expanded={isMenuOpen}
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+              onClick={() => setIsMenuOpen((open) => !open)}
+            >
+              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
           </div>
-          <button
-            type="button"
-            className="inline-flex items-center justify-center rounded-md p-2 text-fg-muted hover:text-fg lg:hidden"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
         </div>
       </div>
       {isMenuOpen ? (
@@ -139,7 +152,7 @@ const Navbar: React.FC = () => {
               ) : (
                 <a
                   key={link.href}
-                  href={link.href}
+                  href={linkHref(link.href, false, pathname)}
                   className="block rounded-md px-3 py-2 text-fg-muted hover:bg-subtle hover:text-fg"
                   onClick={() => setIsMenuOpen(false)}
                 >
@@ -149,22 +162,18 @@ const Navbar: React.FC = () => {
             )}
             <Link
               href="/creator/new"
-              className="block rounded-md px-3 py-2 text-fg-muted hover:bg-subtle"
+              className="block rounded-md px-3 py-2 text-fg-muted hover:bg-subtle md:hidden"
               onClick={() => setIsMenuOpen(false)}
             >
               Create a task
             </Link>
             <Link
               href={validatorPaths.votes}
-              className="block rounded-md px-3 py-2 text-fg-muted hover:bg-subtle"
+              className="block rounded-md px-3 py-2 text-fg-muted hover:bg-subtle md:hidden"
               onClick={() => setIsMenuOpen(false)}
             >
               Vote
             </Link>
-            <div className="flex items-center gap-3 px-3 pt-2">
-              <ThemeToggle />
-              <WalletButton />
-            </div>
           </div>
         </div>
       ) : null}

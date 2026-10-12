@@ -27,7 +27,7 @@ export function WalletButton({
   if (!ready) {
     return (
       <div
-        className="h-9 min-w-[148px] rounded-lg bg-subtle"
+        className="h-9 w-9 rounded-full bg-subtle sm:min-w-[148px] sm:w-auto sm:rounded-lg"
         aria-hidden
       />
     );

@@ -193,9 +193,11 @@ API check: `GET https://crowdlens-api.vercel.app/health` → `{ "ok": true }`.
 
 ---
 
+Product requirements (shipped + Next Phase vs the Superteam idea): [`PRD.md`](PRD.md).
+
 ## Out of scope (not in this MVP)
 
-These ideas appear in the original product brief. They are **not** implemented and must not be treated as shipped:
+These ideas appear in the original product brief. They are **not** implemented and must not be treated as shipped. The full gap list is **§14** in [`PRD.md`](PRD.md):
 
 - Lens AI / generative suggestions from vote data
 - Product surfaces for AI teams or training-data labeling

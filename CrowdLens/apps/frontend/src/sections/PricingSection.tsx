@@ -7,12 +7,15 @@ import SectionHeading from "../components/SectionHeading";
 import Button from "../components/Button";
 import { VoteCountControl } from "../components/VoteCountControl";
 import { useEconomics } from "@/lib/use-economics";
+import { displaySolUsd, formatSolUsdRate, type Economics } from "@/lib/economics";
 import { formatUsd, formatUsdAndSol } from "@/lib/money";
 import { Reveal } from "@/components/landing/Reveal";
 
-const PricingSection: React.FC = () => {
+const PricingSection: React.FC<{ initialEconomics?: Economics | null }> = ({
+  initialEconomics,
+}) => {
   const router = useRouter();
-  const { economics } = useEconomics();
+  const { economics } = useEconomics(initialEconomics);
   const [votes, setVotes] = useState(1);
 
   const creatorTotal = votes * economics.lamportsPerVote;
@@ -42,7 +45,7 @@ const PricingSection: React.FC = () => {
               <span className="ml-2 text-base font-medium text-fg-muted">per vote</span>
             </p>
             <p className="mt-2 text-sm text-cyan-400">
-              {formatUsdAndSol(economics.lamportsPerVote, economics.solUsd)}
+              {formatUsdAndSol(economics.lamportsPerVote, displaySolUsd(economics))}
             </p>
           </div>
           </Reveal>
@@ -57,7 +60,7 @@ const PricingSection: React.FC = () => {
               <span className="ml-2 text-base font-medium text-fg-muted">per vote</span>
             </p>
             <p className="mt-2 text-sm text-emerald-400">
-              {formatUsdAndSol(economics.lamportsPerVotePayout, economics.solUsd)}
+              {formatUsdAndSol(economics.lamportsPerVotePayout, displaySolUsd(economics))}
             </p>
           </div>
           </Reveal>
@@ -69,7 +72,7 @@ const PricingSection: React.FC = () => {
             <div>
               <p className="text-sm font-medium text-fg-muted">How many votes do you need?</p>
               <p className="mt-1 text-xs text-fg-muted">
-                {economics.minVotes}–{economics.maxVotes} votes · SOL at ${economics.solUsd.toFixed(2)}
+                {economics.minVotes}–{economics.maxVotes} votes · {formatSolUsdRate(economics)}
               </p>
             </div>
             <VoteCountControl value={votes} economics={economics} onChange={setVotes} />
@@ -79,13 +82,13 @@ const PricingSection: React.FC = () => {
             <div className="rounded-xl border border-line bg-subtle/60 px-4 py-4">
               <p className="text-xs uppercase tracking-wide text-fg-muted">You pay</p>
               <p className="mt-1 text-lg font-semibold text-fg">
-                {formatUsdAndSol(creatorTotal, economics.solUsd)}
+                {formatUsdAndSol(creatorTotal, displaySolUsd(economics))}
               </p>
             </div>
             <div className="rounded-xl border border-line bg-subtle/60 px-4 py-4">
               <p className="text-xs uppercase tracking-wide text-fg-muted">Voters earn in total</p>
               <p className="mt-1 text-lg font-semibold text-emerald-400">
-                {formatUsdAndSol(voterTotal, economics.solUsd)}
+                {formatUsdAndSol(voterTotal, displaySolUsd(economics))}
               </p>
             </div>
           </div>

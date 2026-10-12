@@ -17,20 +17,23 @@ const plusJakarta = Plus_Jakarta_Sans({
 
 const themeInitScript = `(function(){try{var t=localStorage.getItem("crowdlens.theme");if(t!=="light"&&t!=="dark")t="dark";var r=document.documentElement;r.classList.remove("light","dark");r.classList.add(t);r.style.colorScheme=t;}catch(e){document.documentElement.classList.add("dark");}})();`;
 
+const description =
+  "Real humans pick the thumbnail before you publish. Upload two to five images, escrow SOL, and let validators vote. When the batch fills, the winner is committed on-chain and voters are paid in Devnet SOL.";
+
 export const metadata: Metadata = {
-  title: "CrowdLens | Decentralized Content Feedback Platform",
-  description: "CrowdLens is a revolutionary Web3 platform where creators get real human feedback on their content through a decentralized network. Powered by Solana blockchain, we enable transparent, on-chain content validation with fair compensation for contributors. Join us in shaping the future of content creation and community engagement.",
-  keywords: "Web3, content feedback, decentralized platform, Solana, blockchain, content validation, creator economy, community engagement",
+  title: "CrowdLens | Real humans pick the thumbnail",
+  description,
+  keywords: "CrowdLens, thumbnail testing, Solana Devnet, image comparison, creator tools, validator voting",
   openGraph: {
-    title: "CrowdLens | Decentralized Content Feedback Platform",
-    description: "Get real human feedback on your content through our decentralized network. Powered by Solana blockchain for transparent, on-chain content validation.",
+    title: "CrowdLens | Real humans pick the thumbnail",
+    description,
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "CrowdLens | Decentralized Content Feedback Platform",
-    description: "Get real human feedback on your content through our decentralized network. Powered by Solana blockchain for transparent, on-chain content validation.",
+    title: "CrowdLens | Real humans pick the thumbnail",
+    description,
   }
 };
 

@@ -9,8 +9,8 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { isUiPreview, MOCK_ECONOMICS, PREVIEW_TASK_ID } from "@/lib/ui-preview";
 import { api } from "@/lib/api";
-import { clampVoteCount, FALLBACK_ECONOMICS, type Economics } from "@/lib/economics";
-import { formatSol, formatUsd, formatUsdAndSol, lamportsToUsd } from "@/lib/money";
+import { clampVoteCount, displaySolUsd, FALLBACK_ECONOMICS, type Economics } from "@/lib/economics";
+import { formatSol, formatUsd, formatUsdAndSol } from "@/lib/money";
 import { VoteCountControl } from "@/components/VoteCountControl";
 import {
   clearPendingTask,
@@ -21,13 +21,15 @@ import {
 const MIN_OPTIONS = 2;
 const MAX_OPTIONS = 5;
 
-export const Upload = () => {
+export const Upload = ({ initialEconomics }: { initialEconomics?: Economics | null }) => {
   const [images, setImages] = useState<string[]>([]);
   const [title, setTitle] = useState("");
   const [txSignature, setTxSignature] = useState("");
   const [loading, setLoading] = useState(false);
   const [ready, setReady] = useState(false);
-  const [economics, setEconomics] = useState<Economics | null>(isUiPreview ? MOCK_ECONOMICS : null);
+  const [economics, setEconomics] = useState<Economics | null>(
+    isUiPreview ? MOCK_ECONOMICS : initialEconomics ?? null,
+  );
   const [quotedLamportsPerVote, setQuotedLamportsPerVote] = useState<number | null>(null);
   const [requiredSubmissions, setRequiredSubmissions] = useState(1);
   const { publicKey, sendTransaction } = useWallet();
@@ -302,17 +304,18 @@ export const Upload = () => {
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             <PriceTile
               label="You pay"
-              usd={lamportsToUsd(priceLamports, shownEconomics.solUsd)}
-              sol={formatSol(priceLamports)}
+              usd={requiredSubmissions * shownEconomics.usdPerVoteCreator}
+              sol={priceLamports > 0 ? formatSol(priceLamports) : "—"}
               emphasis="creator"
             />
             <PriceTile
               label="Voters earn"
-              usd={lamportsToUsd(
-                requiredSubmissions * shownEconomics.lamportsPerVotePayout,
-                shownEconomics.solUsd,
-              )}
-              sol={formatSol(requiredSubmissions * shownEconomics.lamportsPerVotePayout)}
+              usd={requiredSubmissions * shownEconomics.usdPerVoteVoter}
+              sol={
+                shownEconomics.lamportsPerVotePayout > 0
+                  ? formatSol(requiredSubmissions * shownEconomics.lamportsPerVotePayout)
+                  : "—"
+              }
               emphasis="voter"
             />
           </div>
@@ -376,7 +379,7 @@ export const Upload = () => {
                 : "Paying..."
               : isUiPreview || txSignature
               ? "Submit Task"
-              : `Pay ${formatUsdAndSol(priceLamports, shownEconomics.solUsd)}`}
+              : `Pay ${formatUsdAndSol(priceLamports, displaySolUsd(shownEconomics))}`}
           </button>
         </div>
         </div>

@@ -1,10 +1,7 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import axios from "axios";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { isUiPreview, MOCK_PLATFORM_STATS, type PreviewPlatformStats } from "@/lib/ui-preview";
+import { fetchPlatformStats } from "@/lib/server-data";
+import type { PreviewPlatformStats } from "@/lib/ui-preview";
 
 function formatTurnaround(ms: number | null) {
   if (ms == null) {
@@ -19,42 +16,10 @@ function formatTurnaround(ms: number | null) {
   return `${minutes}m ${seconds}s`;
 }
 
-export default function StatsPage() {
-  const [stats, setStats] = useState<PreviewPlatformStats | null>(isUiPreview ? MOCK_PLATFORM_STATS : null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(!isUiPreview);
+export const dynamic = "force-dynamic";
 
-  useEffect(() => {
-    if (isUiPreview) {
-      return;
-    }
-    const base = process.env.NEXT_PUBLIC_BACKEND_URL;
-    if (!base) {
-      setStats(MOCK_PLATFORM_STATS);
-      setLoading(false);
-      return;
-    }
-    let cancelled = false;
-    (async () => {
-      try {
-        const response = await axios.get<PreviewPlatformStats>(`${base}/api/v1/stats`);
-        if (!cancelled) {
-          setStats(response.data);
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setError(axios.isAxiosError(err) ? err.response?.data?.error || err.message : "Failed to load stats");
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+export default async function StatsPage() {
+  const stats = await fetchPlatformStats();
 
   return (
     <div className="min-h-screen bg-canvas text-fg">
@@ -66,103 +31,108 @@ export default function StatsPage() {
         <p className="mt-3 text-fg-muted max-w-2xl">
           Live totals from CrowdLens votes. Individual ballots stay with the creator who can export them as CSV or JSON.
         </p>
-
-        {loading && <p className="mt-10 text-fg-muted">Loading stats…</p>}
-        {error && <p className="mt-10 text-red-400">{error}</p>}
-        {stats && !loading && (
-          <>
-            <h2 className="mt-12 text-xl font-semibold">Pilot KPIs</h2>
-            <p className="mt-2 text-sm text-fg-muted max-w-2xl">
-              Progress against grant targets, excluding the seeded demo queue. Unmet targets stay visible.
-            </p>
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <KpiMeter
-                label="Votes"
-                current={stats.pilot.votes}
-                target={stats.targets.votes}
-                display={`${stats.pilot.votes.toLocaleString()} / ${stats.targets.votes.toLocaleString()}`}
-              />
-              <KpiMeter
-                label="Unique validators"
-                current={stats.pilot.uniqueValidators}
-                target={stats.targets.uniqueValidators}
-                display={`${stats.pilot.uniqueValidators.toLocaleString()} / ${stats.targets.uniqueValidators.toLocaleString()}`}
-              />
-              <KpiMeter
-                label="Unique creators"
-                current={stats.pilot.uniqueCreators}
-                target={stats.targets.uniqueCreators}
-                display={`${stats.pilot.uniqueCreators.toLocaleString()} / ${stats.targets.uniqueCreators.toLocaleString()}`}
-              />
-              <KpiMeter
-                label="Under 5 minutes"
-                current={stats.pilot.underFiveMinutesRate ?? 0}
-                target={stats.targets.underFiveMinutesRate}
-                display={
-                  stats.pilot.underFiveMinutesRate == null
-                    ? "—"
-                    : `${Math.round(stats.pilot.underFiveMinutesRate * 100)}% / 100%`
-                }
-                ratio={stats.pilot.underFiveMinutesRate}
-              />
-            </div>
-            {stats.pilot.avgTurnaroundMs != null && (
-              <p className="mt-3 text-sm text-fg-muted">
-                Average pilot batch turnaround: {formatTurnaround(stats.pilot.avgTurnaroundMs)}
-              </p>
-            )}
-
-            <h2 className="mt-12 text-xl font-semibold">All activity</h2>
-            <p className="mt-2 text-sm text-fg-muted">Includes the demo seed and verify traffic.</p>
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-              <StatCard label="Votes" value={stats.votes.toLocaleString()} />
-              <StatCard label="Unique validators" value={stats.uniqueValidators.toLocaleString()} />
-              <StatCard label="Tasks done" value={`${stats.tasksDone.toLocaleString()} / ${stats.tasks.toLocaleString()}`} />
-              <StatCard label="Avg turnaround" value={formatTurnaround(stats.avgTurnaroundMs)} />
-              <StatCard
-                label="Under 5 minutes"
-                value={
-                  stats.underFiveMinutesRate == null
-                    ? "—"
-                    : `${Math.round(stats.underFiveMinutesRate * 100)}%`
-                }
-              />
-            </div>
-
-            <h2 className="mt-12 text-xl font-semibold">Validator leaderboard</h2>
-            {stats.leaderboard.length === 0 ? (
-              <p className="mt-4 text-fg-muted">No votes yet.</p>
-            ) : (
-              <div className="mt-4 overflow-x-auto rounded-xl border border-line">
-                <table className="w-full text-sm">
-                  <thead className="bg-card text-fg-muted">
-                    <tr>
-                      <th className="text-left px-4 py-3 font-medium">Rank</th>
-                      <th className="text-left px-4 py-3 font-medium">Validator</th>
-                      <th className="text-right px-4 py-3 font-medium">Reputation</th>
-                      <th className="text-right px-4 py-3 font-medium">Aligned</th>
-                      <th className="text-right px-4 py-3 font-medium">Votes</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {stats.leaderboard.map((row) => (
-                      <tr key={`${row.rank}-${row.addressPreview}`} className="border-t border-line">
-                        <td className="px-4 py-3 text-fg-muted">{row.rank}</td>
-                        <td className="px-4 py-3 font-mono text-fg">{row.addressPreview}</td>
-                        <td className="px-4 py-3 text-right text-fg">{row.reputation}</td>
-                        <td className="px-4 py-3 text-right text-emerald-400">{row.alignedVotes}</td>
-                        <td className="px-4 py-3 text-right text-fg">{row.votes}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </>
+        {stats ? (
+          <StatsBody stats={stats} />
+        ) : (
+          <p className="mt-10 text-fg-muted">Stats are unavailable right now.</p>
         )}
       </main>
       <Footer />
     </div>
+  );
+}
+
+function StatsBody({ stats }: { stats: PreviewPlatformStats }) {
+  return (
+    <>
+      <h2 className="mt-12 text-xl font-semibold">Pilot KPIs</h2>
+      <p className="mt-2 text-sm text-fg-muted max-w-2xl">
+        Progress against grant targets, excluding the seeded demo queue. Unmet targets stay visible.
+      </p>
+      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <KpiMeter
+          label="Votes"
+          current={stats.pilot.votes}
+          target={stats.targets.votes}
+          display={`${stats.pilot.votes.toLocaleString()} / ${stats.targets.votes.toLocaleString()}`}
+        />
+        <KpiMeter
+          label="Unique validators"
+          current={stats.pilot.uniqueValidators}
+          target={stats.targets.uniqueValidators}
+          display={`${stats.pilot.uniqueValidators.toLocaleString()} / ${stats.targets.uniqueValidators.toLocaleString()}`}
+        />
+        <KpiMeter
+          label="Unique creators"
+          current={stats.pilot.uniqueCreators}
+          target={stats.targets.uniqueCreators}
+          display={`${stats.pilot.uniqueCreators.toLocaleString()} / ${stats.targets.uniqueCreators.toLocaleString()}`}
+        />
+        <KpiMeter
+          label="Under 5 minutes"
+          current={stats.pilot.underFiveMinutesRate ?? 0}
+          target={stats.targets.underFiveMinutesRate}
+          display={
+            stats.pilot.underFiveMinutesRate == null
+              ? "—"
+              : `${Math.round(stats.pilot.underFiveMinutesRate * 100)}% / 100%`
+          }
+          ratio={stats.pilot.underFiveMinutesRate}
+        />
+      </div>
+      {stats.pilot.avgTurnaroundMs != null && (
+        <p className="mt-3 text-sm text-fg-muted">
+          Average pilot batch turnaround: {formatTurnaround(stats.pilot.avgTurnaroundMs)}
+        </p>
+      )}
+
+      <h2 className="mt-12 text-xl font-semibold">All activity</h2>
+      <p className="mt-2 text-sm text-fg-muted">Includes the demo seed and verify traffic.</p>
+      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <StatCard label="Votes" value={stats.votes.toLocaleString()} />
+        <StatCard label="Unique validators" value={stats.uniqueValidators.toLocaleString()} />
+        <StatCard label="Tasks done" value={`${stats.tasksDone.toLocaleString()} / ${stats.tasks.toLocaleString()}`} />
+        <StatCard label="Avg turnaround" value={formatTurnaround(stats.avgTurnaroundMs)} />
+        <StatCard
+          label="Under 5 minutes"
+          value={
+            stats.underFiveMinutesRate == null
+              ? "—"
+              : `${Math.round(stats.underFiveMinutesRate * 100)}%`
+          }
+        />
+      </div>
+
+      <h2 className="mt-12 text-xl font-semibold">Validator leaderboard</h2>
+      {stats.leaderboard.length === 0 ? (
+        <p className="mt-4 text-fg-muted">No votes yet.</p>
+      ) : (
+        <div className="mt-4 overflow-x-auto rounded-xl border border-line">
+          <table className="w-full text-sm">
+            <thead className="bg-card text-fg-muted">
+              <tr>
+                <th className="text-left px-4 py-3 font-medium">Rank</th>
+                <th className="text-left px-4 py-3 font-medium">Validator</th>
+                <th className="text-right px-4 py-3 font-medium">Reputation</th>
+                <th className="text-right px-4 py-3 font-medium">Aligned</th>
+                <th className="text-right px-4 py-3 font-medium">Votes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {stats.leaderboard.map((row) => (
+                <tr key={`${row.rank}-${row.addressPreview}`} className="border-t border-line">
+                  <td className="px-4 py-3 text-fg-muted">{row.rank}</td>
+                  <td className="px-4 py-3 font-mono text-fg">{row.addressPreview}</td>
+                  <td className="px-4 py-3 text-right text-fg">{row.reputation}</td>
+                  <td className="px-4 py-3 text-right text-emerald-400">{row.alignedVotes}</td>
+                  <td className="px-4 py-3 text-right text-fg">{row.votes}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -181,7 +151,7 @@ function KpiMeter({
 }) {
   const pct = Math.max(0, Math.min(100, Math.round(((ratio ?? (target > 0 ? current / target : 0)) * 100))));
   return (
-            <div className="rounded-xl border border-line bg-card px-4 py-5">
+    <div className="rounded-xl border border-line bg-card px-4 py-5">
       <div className="text-sm text-fg-muted">{label}</div>
       <div className="mt-2 text-2xl font-semibold text-fg">{display}</div>
       <div className="mt-3 h-2 rounded-full bg-subtle overflow-hidden">
@@ -196,7 +166,7 @@ function KpiMeter({
 
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
-            <div className="rounded-xl border border-line bg-card px-4 py-5">
+    <div className="rounded-xl border border-line bg-card px-4 py-5">
       <div className="text-sm text-fg-muted">{label}</div>
       <div className="mt-2 text-2xl font-semibold text-fg">{value}</div>
     </div>

@@ -29,13 +29,7 @@ export default function CaseStudiesPage() {
 
         {studies.length === 0 ? (
           <div className="mt-12 rounded-2xl border border-line bg-card px-6 py-10">
-            <p className="text-fg-muted">No published case studies yet.</p>
-            <p className="mt-3 text-sm text-fg-muted">
-              After a pilot batch, add an entry to{" "}
-              <code className="text-fg">apps/frontend/src/content/case-studies.json</code>.
-              Outreach, interview questions, and CTR fields are in <code className="text-fg">PILOT.md</code>{" "}
-              at the repo root.
-            </p>
+            <p className="text-fg-muted">No published results yet.</p>
           </div>
         ) : (
           <div className="mt-10 grid grid-cols-1 gap-6">

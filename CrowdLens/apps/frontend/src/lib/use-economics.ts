@@ -5,15 +5,15 @@ import { useCallback, useEffect, useState } from "react";
 import { FALLBACK_ECONOMICS, type Economics } from "./economics";
 import { isUiPreview } from "./ui-preview";
 
-export function useEconomics() {
-  const [economics, setEconomics] = useState<Economics>(FALLBACK_ECONOMICS);
-  const [loaded, setLoaded] = useState(isUiPreview);
+export function useEconomics(initial?: Economics | null) {
+  const [economics, setEconomics] = useState<Economics>(initial ?? FALLBACK_ECONOMICS);
+  const [loaded, setLoaded] = useState(Boolean(initial && initial.lamportsPerVote > 0) || isUiPreview);
 
   const refresh = useCallback(async () => {
     if (isUiPreview) {
-      setEconomics(FALLBACK_ECONOMICS);
+      setEconomics(initial ?? FALLBACK_ECONOMICS);
       setLoaded(true);
-      return FALLBACK_ECONOMICS;
+      return initial ?? FALLBACK_ECONOMICS;
     }
 
     const base = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -28,21 +28,23 @@ export function useEconomics() {
     setEconomics(next);
     setLoaded(true);
     return next;
-  }, []);
+  }, [initial]);
 
   useEffect(() => {
     let cancelled = false;
     refresh().catch((err) => {
       if (!cancelled) {
         console.error(err);
-        setEconomics(FALLBACK_ECONOMICS);
+        if (!initial) {
+          setEconomics(FALLBACK_ECONOMICS);
+        }
         setLoaded(true);
       }
     });
     return () => {
       cancelled = true;
     };
-  }, [refresh]);
+  }, [initial, refresh]);
 
   return { economics, loaded, refresh };
 }

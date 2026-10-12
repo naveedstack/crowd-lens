@@ -9,8 +9,11 @@ import CTASection from '../sections/CTASection';
 import Footer from '../components/Footer';
 import ScrollToTop from '../components/ScrollToTop';
 import { LandingBackdrop } from '@/components/landing/LandingBackdrop';
+import { fetchEconomics } from '@/lib/server-data';
 
-function App() {
+export default async function App() {
+  const economics = await fetchEconomics();
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-canvas text-fg">
       <LandingBackdrop />
@@ -20,7 +23,7 @@ function App() {
           <HeroSection />
           <FeaturesSection />
           <HowItWorksSection />
-          <PricingSection />
+          <PricingSection initialEconomics={economics} />
           <TestimonialsSection />
           <FAQSection />
           <CTASection />
@@ -31,5 +34,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

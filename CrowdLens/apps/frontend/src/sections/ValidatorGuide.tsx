@@ -17,14 +17,15 @@ import {
 import Button from "@/components/Button";
 import { FAUCET_URL } from "@/components/FaucetHint";
 import { useEconomics } from "@/lib/use-economics";
+import { displaySolUsd, formatSolUsdRate, type Economics } from "@/lib/economics";
 import { formatSol, formatUsd, formatUsdAndSol } from "@/lib/money";
 import { Reveal } from "@/components/landing/Reveal";
 
 const PEXELS_A = "https://images.pexels.com/photos/2263436/pexels-photo-2263436.jpeg";
 const PEXELS_B = "https://images.pexels.com/photos/5409751/pexels-photo-5409751.jpeg";
 
-const ValidatorGuide = () => {
-  const { economics } = useEconomics();
+const ValidatorGuide = ({ initialEconomics }: { initialEconomics?: Economics | null }) => {
+  const { economics } = useEconomics(initialEconomics);
   const [votesPerDay, setVotesPerDay] = useState(25);
   const [previewPick, setPreviewPick] = useState<"A" | "B">("A");
 
@@ -35,7 +36,7 @@ const ValidatorGuide = () => {
 
   return (
     <main>
-      <section className="relative overflow-hidden border-b border-line pt-16 pb-20">
+      <section className="relative overflow-hidden border-b border-line pt-28 pb-20">
         <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
           <Reveal>
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-card px-3.5 py-1 text-sm text-cyan-400">
@@ -247,7 +248,7 @@ const ValidatorGuide = () => {
                   </p>
                   <p className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-emerald-400" />
-                    SOL at ${economics.solUsd.toFixed(2)}
+                    {formatSolUsdRate(economics)}
                   </p>
                 </div>
               </div>
@@ -257,7 +258,7 @@ const ValidatorGuide = () => {
                     If you voted that many times today
                   </div>
                   <p className="font-display text-3xl font-bold text-emerald-400">
-                    {formatUsdAndSol(dailyLamports, economics.solUsd)}
+                    {formatUsdAndSol(dailyLamports, displaySolUsd(economics))}
                   </p>
                 </div>
                 <div className="rounded-xl border border-cyan-500/20 bg-canvas p-5">
@@ -265,7 +266,7 @@ const ValidatorGuide = () => {
                     Same pace for 30 days
                   </div>
                   <p className="font-display text-3xl font-bold text-cyan-400">
-                    {formatUsdAndSol(monthlyLamports, economics.solUsd)}
+                    {formatUsdAndSol(monthlyLamports, displaySolUsd(economics))}
                   </p>
                 </div>
               </div>

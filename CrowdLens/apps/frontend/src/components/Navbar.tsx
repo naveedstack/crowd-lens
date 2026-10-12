@@ -11,6 +11,7 @@ import "@solana/wallet-adapter-react-ui/styles.css";
 import { isUiPreview } from "@/lib/ui-preview";
 import { clearAllSessions, ensureWalletSessions, hasFullSession } from "@/lib/ensure-sessions";
 import { validatorPaths } from "@/lib/routes";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 const LINKS = [
   { href: "/validators", label: "Validators", page: true },
@@ -62,7 +63,7 @@ const Navbar: React.FC = () => {
   return (
     <header
       className={`fixed top-0 right-0 left-0 z-50 transition-all duration-300 ${
-        isScrolled ? "border-b border-slate-800 bg-slate-950/90 backdrop-blur-md" : "bg-transparent"
+        isScrolled ? "border-b border-line bg-canvas/90 backdrop-blur-md" : "bg-transparent"
       }`}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -76,8 +77,8 @@ const Navbar: React.FC = () => {
                   href={link.href}
                   className={
                     pathname === link.href || pathname.startsWith(`${link.href}/`)
-                      ? "text-sm font-medium text-white"
-                      : "text-sm font-medium text-slate-400 hover:text-white"
+                      ? "text-sm font-medium text-fg"
+                      : "text-sm font-medium text-fg-muted hover:text-fg"
                   }
                 >
                   {link.label}
@@ -86,7 +87,7 @@ const Navbar: React.FC = () => {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-sm font-medium text-slate-400 hover:text-white"
+                  className="text-sm font-medium text-fg-muted hover:text-fg"
                 >
                   {link.label}
                 </a>
@@ -96,21 +97,22 @@ const Navbar: React.FC = () => {
           <div className="hidden items-center gap-3 md:flex">
             <Link
               href="/creator/new"
-              className="rounded-full px-3 py-1.5 text-sm font-medium text-slate-300 hover:text-white"
+              className="rounded-full px-3 py-1.5 text-sm font-medium text-fg-muted hover:text-fg"
             >
               Create a task
             </Link>
             <Link
               href={validatorPaths.votes}
-              className="rounded-full px-3 py-1.5 text-sm font-medium text-slate-300 hover:text-white"
+              className="rounded-full px-3 py-1.5 text-sm font-medium text-fg-muted hover:text-fg"
             >
               Vote
             </Link>
+            <ThemeToggle />
             <WalletButton />
           </div>
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-md p-2 text-slate-300 hover:text-white lg:hidden"
+            className="inline-flex items-center justify-center rounded-md p-2 text-fg-muted hover:text-fg lg:hidden"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -118,7 +120,7 @@ const Navbar: React.FC = () => {
         </div>
       </div>
       {isMenuOpen ? (
-        <div className="border-t border-slate-800 bg-slate-950/95 backdrop-blur-md lg:hidden">
+        <div className="border-t border-line bg-canvas/95 backdrop-blur-md lg:hidden">
           <div className="space-y-1 px-4 py-3">
             {LINKS.map((link) =>
               "page" in link && link.page ? (
@@ -127,8 +129,8 @@ const Navbar: React.FC = () => {
                   href={link.href}
                   className={
                     pathname === link.href || pathname.startsWith(`${link.href}/`)
-                      ? "block rounded-md bg-slate-800 px-3 py-2 text-white"
-                      : "block rounded-md px-3 py-2 text-slate-300 hover:bg-slate-800 hover:text-white"
+                      ? "block rounded-md bg-subtle px-3 py-2 text-fg"
+                      : "block rounded-md px-3 py-2 text-fg-muted hover:bg-subtle hover:text-fg"
                   }
                   onClick={() => setIsMenuOpen(false)}
                 >
@@ -138,7 +140,7 @@ const Navbar: React.FC = () => {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="block rounded-md px-3 py-2 text-slate-300 hover:bg-slate-800 hover:text-white"
+                  className="block rounded-md px-3 py-2 text-fg-muted hover:bg-subtle hover:text-fg"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.label}
@@ -147,19 +149,20 @@ const Navbar: React.FC = () => {
             )}
             <Link
               href="/creator/new"
-              className="block rounded-md px-3 py-2 text-slate-300 hover:bg-slate-800"
+              className="block rounded-md px-3 py-2 text-fg-muted hover:bg-subtle"
               onClick={() => setIsMenuOpen(false)}
             >
               Create a task
             </Link>
             <Link
               href={validatorPaths.votes}
-              className="block rounded-md px-3 py-2 text-slate-300 hover:bg-slate-800"
+              className="block rounded-md px-3 py-2 text-fg-muted hover:bg-subtle"
               onClick={() => setIsMenuOpen(false)}
             >
               Vote
             </Link>
-            <div className="px-3 pt-2">
+            <div className="flex items-center gap-3 px-3 pt-2">
+              <ThemeToggle />
               <WalletButton />
             </div>
           </div>

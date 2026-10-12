@@ -109,17 +109,17 @@ export function SubmissionHistory() {
       {submissions.map((submission) => (
         <div
           key={submission.id}
-          className="flex gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-4"
+          className="flex gap-4 rounded-2xl border border-line bg-card p-4"
         >
           {submission.option.type === "Text" ? (
-            <div className="h-20 w-28 shrink-0 overflow-hidden rounded-md bg-slate-950 p-2 text-xs leading-snug text-slate-400">
+            <div className="h-20 w-28 shrink-0 overflow-hidden rounded-md bg-subtle p-2 text-xs leading-snug text-fg-muted">
               {snippet(submission.option.content ?? "")}
             </div>
           ) : (
             <img
               src={submission.option.image_url}
               alt=""
-              className="h-20 w-28 shrink-0 rounded-md object-cover bg-slate-950"
+              className="h-20 w-28 shrink-0 rounded-md object-cover bg-canvas"
             />
           )}
           <div className="min-w-0 flex-1">
@@ -128,7 +128,7 @@ export function SubmissionHistory() {
               <span
                 className={
                   submission.task.done
-                    ? "text-xs rounded-full border border-slate-700 px-2 py-0.5 text-slate-400"
+                    ? "text-xs rounded-full border border-line px-2 py-0.5 text-fg-muted"
                     : "text-xs rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-emerald-400"
                 }
               >
@@ -149,7 +149,7 @@ export function SubmissionHistory() {
               ) : null}
             </div>
             {submission.comment ? (
-              <p className="mt-2 text-sm text-slate-400">{submission.comment}</p>
+              <p className="mt-2 text-sm text-fg-muted">{submission.comment}</p>
             ) : null}
           </div>
         </div>

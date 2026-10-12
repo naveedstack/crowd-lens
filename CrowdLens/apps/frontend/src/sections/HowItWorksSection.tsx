@@ -1,5 +1,6 @@
 import { Upload, Users, BarChart3, Award } from "lucide-react";
 import SectionHeading from "../components/SectionHeading";
+import { Reveal } from "@/components/landing/Reveal";
 
 const steps = [
   {
@@ -28,21 +29,25 @@ const HowItWorksSection = () => {
   return (
     <section id="how-it-works" className="py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          title="How CrowdLens works"
-          subtitle="Four steps from upload to an on-chain winner."
-          centered
-        />
+        <Reveal>
+          <SectionHeading
+            title="How CrowdLens works"
+            subtitle="Four steps from upload to an on-chain winner."
+            centered
+          />
+        </Reveal>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
           {steps.map((step, index) => (
-            <div key={step.title} className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-slate-800 text-cyan-400">
-                <step.icon className="h-5 w-5" />
+            <Reveal key={step.title} delayMs={index * 80}>
+              <div className="landing-card rounded-2xl border border-line bg-card p-6">
+                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-subtle text-cyan-400">
+                  <step.icon className="h-5 w-5" />
+                </div>
+                <p className="text-xs font-semibold tracking-wider text-fg-muted uppercase">Step {index + 1}</p>
+                <h3 className="font-display mt-2 text-lg font-semibold text-fg">{step.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-fg-muted">{step.description}</p>
               </div>
-              <p className="text-xs font-semibold tracking-wider text-slate-500 uppercase">Step {index + 1}</p>
-              <h3 className="font-display mt-2 text-lg font-semibold text-white">{step.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-400">{step.description}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>

@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-canvas" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CrowdLens - Creator Tasks Dashboard</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Inter & Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-surface-variant": "#4a4455",
+            "on-tertiary-container": "#88fbc6",
+            "outline-variant": "#ccc3d8",
+            "tertiary-fixed-dim": "#68dba9",
+            "surface-tint": "#732ee4",
+            "on-tertiary-fixed": "#002114",
+            "surface-container-highest": "#d3e4fe",
+            "accent-cyan": "#06b6d4",
+            "secondary": "#006398",
+            "accent-cyan-subtle": "#ecfeff",
+            "on-tertiary": "#ffffff",
+            "border-strong": "#cbd5e1",
+            "surface": "#f8f9ff",
+            "error-rose": "#e11d48",
+            "secondary-fixed-dim": "#93ccff",
+            "inverse-surface": "#213145",
+            "text-secondary": "#334155",
+            "on-error-container": "#93000a",
+            "surface-subtle": "#f1f5f9",
+            "surface-dim": "#cbdbf5",
+            "on-primary-container": "#ede0ff",
+            "on-secondary-fixed": "#001d31",
+            "success-emerald": "#10b981",
+            "on-primary": "#ffffff",
+            "warning-amber-subtle": "#fffbeb",
+            "outline": "#7b7487",
+            "inverse-on-surface": "#eaf1ff",
+            "on-primary-fixed": "#25005a",
+            "inverse-primary": "#d2bbff",
+            "tertiary": "#005a3d",
+            "border-subtle": "#e2e8f0",
+            "surface-canvas": "#f8fafc",
+            "surface-card": "#ffffff",
+            "surface-container": "#e5eeff",
+            "on-secondary": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "secondary-fixed": "#cce5ff",
+            "background": "#f8f9ff",
+            "tertiary-fixed": "#85f8c4",
+            "on-error": "#ffffff",
+            "on-secondary-fixed-variant": "#004b73",
+            "surface-variant": "#d3e4fe",
+            "primary-fixed-dim": "#d2bbff",
+            "primary-container": "#7c3aed",
+            "brand-violet-subtle": "#f5f3ff",
+            "error-rose-border": "#fecdd3",
+            "warning-amber-border": "#fde68a",
+            "on-secondary-container": "#00476e",
+            "primary-fixed": "#eaddff",
+            "error": "#ba1a1a",
+            "brand-violet-hover": "#6d28d9",
+            "brand-violet-border": "#ddd6fe",
+            "on-tertiary-fixed-variant": "#005137",
+            "surface-container-high": "#dce9ff",
+            "surface-container-low": "#eff4ff",
+            "on-background": "#0b1c30",
+            "error-rose-subtle": "#fff1f2",
+            "success-emerald-subtle": "#ecfdf5",
+            "on-primary-fixed-variant": "#5a00c6",
+            "text-primary": "#0f172a",
+            "tertiary-container": "#007551",
+            "accent-cyan-border": "#a5f3fc",
+            "warning-amber": "#d97706",
+            "primary": "#630ed4",
+            "on-surface": "#0b1c30",
+            "error-container": "#ffdad6",
+            "text-muted": "#64748b",
+            "success-emerald-border": "#a7f3d0",
+            "surface-muted": "#e2e8f0",
+            "secondary-container": "#5bb8fe",
+            "surface-bright": "#f8f9ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "space-xl": "2.5rem",
+            "gutter": "1.5rem",
+            "margin": "2rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "margin-mobile": "1rem",
+            "gutter-mobile": "1rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "label-numeric": ["Inter"],
+            "label-caps": ["Inter"],
+            "display-hero": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "display-hero-mobile": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "body-lg": ["16px", { "lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0", "fontWeight": "400" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-numeric": ["13px", { "lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.06em", "fontWeight": "600" }],
+            "display-hero": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.03em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "display-hero-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-full flex flex-col font-body-md text-text-primary bg-surface-canvas antialiased selection:bg-brand-violet-subtle selection:text-primary">
+<!-- Top Navigation Header (from Shared Components JSON Blueprint) -->
+<header class="bg-surface-card dark:bg-inverse-surface border-b border-border-subtle dark:border-border-strong docked full-width top-0 sticky z-50 shadow-sm">
+<div class="flex justify-between items-center w-full px-space-lg max-w-7xl mx-auto h-16">
+<!-- Brand Logo & Main Nav Links -->
+<div class="flex items-center gap-8">
+<a class="text-headline-sm font-headline-sm font-bold text-text-primary dark:text-inverse-on-surface flex items-center gap-2 tracking-tight" href="/creator">
+<div class="w-8 h-8 rounded-lg bg-primary-container text-on-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[20px]">lens_blur</span>
+</div>
+<span>CrowdLens</span>
+</a>
+<!-- Desktop Navigation Items -->
+<nav class="hidden md:flex items-center gap-6 text-body-md font-body-md">
+<a class="text-primary dark:text-inverse-primary font-semibold border-b-2 border-primary pb-1" href="#tasks">Tasks</a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150" href="#new-task">New Task</a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150" href="#validators">Validators</a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150" href="#votes">Votes</a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150" href="#history">History</a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150" href="#earnings">Earnings</a>
+<a class="text-text-secondary dark:text-surface-variant font-medium hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150" href="#faucet">Faucet</a>
+</nav>
+</div>
+<!-- Right Actions: Devnet Aid & Connected Wallet Pill -->
+<div class="flex items-center gap-4">
+<a class="hidden sm:inline-flex items-center gap-1.5 text-body-sm font-body-sm text-text-muted hover:text-primary transition-colors duration-150" href="#faucet">
+<span class="material-symbols-outlined text-[16px]">swap_horiz</span>
+<span>Need Devnet SOL?</span>
+</a>
+<!-- Wallet Control Unit -->
+<div class="flex items-center bg-surface-card border border-border-subtle rounded-full pl-3 pr-1.5 py-1 shadow-sm gap-2.5">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-accent-cyan animate-pulse"></span>
+<span class="text-label-caps font-label-caps text-text-primary font-semibold tracking-wider font-mono">9wgk...ph8x</span>
+</div>
+<span class="text-border-subtle">|</span>
+<span class="text-label-numeric font-label-numeric text-text-muted font-medium pr-1">14.28 DEV SOL</span>
+<div class="w-6 h-6 rounded-full bg-surface-subtle border border-border-subtle flex items-center justify-center text-text-secondary overflow-hidden">
+<span class="material-symbols-outlined text-[15px]" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Technical Telemetry Sub-bar -->
+<section class="bg-surface-card border-b border-border-subtle text-text-secondary">
+<div class="max-w-7xl mx-auto px-space-lg py-2 flex flex-wrap items-center justify-between gap-3 text-body-sm font-body-sm">
+<div class="flex items-center flex-wrap gap-3">
+<!-- Cluster Badge -->
+<div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-accent-cyan-subtle border border-accent-cyan-border text-secondary text-label-caps font-label-caps">
+<span class="w-1.5 h-1.5 rounded-full bg-accent-cyan"></span>
+<span>Solana Devnet · Cluster 1.18.26</span>
+</div>
+<!-- Program ID Pill -->
+<div class="flex items-center gap-1 font-mono text-label-numeric font-label-numeric text-text-muted bg-surface-subtle px-2 py-0.5 rounded border border-border-subtle">
+<span class="text-text-secondary font-medium">Program ID:</span>
+<span>8vBq...k9QL</span>
+<button class="hover:text-primary transition-colors flex items-center ml-0.5" title="Copy Program ID">
+<span class="material-symbols-outlined text-[13px]">content_copy</span>
+</button>
+</div>
+</div>
+<!-- Live Consensus Metrics -->
+<div class="flex items-center gap-4 text-label-numeric font-label-numeric text-text-muted">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-success-emerald"></span>
+<span>Escrow Locked:</span>
+<strong class="text-text-primary font-semibold">1.432 SOL</strong>
+</div>
+<span class="text-border-subtle">·</span>
+<div class="flex items-center gap-1">
+<span>Settled Batches:</span>
+<strong class="text-text-primary font-semibold">14</strong>
+</div>
+</div>
+</div>
+</section>
+<!-- Main Content Canvas -->
+<main class="flex-1 max-w-7xl w-full mx-auto px-space-lg py-8 space-y-6">
+<!-- Title Area & Header Action Strip -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<div class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-brand-violet-subtle border border-brand-violet-border text-primary text-label-caps font-label-caps mb-2 tracking-wider">
+<span class="material-symbols-outlined text-[13px]">verified_user</span>
+<span>CREATOR PORTAL</span>
+</div>
+<h1 class="text-headline-lg font-headline-lg text-text-primary tracking-tight">Tasks</h1>
+<p class="text-body-md font-body-md text-text-muted mt-1">Open and finished batches. Open a task to see the winner, progress, and export.</p>
+</div>
+<!-- Quick Action Controls -->
+<div class="flex items-center gap-3">
+<button class="px-3.5 py-2 rounded-lg border border-border-subtle bg-surface-card hover:bg-surface-subtle text-text-secondary font-body-md font-medium text-body-md shadow-sm transition-all duration-150 flex items-center gap-1.5" id="simulateEmptyBtn">
+<span class="material-symbols-outlined text-[18px]">toggle_off</span>
+<span>Simulate Empty</span>
+</button>
+<button class="px-4 py-2 rounded-lg bg-primary-container hover:bg-brand-violet-hover text-on-primary font-semibold text-body-md shadow-sm transition-all duration-150 flex items-center gap-1.5 active:scale-[0.99]">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>+ New task</span>
+</button>
+</div>
+</div>
+<!-- Filter Pills & Search Bar -->
+<div class="bg-surface-card border border-border-subtle rounded-xl p-3 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<!-- Tabs Filter -->
+<div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+<button class="filter-btn active px-3 py-1.5 rounded-lg bg-brand-violet-subtle text-primary border border-brand-violet-border font-medium text-body-sm flex items-center gap-1.5">
+<span>All</span>
+<span class="text-label-caps font-label-caps bg-primary text-on-primary px-1.5 py-0.2 rounded-full text-[10px]">4</span>
+</button>
+<button class="filter-btn px-3 py-1.5 rounded-lg text-text-secondary hover:bg-surface-subtle border border-transparent font-medium text-body-sm flex items-center gap-1.5 transition-colors">
+<span>Open</span>
+<span class="text-label-caps font-label-caps bg-surface-subtle text-text-muted px-1.5 py-0.2 rounded-full text-[10px]">2</span>
+</button>
+<button class="filter-btn px-3 py-1.5 rounded-lg text-text-secondary hover:bg-surface-subtle border border-transparent font-medium text-body-sm flex items-center gap-1.5 transition-colors">
+<span>Completed</span>
+<span class="text-label-caps font-label-caps bg-surface-subtle text-text-muted px-1.5 py-0.2 rounded-full text-[10px]">2</span>
+</button>
+</div>
+<!-- Search Input -->
+<div class="relative w-full sm:w-72">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-text-muted text-[18px]">search</span>
+<input class="w-full pl-9 pr-3 py-1.5 rounded-lg bg-surface-card border border-border-subtle text-text-primary placeholder:text-text-muted text-body-sm font-body-sm focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all outline-none" placeholder="Search tasks, hashes, signatures..." type="text"/>
+</div>
+</div>
+<!-- Tasks Grid Container -->
+<div class="space-y-3.5" id="tasksList">
+<!-- TASK 1: Open Batch (A/B YouTube Thumbnail) -->
+<article class="task-card bg-surface-card border border-border-subtle rounded-xl p-4 sm:p-5 shadow-sm hover:border-border-strong hover:shadow-md transition-all duration-200">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+<!-- Left: Thumbnail & Core Meta -->
+<div class="flex flex-col sm:flex-row sm:items-center gap-4 flex-1">
+<!-- 7:4 Aspect Ratio Thumbnail Preview -->
+<div class="relative w-full sm:w-36 h-20 rounded-lg overflow-hidden bg-surface-subtle border border-border-subtle flex-shrink-0 group">
+<img class="w-full h-full object-cover" data-alt="A split composition featuring two distinct digital YouTube thumbnail designs side-by-side in high-contrast crisp studio lighting. The left variant showcases an expressive content creator face with energetic typography, while the right variant displays a minimalist tech challenge illustration in deep slate and bright electric violet. Clean institutional framing, modern web aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA03mB0gKeTiZ40us0YWWq7bDREH8cVG3jSR2gBmOc-BiqZgptkYfyP-myF0wJkP7_2vAb_ywruhXahXNwgKVv0Fwt8-JNXiznWxjfa6wj2zvalLHXc_CNxgQN8Fd7R1YvuzEcjJbuJfGq4-_BqwKDhEvernL-lEsQdUiL6vQlQmpx-IrKf-sA8cZojiGEfsh6AmeCKHZTVlubiUXMWXfr7P90w0ZTiH3GswF4K8wjTxHIILDutrzgS"/>
+<div class="absolute bottom-1 right-1 bg-text-primary/80 backdrop-blur-sm text-surface-card text-[10px] font-mono px-1 rounded">7:4 A/B</div>
+</div>
+<!-- Details & Consensus Status -->
+<div class="space-y-2 flex-1">
+<div class="flex flex-wrap items-center gap-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-label-caps font-label-caps bg-warning-amber-subtle text-warning-amber border border-warning-amber-border">
+<span class="w-1.5 h-1.5 rounded-full bg-warning-amber mr-1"></span>
+                  Open
+                </span>
+<span class="text-label-caps font-label-caps text-text-muted font-mono">#0829-MRB · EXPIRES IN 42M</span>
+</div>
+<h2 class="text-headline-sm font-headline-sm text-text-primary">Thumbnail A/B Test: MrBeast Style Challenge</h2>
+<!-- Progress bar & metrics -->
+<div class="flex flex-col sm:flex-row sm:items-center gap-3 pt-0.5">
+<div class="flex-1 max-w-xs">
+<div class="flex justify-between items-center text-label-numeric font-label-numeric text-text-muted mb-1 text-[11px]">
+<span>Consensus Progress</span>
+<span class="font-semibold text-text-primary">18 / 20 votes (90%)</span>
+</div>
+<div class="w-full bg-surface-subtle rounded-full h-2 overflow-hidden border border-border-subtle">
+<div class="bg-primary-container h-full rounded-full transition-all duration-300" style="width: 90%;"></div>
+</div>
+</div>
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-text-muted">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">groups</span> 18 Evaluators
+                  </span>
+<span>·</span>
+<span class="font-mono text-label-numeric font-label-numeric text-text-muted">SHA-256: 7f3a...c821</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Escrow Bounty & Action Button -->
+<div class="flex sm:flex-row lg:flex-col items-center lg:items-end justify-between border-t lg:border-t-0 pt-3 lg:pt-0 border-border-subtle gap-3 min-w-[190px]">
+<div class="text-left lg:text-right">
+<div class="text-label-caps font-label-caps text-text-muted">Escrow Bounty</div>
+<div class="text-headline-sm font-headline-sm text-text-primary font-bold">$20.00 <span class="text-body-md font-body-md font-normal text-text-muted">· 0.166 SOL</span></div>
+</div>
+<button class="px-4 py-2 rounded-lg bg-surface-card hover:bg-surface-subtle border border-border-subtle text-text-primary font-body-md font-medium text-body-md transition-all duration-150 flex items-center gap-1 shadow-sm active:scale-[0.99] group">
+<span>Open Batch</span>
+<span class="material-symbols-outlined text-[16px] group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- TASK 2: Open Batch (Podcast Cover) -->
+<article class="task-card bg-surface-card border border-border-subtle rounded-xl p-4 sm:p-5 shadow-sm hover:border-border-strong hover:shadow-md transition-all duration-200">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+<!-- Left: Thumbnail & Core Meta -->
+<div class="flex flex-col sm:flex-row sm:items-center gap-4 flex-1">
+<!-- 7:4 Aspect Ratio Thumbnail Preview -->
+<div class="relative w-full sm:w-36 h-20 rounded-lg overflow-hidden bg-surface-subtle border border-border-subtle flex-shrink-0 group">
+<img class="w-full h-full object-cover" data-alt="A refined minimalist podcast cover artwork displayed in a 7:4 frame, featuring sophisticated geometric waveform patterns and clean typography that reads Breakpoint. Rendered in crisp studio light-mode clarity with deep slate typography and subtle cyan accent details on clean white card surface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnept8GpDXgXHRXND8nxCKbpI8mc1GKruOfWC-16PxD2b_Ypueo19Z43bMyGKajBDadd1qvboSGk-AcUB6gwDPOOy8iQgqnOgAQC8ieJAHpVzoy7a7QCZx5AZgsjDolBF4KIwmQJR2XuUawjgea736pU7SviQexWvWWe4ynL-c1gzZrruQ9kfmZNoTljyNmKbSm7010ROcS5cake-JPDsApK87PPHglSCcOZeQVhfqr0uhOavh-gsM"/>
+<div class="absolute bottom-1 right-1 bg-text-primary/80 backdrop-blur-sm text-surface-card text-[10px] font-mono px-1 rounded">Audio</div>
+</div>
+<!-- Details & Consensus Status -->
+<div class="space-y-2 flex-1">
+<div class="flex flex-wrap items-center gap-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-label-caps font-label-caps bg-warning-amber-subtle text-warning-amber border border-warning-amber-border">
+<span class="w-1.5 h-1.5 rounded-full bg-warning-amber mr-1"></span>
+                  Open
+                </span>
+<span class="text-label-caps font-label-caps text-text-muted font-mono">#0824-BRK · EXPIRES IN 2H 15M</span>
+</div>
+<h2 class="text-headline-sm font-headline-sm text-text-primary">Podcast Cover: Solana Breakpoint 2025 Special</h2>
+<!-- Progress bar & metrics -->
+<div class="flex flex-col sm:flex-row sm:items-center gap-3 pt-0.5">
+<div class="flex-1 max-w-xs">
+<div class="flex justify-between items-center text-label-numeric font-label-numeric text-text-muted mb-1 text-[11px]">
+<span>Consensus Progress</span>
+<span class="font-semibold text-text-primary">31 / 50 votes (62%)</span>
+</div>
+<div class="w-full bg-surface-subtle rounded-full h-2 overflow-hidden border border-border-subtle">
+<div class="bg-primary-container h-full rounded-full transition-all duration-300" style="width: 62%;"></div>
+</div>
+</div>
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-text-muted">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">groups</span> 31 Evaluators
+                  </span>
+<span>·</span>
+<span class="font-mono text-label-numeric font-label-numeric text-text-muted">SHA-256: 4e99...d01a</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Escrow Bounty & Action Button -->
+<div class="flex sm:flex-row lg:flex-col items-center lg:items-end justify-between border-t lg:border-t-0 pt-3 lg:pt-0 border-border-subtle gap-3 min-w-[190px]">
+<div class="text-left lg:text-right">
+<div class="text-label-caps font-label-caps text-text-muted">Escrow Bounty</div>
+<div class="text-headline-sm font-headline-sm text-text-primary font-bold">$50.00 <span class="text-body-md font-body-md font-normal text-text-muted">· 0.415 SOL</span></div>
+</div>
+<button class="px-4 py-2 rounded-lg bg-surface-card hover:bg-surface-subtle border border-border-subtle text-text-primary font-body-md font-medium text-body-md transition-all duration-150 flex items-center gap-1 shadow-sm active:scale-[0.99] group">
+<span>Open Batch</span>
+<span class="material-symbols-outlined text-[16px] group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- TASK 3: Completed Batch (Winner Decided) -->
+<article class="task-card bg-surface-card border border-border-subtle rounded-xl p-4 sm:p-5 shadow-sm hover:border-border-strong hover:shadow-md transition-all duration-200">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+<!-- Left: Thumbnail & Core Meta -->
+<div class="flex flex-col sm:flex-row sm:items-center gap-4 flex-1">
+<!-- 7:4 Aspect Ratio Thumbnail with WINNER overlay -->
+<div class="relative w-full sm:w-36 h-20 rounded-lg overflow-hidden bg-surface-subtle border border-border-subtle flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A clean, highly structured SaaS dashboard design shown in an analytics hero banner layout. Crisp dark mode dashboard components set against an ultra clean light studio background, presenting data charts and cryptographic metrics with razor sharp borders and high contrast typography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8iKwip6hdgJ6herBRMjuE99tW_C9p6j_Mr_vxZ7GUCA195CzL6OA0YnERsE7-Wm4U8o3-dYTsOx993RhdfN2rGS66pZU0nZLmZEs2nrXezgvU-_qKU4ng0YsXQLLV5qowMeV37tLIFQbr1_29tZgdS_mUh3f74Y8Zbv-FZ4RU5_dhdu3Rp_TmcOjSxhcworikwFDnn5l2mrfdxOmHS2b9mxJIbWe4mGTCCoBza3NRGNvnnb_VlghC"/>
+<div class="absolute inset-0 bg-success-emerald/15 flex items-center justify-center p-1">
+<span class="bg-success-emerald text-on-primary text-[10px] font-bold px-2 py-0.5 rounded shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">trophy</span>
+                  WINNER: OPTION B (78%)
+                </span>
+</div>
+</div>
+<!-- Details & Consensus Status -->
+<div class="space-y-2 flex-1">
+<div class="flex flex-wrap items-center gap-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-label-caps font-label-caps bg-success-emerald-subtle text-success-emerald border border-success-emerald-border font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-success-emerald mr-1"></span>
+                  Done
+                </span>
+<span class="text-label-caps font-label-caps text-text-muted font-mono">#0781-ANL · CONSENSUS REACHED</span>
+</div>
+<h2 class="text-headline-sm font-headline-sm text-text-primary">SaaS Landing Hero: Dark Mode Analytics</h2>
+<!-- Full Quorum Finished State -->
+<div class="flex flex-col sm:flex-row sm:items-center gap-3 pt-0.5">
+<div class="flex-1 max-w-xs">
+<div class="flex justify-between items-center text-label-numeric font-label-numeric text-text-muted mb-1 text-[11px]">
+<span class="text-success-emerald font-medium">Final Quorum Reached</span>
+<span class="font-semibold text-text-primary">50 / 50 votes (100%)</span>
+</div>
+<div class="w-full bg-surface-subtle rounded-full h-2 overflow-hidden border border-border-subtle">
+<div class="bg-success-emerald h-full rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-text-muted">
+<span class="flex items-center gap-1 text-success-emerald font-medium">
+<span class="material-symbols-outlined text-[15px]">check_circle</span> Settled on Solana
+                  </span>
+<span>·</span>
+<a class="font-mono text-label-numeric font-label-numeric text-primary hover:underline flex items-center gap-0.5" href="#solscan">
+<span>Sig: 5kX2...9Rtt</span>
+<span class="material-symbols-outlined text-[12px]">open_in_new</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Escrow Bounty & Action Button -->
+<div class="flex sm:flex-row lg:flex-col items-center lg:items-end justify-between border-t lg:border-t-0 pt-3 lg:pt-0 border-border-subtle gap-3 min-w-[190px]">
+<div class="text-left lg:text-right">
+<div class="text-label-caps font-label-caps text-text-muted">Distributed</div>
+<div class="text-headline-sm font-headline-sm text-text-primary font-bold">$35.00 <span class="text-body-md font-body-md font-normal text-text-muted">· 0.291 SOL</span></div>
+</div>
+<button class="px-4 py-2 rounded-lg bg-surface-subtle hover:bg-border-subtle/60 text-text-secondary font-body-md font-medium text-body-md transition-all duration-150 flex items-center gap-1.5 shadow-sm active:scale-[0.99]">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>View Report</span>
+</button>
+</div>
+</div>
+</article>
+<!-- TASK 4: Completed Batch (Tie) -->
+<article class="task-card bg-surface-card border border-border-subtle rounded-xl p-4 sm:p-5 shadow-sm hover:border-border-strong hover:shadow-md transition-all duration-200">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+<!-- Left: Thumbnail & Core Meta -->
+<div class="flex flex-col sm:flex-row sm:items-center gap-4 flex-1">
+<!-- 7:4 Aspect Ratio Thumbnail Preview -->
+<div class="relative w-full sm:w-36 h-20 rounded-lg overflow-hidden bg-surface-subtle border border-border-subtle flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Gaming channel thumbnail comparison variant showcasing energetic esports typography and high saturation character art framed within a crisp, clinical white border. Technical instrumentation styling with balanced light and dark contrast suitable for Web3 data review." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaYCG0rhq0E3MpfclEriqRGyX0O8Z6tr-i-ldUWC4lai47ctqp4Jsiy1tCSkrZNzQp103sHk0_chNCn5t7u6_W6hiaot-H7b_HwAaQwD9vWy7gr2Uxj57nK-3DEG9NPMXgk-ABeKw5hRKuL1iaAvwaumbsveOlvQS56Veyux7ssGewLG762Y8oQoO7e0G7PMIj--hYaaJGIk-KwwYd2_eS_zPLHm0dg6yscQm_Z5HkfrC5AQ3Dq9gq"/>
+<div class="absolute inset-0 bg-text-secondary/15 flex items-center justify-center p-1">
+<span class="bg-text-secondary text-surface-card text-[10px] font-bold px-2 py-0.5 rounded shadow-sm">
+                  TIE: 25 vs 25
+                </span>
+</div>
+</div>
+<!-- Details & Consensus Status -->
+<div class="space-y-2 flex-1">
+<div class="flex flex-wrap items-center gap-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-label-caps font-label-caps bg-surface-subtle text-text-secondary border border-border-strong font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-text-muted mr-1"></span>
+                  Done · Tie
+                </span>
+<span class="text-label-caps font-label-caps text-text-muted font-mono">#0690-GME · SPLIT POOL DISBURSED</span>
+</div>
+<h2 class="text-headline-sm font-headline-sm text-text-primary">Gaming YouTube Title &amp; Thumbnail Variant</h2>
+<!-- Status metrics -->
+<div class="flex flex-col sm:flex-row sm:items-center gap-3 pt-0.5">
+<div class="flex-1 max-w-xs">
+<div class="flex justify-between items-center text-label-numeric font-label-numeric text-text-muted mb-1 text-[11px]">
+<span class="text-text-secondary">Consensus Outcome</span>
+<span class="font-semibold text-text-primary">50 / 50 votes (Tie)</span>
+</div>
+<div class="w-full bg-surface-subtle rounded-full h-2 overflow-hidden border border-border-subtle flex">
+<div class="bg-primary-container h-full" style="width: 50%;"></div>
+<div class="bg-secondary h-full" style="width: 50%;"></div>
+</div>
+</div>
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-text-muted">
+<span class="flex items-center gap-1 text-warning-amber">
+<span class="material-symbols-outlined text-[15px]">info</span> Rerun Recommended
+                  </span>
+<span>·</span>
+<a class="font-mono text-label-numeric font-label-numeric text-text-secondary hover:underline flex items-center gap-0.5" href="#solscan">
+<span>Sig: 2pLq...11mZ</span>
+<span class="material-symbols-outlined text-[12px]">open_in_new</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Escrow Bounty & Action Button -->
+<div class="flex sm:flex-row lg:flex-col items-center lg:items-end justify-between border-t lg:border-t-0 pt-3 lg:pt-0 border-border-subtle gap-3 min-w-[190px]">
+<div class="text-left lg:text-right">
+<div class="text-label-caps font-label-caps text-text-muted">Refunded Residual</div>
+<div class="text-headline-sm font-headline-sm text-text-primary font-bold">$15.00 <span class="text-body-md font-body-md font-normal text-text-muted">· 0.125 SOL</span></div>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-2 rounded-lg bg-surface-card hover:bg-surface-subtle border border-border-subtle text-text-secondary font-body-md font-medium text-body-md transition-all duration-150 flex items-center gap-1 shadow-sm active:scale-[0.99]" title="Export results as JSON">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+<span>Export</span>
+</button>
+<button class="px-3.5 py-2 rounded-lg bg-brand-violet-subtle hover:bg-brand-violet-border text-primary font-body-md font-semibold text-body-md transition-all duration-150 shadow-sm flex items-center gap-1">
+<span>Rerun</span>
+</button>
+</div>
+</div>
+</div>
+</article>
+</div>
+<!-- Empty State Container (Hidden by default, triggered via Simulate Empty) -->
+<div class="hidden bg-surface-card border border-border-subtle rounded-2xl p-12 text-center shadow-sm max-w-xl mx-auto my-12" id="emptyState">
+<div class="w-16 h-16 rounded-full bg-brand-violet-subtle text-primary border border-brand-violet-border flex items-center justify-center mx-auto mb-4">
+<span class="material-symbols-outlined text-[32px]">assignment_add</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-text-primary">No tasks found</h3>
+<p class="text-body-md font-body-md text-text-muted mt-2 mb-6">Create your first human consensus batch or clear current filters to view ongoing decentralized evaluations.</p>
+<div class="flex items-center justify-center gap-3">
+<button class="px-4 py-2 rounded-lg border border-border-subtle bg-surface-card text-text-secondary font-medium text-body-md hover:bg-surface-subtle" id="resetEmptyBtn">
+          Reset Filter
+        </button>
+<button class="px-4 py-2 rounded-lg bg-primary-container text-on-primary font-semibold text-body-md hover:bg-brand-violet-hover">
+          + Create Task
+        </button>
+</div>
+</div>
+</main>
+<!-- Bottom Success Toast Notification -->
+<aside aria-label="Transaction Toast" class="fixed bottom-6 right-6 z-40 max-w-md w-full animate-bounce-short">
+<div class="bg-surface-card border border-success-emerald-border rounded-xl p-4 shadow-lg flex items-start gap-3 relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-success-emerald"></div>
+<div class="w-7 h-7 rounded-full bg-success-emerald-subtle text-success-emerald flex items-center justify-center flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+</div>
+<div class="flex-1 pr-4">
+<h4 class="text-body-md font-body-md font-semibold text-text-primary">Task created · 0.166 SOL escrowed</h4>
+<p class="text-body-sm font-body-sm text-text-muted mt-0.5">Batch #0829 broadcasted to Devnet evaluators.</p>
+</div>
+<button class="text-text-muted hover:text-text-primary transition-colors" onclick="this.closest('aside').remove()">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</aside>
+<!-- Footer (Strictly Adhering to Shared Components JSON) -->
+<footer class="bg-surface-canvas dark:bg-inverse-surface border-t border-border-subtle dark:border-border-strong w-full flat no shadows mt-12">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-space-lg py-space-xl max-w-7xl mx-auto gap-space-md">
+<!-- Brand & Protocol Copyright -->
+<div class="space-y-1 text-center md:text-left">
+<div class="text-headline-sm font-headline-sm font-bold text-text-primary dark:text-inverse-on-surface">CrowdLens</div>
+<p class="text-body-sm font-body-sm text-text-muted dark:text-surface-variant font-normal">
+          © 2025 CrowdLens Protocol. Built for Solana Devnet. Decentralized Human Verification &amp; Consensus.
+        </p>
+</div>
+<!-- Footer Navigation Links -->
+<nav class="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-body-sm font-body-sm">
+<a class="text-text-muted dark:text-surface-variant font-normal hover:text-primary dark:hover:text-inverse-primary hover:underline transition-all duration-150" href="#docs">Documentation</a>
+<a class="text-text-muted dark:text-surface-variant font-normal hover:text-primary dark:hover:text-inverse-primary hover:underline transition-all duration-150" href="#explorer">Devnet Explorer</a>
+<a class="text-text-muted dark:text-surface-variant font-normal hover:text-primary dark:hover:text-inverse-primary hover:underline transition-all duration-150" href="#faucet">Faucet</a>
+<a class="text-text-muted dark:text-surface-variant font-normal hover:text-primary dark:hover:text-inverse-primary hover:underline transition-all duration-150" href="#governance">Validator Governance</a>
+<a class="text-text-muted dark:text-surface-variant font-normal hover:text-primary dark:hover:text-inverse-primary hover:underline transition-all duration-150" href="#terms">Terms of Service</a>
+<a class="text-text-muted dark:text-surface-variant font-normal hover:text-primary dark:hover:text-inverse-primary hover:underline transition-all duration-150" href="#privacy">Privacy Policy</a>
+</nav>
+</div>
+</footer>
+<!-- Micro-interactions Script -->
+<script>
+    // Simulate Empty State Toggle
+    const simulateEmptyBtn = document.getElementById('simulateEmptyBtn');
+    const resetEmptyBtn = document.getElementById('resetEmptyBtn');
+    const tasksList = document.getElementById('tasksList');
+    const emptyState = document.getElementById('emptyState');
+
+    let isEmpty = false;
+
+    function toggleEmptyState() {
+      isEmpty = !isEmpty;
+      if (isEmpty) {
+        tasksList.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        simulateEmptyBtn.querySelector('span:first-child').textContent = 'toggle_on';
+        simulateEmptyBtn.classList.add('bg-brand-violet-subtle', 'text-primary', 'border-brand-violet-border');
+      } else {
+        tasksList.classList.remove('hidden');
+        emptyState.classList.add('hidden');
+        simulateEmptyBtn.querySelector('span:first-child').textContent = 'toggle_off';
+        simulateEmptyBtn.classList.remove('bg-brand-violet-subtle', 'text-primary', 'border-brand-violet-border');
+      }
+    }
+
+    if (simulateEmptyBtn) {
+      simulateEmptyBtn.addEventListener('click', toggleEmptyState);
+    }
+    if (resetEmptyBtn) {
+      resetEmptyBtn.addEventListener('click', toggleEmptyState);
+    }
+
+    // Interactive filter pills
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => {
+          b.classList.remove('bg-brand-violet-subtle', 'text-primary', 'border-brand-violet-border');
+          b.classList.add('text-text-secondary', 'border-transparent');
+        });
+        btn.classList.add('bg-brand-violet-subtle', 'text-primary', 'border-brand-violet-border');
+        btn.classList.remove('text-text-secondary', 'border-transparent');
+      });
+    });
+  </script>
+</body></html>

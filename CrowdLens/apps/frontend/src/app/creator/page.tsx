@@ -7,8 +7,8 @@ export default function DashboardPage() {
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-semibold tracking-wider text-cyan-400 uppercase">Creator portal</p>
-          <h1 className="font-display mt-1 text-3xl font-bold tracking-tight text-white md:text-4xl">Tasks</h1>
-          <p className="mt-2 max-w-2xl text-slate-400">
+          <h1 className="font-display mt-1 text-3xl font-bold tracking-tight text-fg md:text-4xl">Tasks</h1>
+          <p className="mt-2 max-w-2xl text-fg-muted">
             Open and finished batches. Open a task to see the winner, progress, and export.
           </p>
         </div>

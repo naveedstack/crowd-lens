@@ -1,6 +1,7 @@
 import { Users, BarChart3, Wallet, Shield, Clock, Coins } from "lucide-react";
 import SectionHeading from "../components/SectionHeading";
 import Card from "../components/Card";
+import { Reveal } from "@/components/landing/Reveal";
 
 const features = [
   {
@@ -39,20 +40,24 @@ const FeaturesSection = () => {
   return (
     <section id="features" className="py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          title="Built for image comparisons"
-          subtitle="Thumbnails and posters. Two to five options. Humans vote. SOL settles the result."
-          centered
-        />
+        <Reveal>
+          <SectionHeading
+            title="Built for image comparisons"
+            subtitle="Thumbnails and posters. Two to five options. Humans vote. SOL settles the result."
+            centered
+          />
+        </Reveal>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature) => (
-            <Card key={feature.title} hover>
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-violet-500/15 text-violet-400">
-                <feature.icon className="h-5 w-5" />
-              </div>
-              <h3 className="font-display text-lg font-semibold text-white">{feature.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-400">{feature.description}</p>
-            </Card>
+          {features.map((feature, index) => (
+            <Reveal key={feature.title} delayMs={index * 80}>
+              <Card hover>
+                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-violet-500/15 text-violet-400">
+                  <feature.icon className="h-5 w-5" />
+                </div>
+                <h3 className="font-display text-lg font-semibold text-fg">{feature.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-fg-muted">{feature.description}</p>
+              </Card>
+            </Reveal>
           ))}
         </div>
       </div>

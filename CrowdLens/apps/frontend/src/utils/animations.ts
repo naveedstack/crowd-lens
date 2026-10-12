@@ -1,75 +1,44 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type RefObject } from "react";
 
-/**
- * Custom hook for detecting if an element is in viewport
- */
-export const useInView = (ref: React.RefObject<HTMLElement>, options = {}) => {
+type InViewOptions = IntersectionObserverInit & { once?: boolean };
+
+export function useInView(
+  ref: RefObject<HTMLElement | null>,
+  options: InViewOptions = {},
+) {
   const [isInView, setIsInView] = useState(false);
+  const { once = true, root = null, rootMargin = "0px 0px -48px 0px", threshold = 0.12 } = options;
 
   useEffect(() => {
+    const node = ref.current;
+    if (!node) {
+      return;
+    }
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setIsInView(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsInView(entry.isIntersecting);
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          if (once) {
+            observer.disconnect();
+          }
+          return;
+        }
+        if (!once) {
+          setIsInView(false);
+        }
       },
-      {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.1,
-        ...options,
-      }
+      { root, rootMargin, threshold },
     );
 
-    const currentRef = ref.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, [ref, options]);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [ref, once, root, rootMargin, threshold]);
 
   return isInView;
-};
-
-/**
- * Animation variants for staggered animations
- */
-export const staggeredAnimations = {
-  fadeInUp: (delay = 0) => ({
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
-      transition: { 
-        duration: 0.5, 
-        delay 
-      } 
-    }
-  }),
-  
-  fadeIn: (delay = 0) => ({
-    hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1, 
-      transition: { 
-        duration: 0.5, 
-        delay 
-      } 
-    }
-  }),
-  
-  scaleIn: (delay = 0) => ({
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: { 
-      opacity: 1, 
-      scale: 1, 
-      transition: { 
-        duration: 0.5, 
-        delay 
-      } 
-    }
-  })
-};
+}

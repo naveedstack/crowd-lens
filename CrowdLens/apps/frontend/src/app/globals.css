@@ -3,6 +3,12 @@
 @theme {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-plus-jakarta), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --color-canvas: var(--canvas);
+  --color-card: var(--card);
+  --color-subtle: var(--subtle);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-line: var(--line);
   --color-slate-950: #020617;
   --color-slate-900: #0f172a;
   --color-slate-800: #1e293b;
@@ -10,13 +16,47 @@
   --color-violet-500: #8b5cf6;
   --color-violet-600: #7c3aed;
   --color-violet-700: #6d28d9;
-  --color-cyan-400: #22d3ee;
+  --color-cyan-400: var(--accent-cyan);
   --color-cyan-500: #06b6d4;
-  --color-emerald-400: #34d399;
+  --color-emerald-400: var(--accent-emerald);
   --color-emerald-500: #10b981;
-  --color-amber-400: #fbbf24;
+  --color-amber-400: var(--accent-amber);
   --color-amber-500: #f59e0b;
   --color-rose-500: #f43f5e;
+}
+
+html.dark {
+  color-scheme: dark;
+  --canvas: #020617;
+  --card: #0f172a;
+  --subtle: #1e293b;
+  --fg: #f8fafc;
+  --fg-muted: #94a3b8;
+  --line: #1e293b;
+  --accent-cyan: #22d3ee;
+  --accent-emerald: #34d399;
+  --accent-amber: #fbbf24;
+  --headline-from: #a78bfa;
+  --headline-to: #22d3ee;
+  --wallet-menu-bg: #0f172a;
+  --wallet-menu-border: #1e293b;
+}
+
+html.light {
+  color-scheme: light;
+  --canvas: #f8fafc;
+  --card: #ffffff;
+  --subtle: #f1f5f9;
+  --fg: #0f172a;
+  --fg-muted: #64748b;
+  --line: #e2e8f0;
+  --accent-cyan: #0891b2;
+  --accent-emerald: #059669;
+  --accent-amber: #d97706;
+  --headline-from: #6d28d9;
+  --headline-to: #0284c7;
+  --wallet-menu-bg: #ffffff;
+  --wallet-menu-border: #e2e8f0;
 }
 
 html {
@@ -24,8 +64,8 @@ html {
 }
 
 body {
-  background: #020617;
-  color: #e2e8f0;
+  background: var(--canvas, #020617);
+  color: var(--fg, #e2e8f0);
   font-variant-numeric: tabular-nums;
 }
 
@@ -34,7 +74,7 @@ body {
 }
 
 .headline-gradient {
-  background-image: linear-gradient(135deg, #a78bfa 0%, #22d3ee 100%);
+  background-image: linear-gradient(135deg, var(--headline-from, #a78bfa) 0%, var(--headline-to, #22d3ee) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -59,7 +99,214 @@ body {
 }
 
 .wallet-adapter-dropdown-list {
-  background: #0f172a !important;
-  border: 1px solid #1e293b !important;
+  background: var(--wallet-menu-bg, #0f172a) !important;
+  border: 1px solid var(--wallet-menu-border, #1e293b) !important;
   border-radius: 0.75rem !important;
+}
+
+html.dark .wallet-adapter-dropdown-list-item {
+  color: #f8fafc !important;
+}
+
+html.light .wallet-adapter-dropdown-list-item {
+  color: #0f172a !important;
+}
+
+.wallet-adapter-dropdown-list-item:hover {
+  background: var(--subtle, #1e293b) !important;
+}
+
+.landing-backdrop {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.landing-backdrop-grid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    color-mix(in srgb, var(--line) 85%, transparent) 1px,
+    transparent 0
+  );
+  background-size: 28px 28px;
+  opacity: 0.35;
+  animation: landing-grid-shift 36s linear infinite;
+}
+
+html.light .landing-backdrop-grid {
+  opacity: 0.72;
+}
+
+.landing-backdrop-sheen {
+  position: absolute;
+  inset: -25%;
+  background: linear-gradient(
+    115deg,
+    transparent 38%,
+    color-mix(in srgb, var(--accent-cyan) 10%, transparent) 50%,
+    transparent 62%
+  );
+  background-size: 220% 220%;
+  animation: landing-sheen 20s ease-in-out infinite;
+}
+
+html.light .landing-backdrop-sheen {
+  background: linear-gradient(
+    115deg,
+    transparent 36%,
+    color-mix(in srgb, #8b5cf6 8%, transparent) 50%,
+    transparent 64%
+  );
+}
+
+.landing-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  animation: landing-orb-drift 22s ease-in-out infinite;
+}
+
+.landing-orb-violet {
+  top: -6rem;
+  left: 8%;
+  width: 26rem;
+  height: 26rem;
+  background: color-mix(in srgb, #8b5cf6 26%, transparent);
+}
+
+.landing-orb-cyan {
+  right: 4%;
+  bottom: 8%;
+  width: 22rem;
+  height: 22rem;
+  background: color-mix(in srgb, var(--accent-cyan) 20%, transparent);
+  animation-duration: 26s;
+  animation-delay: -9s;
+}
+
+html.light .landing-orb-violet {
+  background: color-mix(in srgb, #8b5cf6 16%, transparent);
+}
+
+html.light .landing-orb-cyan {
+  background: color-mix(in srgb, var(--accent-cyan) 12%, transparent);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+
+.reveal.reveal-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero-pulse-dot {
+  animation: hero-pulse 2s ease-in-out infinite;
+}
+
+.hero-float {
+  animation: hero-float 9s ease-in-out infinite;
+}
+
+.hero-bar {
+  width: 0;
+  transition: width 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.85s;
+}
+
+.hero-bar-on {
+  width: var(--bar-w);
+}
+
+.landing-card {
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.landing-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, #8b5cf6 40%, var(--line));
+}
+
+@keyframes landing-grid-shift {
+  to {
+    background-position: 28px 28px;
+  }
+}
+
+@keyframes landing-sheen {
+  0%,
+  100% {
+    background-position: 0% 50%;
+    opacity: 0.45;
+  }
+  50% {
+    background-position: 100% 50%;
+    opacity: 0.9;
+  }
+}
+
+@keyframes landing-orb-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(2.5rem, 1.75rem) scale(1.08);
+  }
+  66% {
+    transform: translate(-1.75rem, 3rem) scale(0.94);
+  }
+}
+
+@keyframes hero-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-cyan) 55%, transparent);
+  }
+  50% {
+    opacity: 0.65;
+    box-shadow: 0 0 0 7px transparent;
+  }
+}
+
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-backdrop-grid,
+  .landing-backdrop-sheen,
+  .landing-orb,
+  .hero-pulse-dot,
+  .hero-float {
+    animation: none !important;
+  }
+
+  .hero-bar {
+    transition: none !important;
+    width: var(--bar-w);
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none !important;
+  }
+
+  .landing-card:hover {
+    transform: none;
+  }
 }

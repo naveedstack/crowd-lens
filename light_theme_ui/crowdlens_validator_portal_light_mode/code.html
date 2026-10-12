@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CrowdLens | Validator Portal &amp; Earning Guide</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-surface-variant": "#4a4455",
+            "on-tertiary-container": "#88fbc6",
+            "outline-variant": "#ccc3d8",
+            "tertiary-fixed-dim": "#68dba9",
+            "surface-tint": "#732ee4",
+            "on-tertiary-fixed": "#002114",
+            "surface-container-highest": "#d3e4fe",
+            "accent-cyan": "#06b6d4",
+            "secondary": "#006398",
+            "accent-cyan-subtle": "#ecfeff",
+            "on-tertiary": "#ffffff",
+            "border-strong": "#cbd5e1",
+            "surface": "#f8f9ff",
+            "error-rose": "#e11d48",
+            "secondary-fixed-dim": "#93ccff",
+            "inverse-surface": "#213145",
+            "text-secondary": "#334155",
+            "on-error-container": "#93000a",
+            "surface-subtle": "#f1f5f9",
+            "surface-dim": "#cbdbf5",
+            "on-primary-container": "#ede0ff",
+            "on-secondary-fixed": "#001d31",
+            "success-emerald": "#10b981",
+            "on-primary": "#ffffff",
+            "warning-amber-subtle": "#fffbeb",
+            "outline": "#7b7487",
+            "inverse-on-surface": "#eaf1ff",
+            "on-primary-fixed": "#25005a",
+            "inverse-primary": "#d2bbff",
+            "tertiary": "#005a3d",
+            "border-subtle": "#e2e8f0",
+            "surface-canvas": "#f8fafc",
+            "surface-card": "#ffffff",
+            "surface-container": "#e5eeff",
+            "on-secondary": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "secondary-fixed": "#cce5ff",
+            "background": "#f8f9ff",
+            "tertiary-fixed": "#85f8c4",
+            "on-error": "#ffffff",
+            "on-secondary-fixed-variant": "#004b73",
+            "surface-variant": "#d3e4fe",
+            "primary-fixed-dim": "#d2bbff",
+            "primary-container": "#7c3aed",
+            "brand-violet-subtle": "#f5f3ff",
+            "error-rose-border": "#fecdd3",
+            "warning-amber-border": "#fde68a",
+            "on-secondary-container": "#00476e",
+            "primary-fixed": "#eaddff",
+            "error": "#ba1a1a",
+            "brand-violet-hover": "#6d28d9",
+            "brand-violet-border": "#ddd6fe",
+            "on-tertiary-fixed-variant": "#005137",
+            "surface-container-high": "#dce9ff",
+            "surface-container-low": "#eff4ff",
+            "on-background": "#0b1c30",
+            "error-rose-subtle": "#fff1f2",
+            "success-emerald-subtle": "#ecfdf5",
+            "on-primary-fixed-variant": "#5a00c6",
+            "text-primary": "#0f172a",
+            "tertiary-container": "#007551",
+            "accent-cyan-border": "#a5f3fc",
+            "warning-amber": "#d97706",
+            "primary": "#630ed4",
+            "on-surface": "#0b1c30",
+            "error-container": "#ffdad6",
+            "text-muted": "#64748b",
+            "success-emerald-border": "#a7f3d0",
+            "surface-muted": "#e2e8f0",
+            "secondary-container": "#5bb8fe",
+            "surface-bright": "#f8f9ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "space-xl": "2.5rem",
+            "gutter": "1.5rem",
+            "margin": "2rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "margin-mobile": "1rem",
+            "gutter-mobile": "1rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "label-numeric": ["Inter"],
+            "label-caps": ["Inter"],
+            "display-hero": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "display-hero-mobile": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "body-lg": ["16px", {"lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "400"}],
+            "body-sm": ["12px", {"lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "400"}],
+            "body-md": ["14px", {"lineHeight": "22px", "letterSpacing": "0", "fontWeight": "400"}],
+            "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600"}],
+            "headline-sm": ["18px", {"lineHeight": "26px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+            "label-numeric": ["13px", {"lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+            "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.06em", "fontWeight": "600"}],
+            "display-hero": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.03em", "fontWeight": "700"}],
+            "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+            "display-hero-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      height: 20px;
+      width: 20px;
+      border-radius: 9999px;
+      background: #ffffff;
+      border: 2px solid #7c3aed;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.2);
+      cursor: pointer;
+      -webkit-appearance: none;
+      margin-top: -6px;
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 8px;
+      cursor: pointer;
+      background: #e2e8f0;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-surface-canvas text-text-primary antialiased min-h-screen selection:bg-brand-violet-border selection:text-primary">
+<!-- TOP APP BAR -->
+<header class="bg-surface-card sticky top-0 z-50 shadow-sm">
+<div class="flex justify-between items-center w-full px-space-lg max-w-7xl mx-auto h-16">
+<!-- Brand Logo Anchor -->
+<div class="flex items-center gap-8">
+<a class="text-headline-sm font-headline-sm font-bold text-text-primary flex items-center gap-2 tracking-tight" href="#hero">
+<span class="w-8 h-8 rounded-lg bg-primary-container text-on-primary flex items-center justify-center font-bold text-sm shadow-sm">
+<span class="material-symbols-outlined text-lg" data-icon="lens_blur">lens_blur</span>
+</span>
+          CrowdLens
+        </a>
+<!-- Desktop Navigation Links -->
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-text-secondary font-medium font-body-md text-body-md hover:text-primary transition-colors duration-150" href="#features">Features</a>
+<a class="text-text-secondary font-medium font-body-md text-body-md hover:text-primary transition-colors duration-150" href="#how-it-works">How It Works</a>
+<a class="text-text-secondary font-medium font-body-md text-body-md hover:text-primary transition-colors duration-150" href="#pricing">Pricing</a>
+<a class="text-text-secondary font-medium font-body-md text-body-md hover:text-primary transition-colors duration-150" href="#results">Results</a>
+<a class="text-text-secondary font-medium font-body-md text-body-md hover:text-primary transition-colors duration-150" href="#stats">Stats</a>
+<!-- Active Tab: Validators -->
+<a class="text-primary font-semibold font-body-md text-body-md border-b-2 border-primary pb-1" href="#validators">Validators</a>
+</nav>
+</div>
+<!-- Trailing Action Controls -->
+<div class="flex items-center gap-3">
+<!-- Devnet Cluster Status Badge -->
+<div class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent-cyan-subtle border border-accent-cyan-border text-secondary font-label-caps text-label-caps">
+<span class="w-2 h-2 rounded-full bg-accent-cyan animate-pulse"></span>
+<span>Solana Devnet</span>
+</div>
+<!-- Faucet Link -->
+<a class="hidden lg:inline-flex items-center gap-1 text-text-secondary font-body-sm text-body-sm hover:text-primary px-2.5 py-1.5 rounded-lg border border-border-subtle bg-surface-card hover:bg-surface-subtle transition-all" href="#faucet">
+<span class="material-symbols-outlined text-base" data-icon="swap_horiz">swap_horiz</span>
+          Devnet Faucet
+        </a>
+<!-- Connected Phantom Wallet Pill -->
+<button class="flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-full border border-border-subtle bg-surface-card hover:border-border-strong transition-all shadow-sm active:scale-95 duration-100">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label-numeric text-label-numeric font-semibold text-text-primary">8xQ2...4F7b</span>
+<span class="font-label-numeric text-label-numeric text-text-muted border-l border-border-subtle pl-2">2.45 SOL</span>
+<div class="w-6 h-6 rounded-full bg-brand-violet-subtle border border-brand-violet-border text-primary flex items-center justify-center text-xs font-bold" title="Connected Solana Phantom Wallet Avatar">
+            CL
+          </div>
+</button>
+</div>
+</div>
+</header>
+<main class="w-full">
+<!-- 2. HERO SECTION -->
+<section class="relative overflow-hidden pt-12 pb-16 md:pt-20 md:pb-24 border-b border-border-subtle" id="hero">
+<!-- Ambient subtle background glow -->
+<div class="absolute inset-0 pointer-events-none -z-10 flex justify-center">
+<div class="w-[800px] h-[350px] bg-brand-violet-subtle/70 rounded-full blur-3xl opacity-60"></div>
+</div>
+<div class="max-w-7xl mx-auto px-space-lg">
+<div class="max-w-3xl mx-auto text-center">
+<!-- Escrow Incentive Badge -->
+<div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-success-emerald-subtle border border-success-emerald-border text-tertiary-container mb-6 shadow-sm">
+<span class="material-symbols-outlined text-base text-success-emerald" data-icon="payments">payments</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Earn 80% of Every Creator Escrow • ~$0.0066 SOL / vote</span>
+</div>
+<!-- Hero Headline -->
+<h1 class="text-display-hero-mobile md:text-display-hero font-display-hero text-text-primary tracking-tight mb-6">
+            Get Paid in SOL to Review &amp; Vote on Creative Content
+          </h1>
+<!-- Hero Subtitle -->
+<p class="text-body-lg font-body-lg text-text-secondary leading-relaxed mb-8 max-w-2xl mx-auto">
+            Join the decentralized human validator network. Evaluate YouTube thumbnails, podcast covers, and marketing assets. Earn $0.80 per aligned vote sent directly to your Solana wallet upon quorum.
+          </p>
+<!-- Dual CTA Buttons -->
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+<a class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-primary-container hover:bg-brand-violet-hover text-on-primary font-body-md font-semibold shadow-sm transition-all active:scale-95 duration-100" href="#sandbox">
+<span class="material-symbols-outlined text-lg" data-icon="how_to_vote">how_to_vote</span>
+              Start Voting Now
+            </a>
+<a class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-surface-card hover:bg-surface-subtle border border-border-subtle hover:border-border-strong text-text-primary font-body-md font-semibold transition-all" href="#estimator">
+<span class="material-symbols-outlined text-lg text-text-muted" data-icon="ballot">ballot</span>
+              View Open Ballots
+            </a>
+</div>
+<!-- Trust Highlights Strip -->
+<div class="pt-8 border-t border-border-subtle grid grid-cols-2 md:grid-cols-4 gap-4 text-left">
+<div class="flex items-center gap-3 p-2">
+<div class="w-8 h-8 rounded-lg bg-brand-violet-subtle flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-lg" data-icon="bolt">bolt</span>
+</div>
+<div>
+<p class="font-headline-sm text-body-md font-semibold text-text-primary">Instant Settlement</p>
+<p class="font-body-sm text-body-sm text-text-muted">Direct atomic escrow unlock</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-2">
+<div class="w-8 h-8 rounded-lg bg-success-emerald-subtle flex items-center justify-center text-tertiary-container flex-shrink-0">
+<span class="material-symbols-outlined text-lg" data-icon="pie_chart">pie_chart</span>
+</div>
+<div>
+<p class="font-headline-sm text-body-md font-semibold text-text-primary">80% Pool Distributed</p>
+<p class="font-body-sm text-body-sm text-text-muted">Highest yield in Web3 human oracle</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-2">
+<div class="w-8 h-8 rounded-lg bg-accent-cyan-subtle flex items-center justify-center text-secondary flex-shrink-0">
+<span class="material-symbols-outlined text-lg" data-icon="savings">savings</span>
+</div>
+<div>
+<p class="font-headline-sm text-body-md font-semibold text-text-primary">Zero Minimum</p>
+<p class="font-body-sm text-body-sm text-text-muted">Withdraw single-vote earnings</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-2">
+<div class="w-8 h-8 rounded-lg bg-surface-subtle flex items-center justify-center text-text-secondary flex-shrink-0">
+<span class="material-symbols-outlined text-lg" data-icon="verified_user">verified_user</span>
+</div>
+<div>
+<p class="font-headline-sm text-body-md font-semibold text-text-primary">Phantom Devnet</p>
+<p class="font-body-sm text-body-sm text-text-muted">Gasless commit testnet mode</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. TRANSPARENT ON-CHAIN ALLOCATION BANNER -->
+<section class="py-10 bg-surface-subtle/50 border-b border-border-subtle">
+<div class="max-w-7xl mx-auto px-space-lg">
+<div class="bg-surface-card border border-border-subtle rounded-xl p-6 lg:p-8 shadow-sm">
+<div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-6">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="account_tree">account_tree</span>
+<h3 class="font-headline-sm text-headline-sm text-text-primary">Creator Escrow Breakdown</h3>
+</div>
+<p class="font-body-md text-body-md text-text-secondary">Every verified creator batch locks 1.00 USD equivalent in SPL escrow. Here is where the smart contract allocates it:</p>
+</div>
+<div class="flex items-center gap-6 self-stretch lg:self-auto justify-end text-right">
+<div>
+<span class="block font-label-caps text-label-caps text-text-muted">VALIDATOR PAYOUT</span>
+<span class="font-headline-md text-headline-md text-tertiary-container font-bold">$0.80 / vote</span>
+</div>
+<div class="h-8 w-px bg-border-subtle"></div>
+<div>
+<span class="block font-label-caps text-label-caps text-text-muted">PROTOCOL BUFFER</span>
+<span class="font-headline-md text-headline-md text-text-muted font-bold">$0.20 / vote</span>
+</div>
+</div>
+</div>
+<!-- Allocation Bar Component -->
+<div class="w-full bg-surface-subtle h-4 rounded-full overflow-hidden flex shadow-inner">
+<div class="bg-success-emerald h-full transition-all duration-500 rounded-l-full relative group" style="width: 80%">
+<div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div class="bg-border-strong h-full transition-all duration-500 rounded-r-full" style="width: 20%"></div>
+</div>
+<div class="flex justify-between items-center mt-3 text-xs font-body-sm text-text-muted">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-success-emerald inline-block"></span>
+<span class="font-medium text-text-primary">80% Community Validators (Transferred instantaneously upon quorum)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-border-strong inline-block"></span>
+<span>20% Staking slash insurance &amp; developer gas relay</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. HOW VALIDATING WORKS -->
+<section class="py-16 md:py-24 border-b border-border-subtle bg-surface-card" id="how-it-works">
+<div class="max-w-7xl mx-auto px-space-lg">
+<div class="max-w-2xl mb-12">
+<span class="font-label-caps text-label-caps text-primary tracking-wider uppercase block mb-2">Protocol Architecture</span>
+<h2 class="font-headline-lg text-headline-lg text-text-primary mb-3">How Validating Works</h2>
+<p class="font-body-lg text-body-lg text-text-secondary">Three decentralized phases execute high-integrity human consensus without revealing votes prematurely.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Step 1 -->
+<div class="bg-surface-canvas border border-border-subtle rounded-xl p-6 hover:shadow-md transition-shadow relative flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="font-label-caps text-label-caps text-primary bg-brand-violet-subtle px-2.5 py-1 rounded-md border border-brand-violet-border">STEP 01</span>
+<span class="material-symbols-outlined text-text-muted" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-text-primary mb-2">Connect &amp; Select</h3>
+<p class="font-body-md text-body-md text-text-secondary leading-relaxed mb-4">
+                Authenticate with Phantom or Solflare on Devnet. Browse public queues filtered by design category, audio assets, or thumbnail variants.
+              </p>
+</div>
+<div class="bg-surface-card p-3 rounded-lg border border-border-subtle flex items-center gap-3">
+<span class="material-symbols-outlined text-accent-cyan text-base" data-icon="check_circle">check_circle</span>
+<span class="font-body-sm text-body-sm text-text-primary">Instant permissionless queue access</span>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="bg-surface-canvas border border-border-subtle rounded-xl p-6 hover:shadow-md transition-shadow relative flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="font-label-caps text-label-caps text-primary bg-brand-violet-subtle px-2.5 py-1 rounded-md border border-brand-violet-border">STEP 02</span>
+<span class="material-symbols-outlined text-text-muted" data-icon="visibility_off">visibility_off</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-text-primary mb-2">Evaluate &amp; Blind-Vote</h3>
+<p class="font-body-md text-body-md text-text-secondary leading-relaxed mb-4">
+                Inspect 2 to 5 high-resolution creative options. Submit an encrypted SHA-256 vote commitment to prevent front-running until round close.
+              </p>
+</div>
+<div class="bg-surface-card p-3 rounded-lg border border-border-subtle flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-base" data-icon="lock">lock</span>
+<span class="font-body-sm text-body-sm text-text-primary">Zero-knowledge ballot secrecy</span>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="bg-surface-canvas border border-border-subtle rounded-xl p-6 hover:shadow-md transition-shadow relative flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="font-label-caps text-label-caps text-tertiary-container bg-success-emerald-subtle px-2.5 py-1 rounded-md border border-success-emerald-border">STEP 03</span>
+<span class="material-symbols-outlined text-tertiary-container" data-icon="attach_money">attach_money</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-text-primary mb-2">Instant Settlement</h3>
+<p class="font-body-md text-body-md text-text-secondary leading-relaxed mb-4">
+                Once the batch achieves quorum (e.g. 50 consensus validators), smart contracts release $0.80 per aligned vote instantly to your wallet.
+              </p>
+</div>
+<div class="bg-surface-card p-3 rounded-lg border border-border-subtle flex items-center gap-3">
+<span class="material-symbols-outlined text-success-emerald text-base" data-icon="electric_bolt">electric_bolt</span>
+<span class="font-body-sm text-body-sm text-text-primary">Sub-second Solana transaction finality</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. VALIDATOR EARNINGS ESTIMATOR -->
+<section class="py-16 md:py-24 border-b border-border-subtle bg-surface-canvas" id="estimator">
+<div class="max-w-7xl mx-auto px-space-lg">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+<!-- Left: Controller & Details -->
+<div class="lg:col-span-7 bg-surface-card p-6 md:p-8 rounded-xl border border-border-subtle shadow-sm">
+<div class="flex items-center justify-between mb-6">
+<div>
+<span class="font-label-caps text-label-caps text-primary tracking-wider uppercase block mb-1">Calculator</span>
+<h2 class="font-headline-lg text-headline-md md:text-headline-lg text-text-primary">Validator Yield Estimator</h2>
+</div>
+<div class="px-3 py-1 bg-brand-violet-subtle border border-brand-violet-border rounded-full text-primary font-label-caps text-label-caps">
+                SOL/USD ~$121.20
+              </div>
+</div>
+<p class="font-body-md text-body-md text-text-secondary mb-8">
+              Adjust your daily evaluation throughput to forecast prospective staking and review yields. CrowdLens consensus rewards active participants with consistent quorum accuracy.
+            </p>
+<!-- Slider Control Container -->
+<div class="space-y-4 mb-8 bg-surface-canvas p-5 rounded-lg border border-border-subtle">
+<div class="flex justify-between items-center">
+<label class="font-headline-sm text-body-md font-semibold text-text-primary" for="vote-slider">Evaluations Per Day</label>
+<span class="font-headline-md text-headline-sm text-primary font-bold bg-white px-3 py-1 rounded border border-border-subtle" id="slider-display">35 Votes / day</span>
+</div>
+<input class="w-full accent-primary-container" id="vote-slider" max="150" min="5" oninput="updateEstimator(this.value)" step="5" type="range" value="35"/>
+<div class="flex justify-between text-text-muted font-label-numeric text-body-sm">
+<span>5 votes (Casual)</span>
+<span>75 votes (Power Curator)</span>
+<span>150 votes (Pro Node)</span>
+</div>
+</div>
+<!-- Protocol Perks Checklist -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+<div class="flex items-center gap-2 text-text-secondary">
+<span class="material-symbols-outlined text-success-emerald text-base" data-icon="check_box">check_box</span>
+<span class="font-body-sm text-body-sm font-medium">$0.80 Fixed Escrow</span>
+</div>
+<div class="flex items-center gap-2 text-text-secondary">
+<span class="material-symbols-outlined text-success-emerald text-base" data-icon="check_box">check_box</span>
+<span class="font-body-sm text-body-sm font-medium">1.0x Base Multiplier</span>
+</div>
+<div class="flex items-center gap-2 text-text-secondary">
+<span class="material-symbols-outlined text-success-emerald text-base" data-icon="check_box">check_box</span>
+<span class="font-body-sm text-body-sm font-medium">Zero Gas Deduction</span>
+</div>
+</div>
+</div>
+<!-- Right: Projection Stat Cards -->
+<div class="lg:col-span-5 space-y-4">
+<!-- Daily Yield Card -->
+<div class="bg-surface-card p-6 rounded-xl border border-border-subtle shadow-sm relative overflow-hidden">
+<div class="flex items-center justify-between mb-3">
+<span class="font-label-caps text-label-caps text-text-muted uppercase">ESTIMATED DAILY YIELD</span>
+<span class="w-7 h-7 rounded-full bg-success-emerald-subtle text-tertiary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-base" data-icon="today">today</span>
+</span>
+</div>
+<div class="flex items-baseline gap-2 mb-1">
+<span class="font-headline-lg text-headline-lg text-text-primary font-bold" id="daily-usd">$28.00 USD</span>
+</div>
+<p class="font-label-numeric text-label-numeric font-semibold text-tertiary-container" id="daily-sol">
+                ≈ 0.231 SOL / day
+              </p>
+<div class="mt-4 pt-3 border-t border-border-subtle text-text-muted font-body-sm text-body-sm">
+                Credited directly to connected Devnet address upon each consensus round.
+              </div>
+</div>
+<!-- Monthly Potential Card -->
+<div class="bg-gradient-to-br from-brand-violet-subtle to-surface-card p-6 rounded-xl border border-brand-violet-border shadow-sm relative overflow-hidden">
+<div class="flex items-center justify-between mb-3">
+<span class="font-label-caps text-label-caps text-primary uppercase font-bold">MONTHLY POTENTIAL (30 DAYS)</span>
+<span class="w-7 h-7 rounded-full bg-primary-container text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-base" data-icon="calendar_month">calendar_month</span>
+</span>
+</div>
+<div class="flex items-baseline gap-2 mb-1">
+<span class="font-headline-lg text-headline-lg text-primary font-extrabold" id="monthly-usd">$840.00 USD</span>
+</div>
+<p class="font-label-numeric text-label-numeric font-semibold text-text-primary" id="monthly-sol">
+                ≈ 6.93 SOL / month
+              </p>
+<div class="mt-4 pt-3 border-t border-brand-violet-border/60 text-text-secondary font-body-sm text-body-sm">
+                Includes validator reputation compounding and early tier eligibility.
+              </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 6. INTERACTIVE BALLOT SANDBOX PREVIEW -->
+<section class="py-16 md:py-24 border-b border-border-subtle bg-surface-card" id="sandbox">
+<div class="max-w-7xl mx-auto px-space-lg">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2.5 py-0.5 rounded-full bg-brand-violet-subtle border border-brand-violet-border text-primary font-label-caps text-label-caps">LIVE INTERACTIVE DEMO</span>
+<span class="font-body-sm text-body-sm text-text-muted">Batch ID #SOL-89410</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-text-primary">Task: Solana Mobile 2 YouTube Thumbnail Optimization</h2>
+<p class="font-body-md text-body-md text-text-secondary">Review both variants below. Select the asset with stronger visual contrast, immediate readability, and higher anticipated organic click-through rate.</p>
+</div>
+<!-- Escrow Pool Bounty Chip -->
+<div class="flex items-center gap-2 px-4 py-2 bg-success-emerald-subtle border border-success-emerald-border rounded-lg text-tertiary-container flex-shrink-0 self-start md:self-auto">
+<span class="material-symbols-outlined text-xl" data-icon="monetization_on">monetization_on</span>
+<div>
+<p class="font-label-caps text-label-caps leading-none">VOTE REWARD</p>
+<p class="font-headline-sm text-body-lg font-bold">$0.80 SOL (~0.0066 SOL)</p>
+</div>
+</div>
+</div>
+<!-- Ballot Container -->
+<div class="bg-surface-canvas border border-border-subtle rounded-xl p-6 lg:p-8 shadow-sm">
+<!-- Image Comparison Grid (6/6 Side-by-Side) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+<!-- Variant A Card -->
+<div class="cursor-pointer group relative bg-surface-card border-2 border-border-subtle rounded-xl overflow-hidden transition-all duration-200 hover:shadow-md" id="card-a" onclick="selectVariant('A')">
+<div class="p-4 border-b border-border-subtle flex items-center justify-between bg-surface-subtle/40">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-body-md font-bold text-text-primary">Variant A</span>
+<span class="font-body-sm text-body-sm text-text-muted">"Neon Glow &amp; Solana Cyberpunk"</span>
+</div>
+<span class="text-xs font-label-numeric text-text-muted px-2 py-0.5 bg-surface-card rounded border border-border-subtle">SHA-256: 7d4e...a91f</span>
+</div>
+<!-- Image Preview Bay -->
+<div class="relative aspect-video w-full bg-slate-900 overflow-hidden flex items-center justify-center">
+<img class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300" data-alt="A futuristic and vibrant YouTube thumbnail layout showcasing the Solana Mobile Two in sleek black and violet neon lighting, positioned at an aggressive angle with crisp geometric typography reading WEB3 REVOLUTION in pure white, high clarity institutional lighting, sharp edges, clean modern graphic design aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHJoscSSCZ5QkPk4GdhWioaCvkFUgwVSJsN_ccMRt2CrdqKc-_Uc376U8SAjrnakOpJY55wP0mk5o9SwR_2ZlZcMuy1Z_-yK7HkogxZJOroiq7Y_nMZ6bpX6MdQmiMDo5OuhhNgWYSUj3ypeOYM5VfQ6te5Gp07Lr_bxQwmKrIfHNLXW3tcbYShi5a3SM5zFi1hf5THuWF3BdRQLapTUrLhZwhsHmjNRcDRnWJ1yAa19S_7-Sz3SMJ"/>
+<div class="absolute top-3 left-3 bg-surface-card/90 backdrop-blur-sm px-2.5 py-1 rounded text-xs font-semibold text-text-primary shadow-sm">
+                  16:9 • High Dynamic Range
+                </div>
+</div>
+<!-- Selection Indicator Bottom Tray -->
+<div class="p-4 flex items-center justify-between">
+<div>
+<p class="font-body-sm text-body-sm font-semibold text-text-primary">Emphasizes hardware glow</p>
+<p class="font-body-sm text-body-sm text-text-muted">Target audience: Tech enthusiasts &amp; crypto natives</p>
+</div>
+<div class="w-6 h-6 rounded-full border-2 border-border-strong flex items-center justify-center transition-colors" id="check-a">
+<span class="material-symbols-outlined text-sm text-white hidden" data-icon="check" id="icon-a">check</span>
+</div>
+</div>
+</div>
+<!-- Variant B Card -->
+<div class="cursor-pointer group relative bg-surface-card border-2 border-border-subtle rounded-xl overflow-hidden transition-all duration-200 hover:shadow-md" id="card-b" onclick="selectVariant('B')">
+<div class="p-4 border-b border-border-subtle flex items-center justify-between bg-surface-subtle/40">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-body-md font-bold text-text-primary">Variant B</span>
+<span class="font-body-sm text-body-sm text-text-muted">"Minimal Studio &amp; Pure Slate"</span>
+</div>
+<span class="text-xs font-label-numeric text-text-muted px-2 py-0.5 bg-surface-card rounded border border-border-subtle">SHA-256: 3c1b...b820</span>
+</div>
+<!-- Image Preview Bay -->
+<div class="relative aspect-video w-full bg-slate-100 overflow-hidden flex items-center justify-center">
+<img class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300" data-alt="A clean minimalist YouTube video thumbnail displaying the Solana Mobile smartphone placed against an ultra clean light slate and pure white architectural background with soft diffuse studio shadows, bold legible black typography stating 100K PREORDERS with clinical institutional precision and zero clutter." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpdQj1Tng5_EsRTPaDFv-Fl-MCeVEUJC9khYkBWUJg4l9mWDBtCZkrgY3CviTm7_zT9lD5DEZd24t4vnnDDCVnykxTFe3JMvcXGG7cBVSQ8ItwFufrKBtUG5UATydXVqRY0ZAbBjwiNCS74ZLUrbmtrBP0IV36CtFD4t_QeXtP34rR0pN-Q3LRWRDij0HERPE36nJg1vaoYkbrdjombgnHhdM1BSMnbeUK4hsrsoGXFD6lg_N7tD5u"/>
+<div class="absolute top-3 left-3 bg-surface-card/90 backdrop-blur-sm px-2.5 py-1 rounded text-xs font-semibold text-text-primary shadow-sm">
+                  16:9 • Studio Key Light
+                </div>
+</div>
+<!-- Selection Indicator Bottom Tray -->
+<div class="p-4 flex items-center justify-between">
+<div>
+<p class="font-body-sm text-body-sm font-semibold text-text-primary">High contrast minimal studio</p>
+<p class="font-body-sm text-body-sm text-text-muted">Target audience: Broad consumers &amp; mainstream reviewers</p>
+</div>
+<div class="w-6 h-6 rounded-full border-2 border-border-strong flex items-center justify-center transition-colors" id="check-b">
+<span class="material-symbols-outlined text-sm text-white hidden" data-icon="check" id="icon-b">check</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Rationale Feedback & Tag Selector -->
+<div class="border-t border-border-subtle pt-6">
+<div class="mb-4">
+<label class="block font-headline-sm text-body-md font-semibold text-text-primary mb-1" for="rationale-input">
+                Optional Validator Rationale Feedback <span class="font-normal text-text-muted text-xs">(Accrues +0.05 REP reputation score)</span>
+</label>
+<p class="font-body-sm text-body-sm text-text-muted mb-3">Provide qualitative rationale to aid creator iterative calibration:</p>
+<!-- Quick Tag Pills -->
+<div class="flex flex-wrap gap-2 mb-3">
+<button class="px-2.5 py-1 rounded-md text-xs font-medium bg-surface-card border border-border-subtle text-text-secondary hover:border-primary hover:text-primary transition-colors" onclick="addTag('Stronger Mobile Readability')" type="button">
+                  + Stronger Mobile Readability
+                </button>
+<button class="px-2.5 py-1 rounded-md text-xs font-medium bg-surface-card border border-border-subtle text-text-secondary hover:border-primary hover:text-primary transition-colors" onclick="addTag('Higher Organic CTR')" type="button">
+                  + Higher Organic CTR
+                </button>
+<button class="px-2.5 py-1 rounded-md text-xs font-medium bg-surface-card border border-border-subtle text-text-secondary hover:border-primary hover:text-primary transition-colors" onclick="addTag('Clearer Value Proposition')" type="button">
+                  + Clearer Value Proposition
+                </button>
+<button class="px-2.5 py-1 rounded-md text-xs font-medium bg-surface-card border border-border-subtle text-text-secondary hover:border-primary hover:text-primary transition-colors" onclick="addTag('Better Color Contrast')" type="button">
+                  + Better Color Contrast
+                </button>
+</div>
+<input class="w-full bg-surface-card border border-border-subtle rounded-lg px-3.5 py-2.5 text-body-md text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all" id="rationale-input" placeholder="e.g., Variant B has far clearer typography at small mobile viewport dimensions..." type="text"/>
+</div>
+<!-- Cast Vote Action Tray -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-border-subtle">
+<div class="flex items-center gap-2 text-text-muted text-xs">
+<span class="material-symbols-outlined text-base text-accent-cyan" data-icon="lock_clock">lock_clock</span>
+<span>Blind commitment will be sealed on Devnet slot #281,992,104</span>
+</div>
+<div class="flex items-center gap-3 w-full sm:w-auto">
+<button class="w-full sm:w-auto px-6 py-3 rounded-lg bg-primary-container hover:bg-brand-violet-hover text-on-primary font-semibold font-body-md shadow-sm transition-all flex items-center justify-center gap-2 active:scale-95 duration-100" id="submit-vote-btn" onclick="simulateVoteSubmission()">
+<span class="material-symbols-outlined text-lg" data-icon="fingerprint">fingerprint</span>
+                  Cast Consensus Vote &amp; Claim $0.80
+                </button>
+</div>
+</div>
+</div>
+<!-- Transaction Toast Preview -->
+<div class="hidden mt-6 p-4 rounded-xl bg-success-emerald-subtle border border-success-emerald-border text-text-primary animate-fade-in" id="tx-toast">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-success-emerald text-white flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-xl" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-body-md font-bold text-text-primary">Vote Committed &amp; Escrow Assigned!</h4>
+<p class="font-body-sm text-body-sm text-text-secondary">
+                    Transaction hash: <span class="font-label-numeric font-medium text-text-primary">5Wd9xKz...88LmJp</span> • Devnet Confirmed
+                  </p>
+<p class="font-body-sm text-body-sm text-tertiary-container font-semibold mt-0.5">
+                    +$0.80 USD (0.0066 SOL) queued for payout to 8xQ2...4F7b upon quorum resolution.
+                  </p>
+</div>
+</div>
+<button class="text-text-muted hover:text-text-primary" onclick="document.getElementById('tx-toast').classList.add('hidden')">
+<span class="material-symbols-outlined text-base" data-icon="close">close</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 7. VALIDATOR REPUTATION & SECURITY FAQ ACCORDION -->
+<section class="py-16 md:py-24 border-b border-border-subtle bg-surface-canvas">
+<div class="max-w-4xl mx-auto px-space-lg">
+<div class="text-center mb-12">
+<span class="font-label-caps text-label-caps text-primary tracking-wider uppercase block mb-2">Protocol Integrity</span>
+<h2 class="font-headline-lg text-headline-lg text-text-primary mb-3">Validator Reputation &amp; Security FAQ</h2>
+<p class="font-body-lg text-body-lg text-text-secondary">Everything you need to know about slashing conditions, blind commits, and payout cycles.</p>
+</div>
+<div class="space-y-4" id="faq-accordion">
+<!-- FAQ 1 -->
+<div class="bg-surface-card border border-border-subtle rounded-xl overflow-hidden shadow-sm transition-all">
+<button class="w-full p-5 text-left flex justify-between items-center hover:bg-surface-subtle/50 transition-colors" onclick="toggleFaq(1)">
+<span class="font-headline-sm text-body-lg font-semibold text-text-primary">What happens if my vote does not align with the final consensus?</span>
+<span class="material-symbols-outlined text-text-muted transition-transform duration-200" data-icon="expand_more" id="faq-icon-1">expand_more</span>
+</button>
+<div class="hidden px-5 pb-5 pt-1 text-text-secondary font-body-md text-body-md border-t border-border-subtle/50" id="faq-content-1">
+              CrowdLens implements a non-punitive learning curve for new validators. If you vote for an outlier option, you simply forfeit that single ballot’s $0.80 bounty—you are never slashed for honest subjective disagreements. However, persistent random spam botting lowers your validator tier, temporarily suspending ballot eligibility until recalibrated.
+            </div>
+</div>
+<!-- FAQ 2 -->
+<div class="bg-surface-card border border-border-subtle rounded-xl overflow-hidden shadow-sm transition-all">
+<button class="w-full p-5 text-left flex justify-between items-center hover:bg-surface-subtle/50 transition-colors" onclick="toggleFaq(2)">
+<span class="font-headline-sm text-body-lg font-semibold text-text-primary">How does the Blind-Vote (Commit-Reveal) scheme work?</span>
+<span class="material-symbols-outlined text-text-muted transition-transform duration-200" data-icon="expand_more" id="faq-icon-2">expand_more</span>
+</button>
+<div class="hidden px-5 pb-5 pt-1 text-text-secondary font-body-md text-body-md border-t border-border-subtle/50" id="faq-content-2">
+              To guarantee pure independence, every validator submits a cryptographic SHA-256 hash containing their choice combined with a unique wallet nonce. No one—not even other validators or creators—can inspect the current voting split until the required quorum threshold is reached. Once closed, votes are revealed simultaneously in a single atomic smart contract transaction.
+            </div>
+</div>
+<!-- FAQ 3 -->
+<div class="bg-surface-card border border-border-subtle rounded-xl overflow-hidden shadow-sm transition-all">
+<button class="w-full p-5 text-left flex justify-between items-center hover:bg-surface-subtle/50 transition-colors" onclick="toggleFaq(3)">
+<span class="font-headline-sm text-body-lg font-semibold text-text-primary">Are there any minimum withdrawal limits or platform lockups?</span>
+<span class="material-symbols-outlined text-text-muted transition-transform duration-200" data-icon="expand_more" id="faq-icon-3">expand_more</span>
+</button>
+<div class="hidden px-5 pb-5 pt-1 text-text-secondary font-body-md text-body-md border-t border-border-subtle/50" id="faq-content-3">
+              Zero limits. Rewards are programmed directly as Solana Program Library (SPL) token transfers. When a batch completes its quorum validation, the creator escrow smart contract dispatches your $0.80 SOL directly into your connected Phantom address within the same block.
+            </div>
+</div>
+<!-- FAQ 4 -->
+<div class="bg-surface-card border border-border-subtle rounded-xl overflow-hidden shadow-sm transition-all">
+<button class="w-full p-5 text-left flex justify-between items-center hover:bg-surface-subtle/50 transition-colors" onclick="toggleFaq(4)">
+<span class="font-headline-sm text-body-lg font-semibold text-text-primary">How do I access Devnet SOL to test the protocol?</span>
+<span class="material-symbols-outlined text-text-muted transition-transform duration-200" data-icon="expand_more" id="faq-icon-4">expand_more</span>
+</button>
+<div class="hidden px-5 pb-5 pt-1 text-text-secondary font-body-md text-body-md border-t border-border-subtle/50" id="faq-content-4">
+              You can utilize the CrowdLens integrated Devnet Faucet in the navigation header, or call the standard Solana CLI faucet via `solana airdrop 2`. While in Devnet mode, validator transactions are sponsored by protocol gas relays, allowing frictionless test evaluations.
+            </div>
+</div>
+</div>
+</div>
+</section>
+<!-- 8. BOTTOM CTA BANNER -->
+<section class="py-16 md:py-20 bg-surface-card border-b border-border-subtle">
+<div class="max-w-7xl mx-auto px-space-lg">
+<div class="bg-gradient-to-r from-brand-violet-subtle via-surface-card to-accent-cyan-subtle border border-brand-violet-border rounded-2xl p-8 md:p-12 text-center max-w-4xl mx-auto shadow-sm">
+<span class="w-12 h-12 rounded-xl bg-primary-container text-on-primary inline-flex items-center justify-center mb-4 shadow-sm">
+<span class="material-symbols-outlined text-2xl" data-icon="how_to_reg">how_to_reg</span>
+</span>
+<h2 class="font-headline-lg text-headline-lg text-text-primary mb-3">Ready to Start Earning as a Creative Validator?</h2>
+<p class="font-body-lg text-body-lg text-text-secondary mb-8 max-w-xl mx-auto">
+            Connect your Solana wallet, select live content rounds, and verify real design variants with cryptographic certainty.
+          </p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+<button class="w-full sm:w-auto px-8 py-3.5 rounded-lg bg-primary-container hover:bg-brand-violet-hover text-on-primary font-semibold font-body-md shadow-sm transition-all active:scale-95 duration-100 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="account_balance_wallet">account_balance_wallet</span>
+              Connect Wallet
+            </button>
+<a class="w-full sm:w-auto px-6 py-3.5 rounded-lg bg-surface-card hover:bg-surface-subtle border border-border-subtle text-text-primary font-semibold font-body-md transition-all" href="#how-it-works">
+              Read Documentation
+            </a>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- FOOTER -->
+<footer class="w-full bg-surface-canvas border-t border-border-subtle">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-space-lg py-space-xl max-w-7xl mx-auto gap-space-md">
+<!-- Brand & Copyright -->
+<div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+<a class="text-headline-sm font-headline-sm font-bold text-text-primary flex items-center gap-2" href="#hero">
+<span class="w-6 h-6 rounded bg-primary-container text-on-primary flex items-center justify-center font-bold text-xs">CL</span>
+          CrowdLens
+        </a>
+<span class="hidden sm:inline text-text-muted">•</span>
+<p class="text-body-sm font-body-sm text-text-muted">
+          © 2025 CrowdLens Protocol. Built for Solana Devnet. Decentralized Human Verification &amp; Consensus.
+        </p>
+</div>
+<!-- Navigation Links -->
+<div class="flex flex-wrap justify-center items-center gap-6">
+<a class="text-body-sm font-body-sm text-text-muted font-normal hover:text-primary hover:underline transition-all duration-150" href="#docs">Documentation</a>
+<a class="text-body-sm font-body-sm text-text-muted font-normal hover:text-primary hover:underline transition-all duration-150" href="#explorer">Devnet Explorer</a>
+<a class="text-body-sm font-body-sm text-text-muted font-normal hover:text-primary hover:underline transition-all duration-150" href="#faucet">Faucet</a>
+<a class="text-body-sm font-body-sm text-text-muted font-normal hover:text-primary hover:underline transition-all duration-150" href="#governance">Validator Governance</a>
+<a class="text-body-sm font-body-sm text-text-muted font-normal hover:text-primary hover:underline transition-all duration-150" href="#terms">Terms of Service</a>
+<a class="text-body-sm font-body-sm text-text-muted font-normal hover:text-primary hover:underline transition-all duration-150" href="#privacy">Privacy Policy</a>
+</div>
+</div>
+</footer>
+<!-- SCRIPT FOR DYNAMIC CALCULATIONS & SANDBOX INTERACTIONS -->
+<script>
+    let selectedChoice = 'B';
+
+    // Initialize Default State
+    window.addEventListener('DOMContentLoaded', () => {
+      selectVariant('B');
+      updateEstimator(35);
+    });
+
+    // Earnings Estimator Function
+    function updateEstimator(votes) {
+      const dailyUSD = (votes * 0.80).toFixed(2);
+      const dailySOL = (dailyUSD / 121.20).toFixed(3);
+      
+      const monthlyUSD = (dailyUSD * 30).toFixed(2);
+      const monthlySOL = (monthlyUSD / 121.20).toFixed(2);
+
+      document.getElementById('slider-display').textContent = `${votes} Votes / day`;
+      document.getElementById('daily-usd').textContent = `$${dailyUSD} USD`;
+      document.getElementById('daily-sol').textContent = `≈ ${dailySOL} SOL / day`;
+      document.getElementById('monthly-usd').textContent = `$${monthlyUSD} USD`;
+      document.getElementById('monthly-sol').textContent = `≈ ${monthlySOL} SOL / month`;
+    }
+
+    // Ballot Variant Selector
+    function selectVariant(variant) {
+      selectedChoice = variant;
+      const cardA = document.getElementById('card-a');
+      const cardB = document.getElementById('card-b');
+      const checkA = document.getElementById('check-a');
+      const checkB = document.getElementById('check-b');
+      const iconA = document.getElementById('icon-a');
+      const iconB = document.getElementById('icon-b');
+
+      if (variant === 'A') {
+        // Highlight A
+        cardA.className = "cursor-pointer group relative bg-surface-card border-2 border-primary-container ring-2 ring-primary-container/20 rounded-xl overflow-hidden transition-all duration-200 shadow-md";
+        checkA.className = "w-6 h-6 rounded-full bg-primary-container border-2 border-primary-container flex items-center justify-center transition-colors";
+        iconA.classList.remove('hidden');
+
+        // Reset B
+        cardB.className = "cursor-pointer group relative bg-surface-card border-2 border-border-subtle rounded-xl overflow-hidden transition-all duration-200 hover:shadow-md";
+        checkB.className = "w-6 h-6 rounded-full border-2 border-border-strong flex items-center justify-center transition-colors";
+        iconB.classList.add('hidden');
+      } else {
+        // Highlight B
+        cardB.className = "cursor-pointer group relative bg-surface-card border-2 border-primary-container ring-2 ring-primary-container/20 rounded-xl overflow-hidden transition-all duration-200 shadow-md";
+        checkB.className = "w-6 h-6 rounded-full bg-primary-container border-2 border-primary-container flex items-center justify-center transition-colors";
+        iconB.classList.remove('hidden');
+
+        // Reset A
+        cardA.className = "cursor-pointer group relative bg-surface-card border-2 border-border-subtle rounded-xl overflow-hidden transition-all duration-200 hover:shadow-md";
+        checkA.className = "w-6 h-6 rounded-full border-2 border-border-strong flex items-center justify-center transition-colors";
+        iconA.classList.add('hidden');
+      }
+    }
+
+    // Add Tag Pill to Rationale Input
+    function addTag(tagText) {
+      const input = document.getElementById('rationale-input');
+      if (input.value) {
+        input.value = input.value + '; ' + tagText;
+      } else {
+        input.value = tagText;
+      }
+      input.focus();
+    }
+
+    // Simulated Vote Transaction
+    function simulateVoteSubmission() {
+      const btn = document.getElementById('submit-vote-btn');
+      const toast = document.getElementById('tx-toast');
+      
+      btn.innerHTML = `<span class="material-symbols-outlined text-lg animate-spin" data-icon="progress_activity">progress_activity</span> Committing to Solana...`;
+      btn.disabled = true;
+
+      setTimeout(() => {
+        btn.innerHTML = `<span class="material-symbols-outlined text-lg" data-icon="check">check</span> Vote Submitted!`;
+        btn.className = "w-full sm:w-auto px-6 py-3 rounded-lg bg-success-emerald text-white font-semibold font-body-md shadow-sm transition-all flex items-center justify-center gap-2";
+        toast.classList.remove('hidden');
+        
+        setTimeout(() => {
+          btn.innerHTML = `<span class="material-symbols-outlined text-lg" data-icon="fingerprint">fingerprint</span> Cast Consensus Vote & Claim $0.80`;
+          btn.className = "w-full sm:w-auto px-6 py-3 rounded-lg bg-primary-container hover:bg-brand-violet-hover text-on-primary font-semibold font-body-md shadow-sm transition-all flex items-center justify-center gap-2 active:scale-95 duration-100";
+          btn.disabled = false;
+        }, 4000);
+      }, 900);
+    }
+
+    // FAQ Accordion Handler
+    function toggleFaq(id) {
+      const content = document.getElementById(`faq-content-${id}`);
+      const icon = document.getElementById(`faq-icon-${id}`);
+      const isOpen = !content.classList.contains('hidden');
+
+      // Close all
+      for (let i = 1; i <= 4; i++) {
+        document.getElementById(`faq-content-${i}`).classList.add('hidden');
+        document.getElementById(`faq-icon-${i}`).style.transform = 'rotate(0deg)';
+      }
+
+      if (!isOpen) {
+        content.classList.remove('hidden');
+        icon.style.transform = 'rotate(180deg)';
+      }
+    }
+  </script>
+</body></html>

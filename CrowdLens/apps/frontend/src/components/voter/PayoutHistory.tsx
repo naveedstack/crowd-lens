@@ -73,8 +73,8 @@ export function PayoutHistory({ showEmpty = false }: { showEmpty?: boolean }) {
     }
     return (
       <div>
-        <h2 className="font-display mb-3 text-lg font-semibold text-white">Payouts</h2>
-        <div className="rounded-2xl border border-slate-800 bg-slate-900 px-6 py-8 text-center text-slate-400">
+        <h2 className="font-display mb-3 text-lg font-semibold text-fg">Payouts</h2>
+        <div className="rounded-2xl border border-line bg-card px-6 py-8 text-center text-fg-muted">
           No payouts yet.
         </div>
       </div>
@@ -83,10 +83,10 @@ export function PayoutHistory({ showEmpty = false }: { showEmpty?: boolean }) {
 
   return (
     <div>
-      <h2 className="font-display mb-3 text-lg font-semibold text-white">Payouts</h2>
-      <div className="overflow-x-auto rounded-2xl border border-slate-800">
+      <h2 className="font-display mb-3 text-lg font-semibold text-fg">Payouts</h2>
+      <div className="overflow-x-auto rounded-2xl border border-line">
         <table className="w-full text-sm">
-          <thead className="bg-slate-900 text-slate-500">
+          <thead className="bg-card text-fg-muted">
             <tr>
               <th className="px-4 py-3 text-left font-medium">Amount</th>
               <th className="px-4 py-3 text-left font-medium">Date</th>
@@ -97,11 +97,11 @@ export function PayoutHistory({ showEmpty = false }: { showEmpty?: boolean }) {
           </thead>
           <tbody>
             {payouts.map((payout) => (
-              <tr key={payout.id} className="border-t border-slate-800 bg-slate-900">
-                <td className="px-4 py-3 font-medium text-white">
+              <tr key={payout.id} className="border-t border-line bg-card">
+                <td className="px-4 py-3 font-medium text-fg">
                   {formatUsdAndSol(payout.amount, economics.solUsd)}
                 </td>
-                <td className="px-4 py-3 text-slate-400">
+                <td className="px-4 py-3 text-fg-muted">
                   {new Date(payout.created_at).toLocaleString()}
                 </td>
                 <td className="px-4 py-3">
@@ -117,7 +117,7 @@ export function PayoutHistory({ showEmpty = false }: { showEmpty?: boolean }) {
                     {payout.status}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-slate-400">
+                <td className="px-4 py-3 text-fg-muted">
                   {payout.source === "Escrow" ? "Escrow" : "Treasury"}
                 </td>
                 <td className="px-4 py-3">
@@ -131,7 +131,7 @@ export function PayoutHistory({ showEmpty = false }: { showEmpty?: boolean }) {
                       View
                     </a>
                   ) : (
-                    <span className="text-xs text-slate-500">Pending tx</span>
+                    <span className="text-xs text-fg-muted">Pending tx</span>
                   )}
                 </td>
               </tr>

@@ -1,4 +1,5 @@
 import SectionHeading from "../components/SectionHeading";
+import { Reveal } from "@/components/landing/Reveal";
 
 const points = [
   {
@@ -19,17 +20,21 @@ const TestimonialsSection: React.FC = () => {
   return (
     <section id="testimonials" className="py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          title="What a finished batch shows"
-          subtitle="Results come from the votes on that task. CrowdLens does not add click-through rates."
-          centered
-        />
+        <Reveal>
+          <SectionHeading
+            title="What a finished batch shows"
+            subtitle="Results come from the votes on that task. CrowdLens does not add click-through rates."
+            centered
+          />
+        </Reveal>
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3">
-          {points.map((point) => (
-            <div key={point.title} className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-              <h3 className="font-display text-lg font-semibold text-white">{point.title}</h3>
-              <p className="mt-3 text-slate-400">{point.body}</p>
-            </div>
+          {points.map((point, index) => (
+            <Reveal key={point.title} delayMs={index * 80}>
+              <div className="landing-card rounded-2xl border border-line bg-card p-6">
+                <h3 className="font-display text-lg font-semibold text-fg">{point.title}</h3>
+                <p className="mt-3 text-fg-muted">{point.body}</p>
+              </div>
+            </Reveal>
           ))}
         </div>
       </div>

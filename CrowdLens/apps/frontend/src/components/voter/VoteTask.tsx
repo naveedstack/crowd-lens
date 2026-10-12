@@ -181,26 +181,26 @@ export function VoteTask() {
   return (
     <div className="mx-auto max-w-7xl px-4 pb-16">
       <div className="pt-8">
-        <Link href="/validators/votes" className="text-sm text-slate-400 hover:text-white">
+        <Link href="/validators/votes" className="text-sm text-fg-muted hover:text-fg">
           ← All open votes
         </Link>
       </div>
-      <div className="mt-6 rounded-2xl border border-slate-800 bg-slate-900 p-6">
+      <div className="mt-6 rounded-2xl border border-line bg-card p-6">
       <div className="flex flex-wrap items-center gap-3">
-        <h1 className="font-display text-2xl font-semibold text-white">{currentTask.title}</h1>
+        <h1 className="font-display text-2xl font-semibold text-fg">{currentTask.title}</h1>
         {typeof currentTask.reward === "number" && (
           <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-sm font-medium text-emerald-400">
             Earn {formatUsdAndSol(currentTask.reward, economics.solUsd)}
           </span>
         )}
         {showProgress && (
-          <span className="rounded-full border border-slate-700 bg-slate-950 px-3 py-1 text-sm font-medium text-slate-300">
+          <span className="rounded-full border border-line bg-subtle px-3 py-1 text-sm font-medium text-fg-muted">
             {submitted} / {required} votes filled
           </span>
         )}
         {submitting && <span className="text-sm text-cyan-400 animate-pulse">Submitting…</span>}
       </div>
-      <p className="mt-3 rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-slate-400">
+      <p className="mt-3 rounded-lg border border-line bg-subtle px-3 py-2 text-sm text-fg-muted">
         When this batch fills, about {formatUsd(economics.usdPerVoteVoter)} of Devnet SOL (80% of the
         creator escrow) is sent to your connected wallet. Switch Phantom to Devnet to see it.
       </p>
@@ -227,8 +227,8 @@ export function VoteTask() {
           ),
         )}
       </div>
-      <div className="mx-auto mt-8 max-w-3xl space-y-3 rounded-2xl border border-slate-800 bg-slate-900 p-5">
-        <label className="block text-sm text-slate-400">
+      <div className="mx-auto mt-8 max-w-3xl space-y-3 rounded-2xl border border-line bg-card p-5">
+        <label className="block text-sm text-fg-muted">
           Why did you pick this? (optional)
           <textarea
             value={comment}
@@ -237,16 +237,16 @@ export function VoteTask() {
             disabled={submitting}
             rows={3}
             placeholder="Why did you pick this?"
-            className="mt-1 w-full resize-y rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-white placeholder:text-slate-500"
+            className="mt-1 w-full resize-y rounded-lg border border-line bg-subtle px-3 py-2 text-sm text-fg placeholder:text-fg-muted"
           />
-          <span className="mt-1 block text-right text-xs text-slate-500">
+          <span className="mt-1 block text-right text-xs text-fg-muted">
             {comment.length}/{COMMENT_MAX}
           </span>
         </label>
         <div className="flex flex-wrap justify-end gap-3">
           <Link
             href="/validators/votes"
-            className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 hover:text-white"
+            className="rounded-lg border border-line px-4 py-2 text-sm text-fg-muted hover:bg-subtle hover:text-fg"
           >
             Back to Votes
           </Link>
@@ -277,8 +277,8 @@ function VoteStatus({
 }) {
   return (
     <div className="max-w-7xl mx-auto px-4 py-20">
-      <div className="mx-auto max-w-lg rounded-2xl border border-slate-800 bg-slate-900 px-6 py-10 text-center">
-        <div className="text-lg font-medium text-slate-300">{children}</div>
+      <div className="mx-auto max-w-lg rounded-2xl border border-line bg-card px-6 py-10 text-center">
+        <div className="text-lg font-medium text-fg-muted">{children}</div>
         {action && <div className="mt-4">{action}</div>}
       </div>
     </div>
@@ -298,8 +298,8 @@ function Option({
 }) {
   return (
     <div
-      className={`relative group aspect-[4/3] overflow-hidden rounded-2xl bg-slate-900 ${
-        selected ? "ring-2 ring-violet-500 ring-offset-2 ring-offset-slate-950" : "border border-slate-800"
+      className={`relative group aspect-[4/3] overflow-hidden rounded-2xl bg-card ${
+        selected ? "ring-2 ring-violet-500 ring-offset-2 ring-offset-canvas" : "border border-line"
       }`}
     >
       <img
@@ -329,13 +329,13 @@ function TextOption({
       type="button"
       onClick={disabled ? undefined : onSelect}
       disabled={disabled}
-      className={`min-h-[12rem] rounded-lg border bg-slate-900/70 p-6 text-left transition-colors ${
+      className={`min-h-[12rem] rounded-lg border bg-card/70 p-6 text-left transition-colors ${
         selected
           ? "border-violet-500 ring-2 ring-violet-500"
-          : "border-slate-800 hover:border-violet-500/50"
+          : "border-line hover:border-violet-500/50"
       } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
     >
-      <p className="text-base leading-relaxed text-white">{content}</p>
+      <p className="text-base leading-relaxed text-fg">{content}</p>
     </button>
   );
 }

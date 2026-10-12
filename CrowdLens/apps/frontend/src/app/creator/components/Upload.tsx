@@ -263,31 +263,31 @@ export const Upload = () => {
       <div className="max-w-3xl space-y-8">
         <div>
           <p className="text-xs font-semibold tracking-wider text-cyan-400 uppercase">Solana Devnet · content oracle</p>
-          <h1 className="font-display mt-2 text-3xl font-bold tracking-tight text-white md:text-4xl">
+          <h1 className="font-display mt-2 text-3xl font-bold tracking-tight text-fg md:text-4xl">
             Create a task
           </h1>
-          <p className="mt-2 text-slate-400">
+          <p className="mt-2 text-fg-muted">
             Upload two to five images. You pay {formatUsd(shownEconomics.usdPerVoteCreator)} per vote in SOL.
           </p>
         </div>
 
-        <div className="space-y-6 rounded-2xl border border-slate-800 bg-slate-900 p-5 sm:p-6">
+        <div className="space-y-6 rounded-2xl border border-line bg-card p-5 sm:p-6">
         <div className="space-y-1">
-          <label className="text-xs font-semibold tracking-wider text-slate-500 uppercase">Task title</label>
+          <label className="text-xs font-semibold tracking-wider text-fg-muted uppercase">Task title</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g. Choose the best thumbnail"
-            className="w-full rounded-lg border border-slate-800 bg-slate-950 p-3 text-sm text-white placeholder:text-slate-500 focus:border-violet-500 focus:outline-none"
+            className="w-full rounded-lg border border-line bg-subtle p-3 text-sm text-fg placeholder:text-fg-muted focus:border-violet-500 focus:outline-none"
           />
         </div>
 
         <div>
           <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <label className="text-xs font-semibold tracking-wider text-slate-500 uppercase">How many votes?</label>
-              <p className="mt-1 text-xs text-slate-500">
+              <label className="text-xs font-semibold tracking-wider text-fg-muted uppercase">How many votes?</label>
+              <p className="mt-1 text-xs text-fg-muted">
                 {shownEconomics.minVotes}–{shownEconomics.maxVotes} · {formatUsd(shownEconomics.usdPerVoteCreator)} each
               </p>
             </div>
@@ -316,21 +316,21 @@ export const Upload = () => {
               emphasis="voter"
             />
           </div>
-          <p className="mt-4 text-sm text-slate-500">
+          <p className="mt-4 text-sm text-fg-muted">
             Charged in SOL at the live rate. Wallet transfer: {formatSol(priceLamports)} SOL.
           </p>
         </div>
 
         <div className="space-y-2">
-          <label className="text-xs font-semibold tracking-wider text-slate-500 uppercase">
+          <label className="text-xs font-semibold tracking-wider text-fg-muted uppercase">
             Image options <span className="font-normal lowercase tracking-normal">({images.length}/{MAX_OPTIONS}, min {MIN_OPTIONS})</span>
           </label>
-          <p className="text-xs text-slate-500">Select several images at once. Only image files are accepted.</p>
+          <p className="text-xs text-fg-muted">Select several images at once. Only image files are accepted.</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {images.map((image, index) => (
-              <div key={`${image}-${index}`} className="overflow-hidden rounded-xl border border-slate-800 bg-slate-950">
+              <div key={`${image}-${index}`} className="overflow-hidden rounded-xl border border-line bg-subtle">
                 <div className="relative">
-                  <span className="absolute top-2 left-2 rounded-full bg-slate-950/80 px-2 py-0.5 text-xs text-white">
+                  <span className="absolute top-2 left-2 rounded-full bg-canvas/80 px-2 py-0.5 text-xs text-fg">
                     Option {String.fromCharCode(65 + index)}
                   </span>
                   <img
@@ -343,7 +343,7 @@ export const Upload = () => {
                   type="button"
                   onClick={() => setImages((current) => current.filter((_, i) => i !== index))}
                   disabled={loading}
-                  className="w-full py-2 text-xs text-rose-400 hover:bg-slate-900"
+                  className="w-full py-2 text-xs text-rose-400 hover:bg-card"
                 >
                   Remove
                 </button>
@@ -363,8 +363,8 @@ export const Upload = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 border-t border-slate-800 pt-5 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-slate-500">Funds stay in Solana Devnet escrow until the batch fills.</p>
+        <div className="flex flex-col gap-3 border-t border-line pt-5 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs text-fg-muted">Funds stay in Solana Devnet escrow until the batch fills.</p>
           <button
             onClick={isUiPreview || txSignature ? onSubmit : makePayment}
             disabled={loading || !canPay}
@@ -397,9 +397,9 @@ function PriceTile({
   emphasis: "creator" | "voter";
 }) {
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-950 px-4 py-4">
-      <p className="text-xs font-medium uppercase tracking-wide text-slate-500">{label}</p>
-      <p className="mt-2 text-2xl font-semibold text-white">{formatUsd(usd)}</p>
+    <div className="rounded-xl border border-line bg-subtle px-4 py-4">
+      <p className="text-xs font-medium uppercase tracking-wide text-fg-muted">{label}</p>
+      <p className="mt-2 text-2xl font-semibold text-fg">{formatUsd(usd)}</p>
       <p className={`mt-1 text-sm ${emphasis === "voter" ? "text-emerald-400" : "text-cyan-400"}`}>
         {sol} SOL
       </p>

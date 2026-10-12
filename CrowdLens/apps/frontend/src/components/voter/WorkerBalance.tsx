@@ -126,11 +126,11 @@ export function WorkerBalance() {
 
   return (
     <div className="hidden items-center gap-3 text-sm sm:flex">
-      <div className="rounded-full border border-slate-800 bg-slate-900 px-3 py-1.5 text-right leading-tight">
+      <div className="rounded-full border border-line bg-card px-3 py-1.5 text-right leading-tight">
         <div className="font-medium text-emerald-400">
           {formatUsdAndSol(shownLamports, economics.solUsd)}
         </div>
-        <div className="text-slate-400 text-xs">
+        <div className="text-fg-muted text-xs">
           {balance.lockedBal > 0
             ? `Locked ${formatSol(balance.lockedBal)}`
             : balance.unsettledBal > 0

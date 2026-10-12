@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-canvas" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CrowdLens - Validator Ballot &amp; Open Votes (/voter)</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-surface-variant": "#4a4455",
+            "on-tertiary-container": "#88fbc6",
+            "outline-variant": "#ccc3d8",
+            "tertiary-fixed-dim": "#68dba9",
+            "surface-tint": "#732ee4",
+            "on-tertiary-fixed": "#002114",
+            "surface-container-highest": "#d3e4fe",
+            "accent-cyan": "#06b6d4",
+            "secondary": "#006398",
+            "accent-cyan-subtle": "#ecfeff",
+            "on-tertiary": "#ffffff",
+            "border-strong": "#cbd5e1",
+            "surface": "#f8f9ff",
+            "error-rose": "#e11d48",
+            "secondary-fixed-dim": "#93ccff",
+            "inverse-surface": "#213145",
+            "text-secondary": "#334155",
+            "on-error-container": "#93000a",
+            "surface-subtle": "#f1f5f9",
+            "surface-dim": "#cbdbf5",
+            "on-primary-container": "#ede0ff",
+            "on-secondary-fixed": "#001d31",
+            "success-emerald": "#10b981",
+            "on-primary": "#ffffff",
+            "warning-amber-subtle": "#fffbeb",
+            "outline": "#7b7487",
+            "inverse-on-surface": "#eaf1ff",
+            "on-primary-fixed": "#25005a",
+            "inverse-primary": "#d2bbff",
+            "tertiary": "#005a3d",
+            "border-subtle": "#e2e8f0",
+            "surface-canvas": "#f8fafc",
+            "surface-card": "#ffffff",
+            "surface-container": "#e5eeff",
+            "on-secondary": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "secondary-fixed": "#cce5ff",
+            "background": "#f8f9ff",
+            "tertiary-fixed": "#85f8c4",
+            "on-error": "#ffffff",
+            "on-secondary-fixed-variant": "#004b73",
+            "surface-variant": "#d3e4fe",
+            "primary-fixed-dim": "#d2bbff",
+            "primary-container": "#7c3aed",
+            "brand-violet-subtle": "#f5f3ff",
+            "error-rose-border": "#fecdd3",
+            "warning-amber-border": "#fde68a",
+            "on-secondary-container": "#00476e",
+            "primary-fixed": "#eaddff",
+            "error": "#ba1a1a",
+            "brand-violet-hover": "#6d28d9",
+            "brand-violet-border": "#ddd6fe",
+            "on-tertiary-fixed-variant": "#005137",
+            "surface-container-high": "#dce9ff",
+            "surface-container-low": "#eff4ff",
+            "on-background": "#0b1c30",
+            "error-rose-subtle": "#fff1f2",
+            "success-emerald-subtle": "#ecfdf5",
+            "on-primary-fixed-variant": "#5a00c6",
+            "text-primary": "#0f172a",
+            "tertiary-container": "#007551",
+            "accent-cyan-border": "#a5f3fc",
+            "warning-amber": "#d97706",
+            "primary": "#630ed4",
+            "on-surface": "#0b1c30",
+            "error-container": "#ffdad6",
+            "text-muted": "#64748b",
+            "success-emerald-border": "#a7f3d0",
+            "surface-muted": "#e2e8f0",
+            "secondary-container": "#5bb8fe",
+            "surface-bright": "#f8f9ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "space-xl": "2.5rem",
+            "gutter": "1.5rem",
+            "margin": "2rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "margin-mobile": "1rem",
+            "gutter-mobile": "1rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "label-numeric": ["Inter"],
+            "label-caps": ["Inter"],
+            "display-hero": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "display-hero-mobile": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "body-lg": ["16px", { "lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0", "fontWeight": "400" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-numeric": ["13px", { "lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.06em", "fontWeight": "600" }],
+            "display-hero": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.03em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "display-hero-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-surface-canvas text-text-primary antialiased min-h-full flex flex-col font-body-md text-body-md selection:bg-brand-violet-subtle selection:text-primary">
+<!-- Top Navigation Header (from Shared Components JSON with Contextual Ballot Status) -->
+<header class="bg-surface-card border-b border-border-subtle sticky top-0 z-40 shadow-sm">
+<div class="flex justify-between items-center w-full px-space-lg max-w-7xl mx-auto h-16">
+<!-- Brand & Global Nav Links -->
+<div class="flex items-center gap-8">
+<a class="text-headline-sm font-headline-sm font-bold text-text-primary flex items-center gap-2 tracking-tight" href="#">
+<span class="w-8 h-8 rounded-lg bg-primary-container text-white flex items-center justify-center font-extrabold text-sm shadow-sm">
+<span class="material-symbols-outlined text-lg" data-icon="lens_blur">lens_blur</span>
+</span>
+          CrowdLens
+        </a>
+<!-- Navigation Menu -->
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-text-secondary hover:text-primary transition-colors duration-150 font-body-md text-body-md font-medium" href="#">Tasks</a>
+<a class="text-text-secondary hover:text-primary transition-colors duration-150 font-body-md text-body-md font-medium" href="#">New Task</a>
+<a class="text-primary font-semibold border-b-2 border-primary pb-1 flex items-center gap-1.5 font-body-md text-body-md" href="#">
+<span>Votes</span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+</a>
+<a class="text-text-secondary hover:text-primary transition-colors duration-150 font-body-md text-body-md font-medium" href="#">History</a>
+<a class="text-text-secondary hover:text-primary transition-colors duration-150 font-body-md text-body-md font-medium" href="#">Earnings</a>
+<a class="text-text-secondary hover:text-primary transition-colors duration-150 font-body-md text-body-md font-medium" href="#">Faucet</a>
+</nav>
+</div>
+<!-- Right Utility Rails: Earnings Alert & Connected Wallet -->
+<div class="flex items-center gap-4">
+<!-- Balance Status Cluster -->
+<div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-success-emerald-subtle border border-success-emerald-border text-emerald-700">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="font-label-numeric text-label-numeric font-semibold">
+            Last paid: $0.50 · 0.0042 SOL · Paid to Devnet wallet
+          </span>
+</div>
+<!-- Wallet Control Pill -->
+<div class="flex items-center bg-surface-card border border-border-subtle rounded-full p-1 shadow-sm hover:border-border-strong transition-colors">
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent-cyan-subtle border border-accent-cyan-border text-sky-700 font-label-caps text-label-caps font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+            SOL DEVNET
+          </div>
+<div class="px-3 py-1 flex items-center gap-2">
+<span class="font-label-numeric text-label-numeric font-semibold text-text-primary">9wgk...ph8x</span>
+<span class="w-5 h-5 rounded-full bg-surface-subtle text-text-muted flex items-center justify-center text-xs">
+<span class="material-symbols-outlined text-sm" data-icon="account_balance_wallet">account_balance_wallet</span>
+</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Ballot Canvas -->
+<main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mb-24">
+<!-- Breadcrumb & Ballot Metadata Bar -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-border-subtle">
+<div class="flex items-center gap-3">
+<a class="inline-flex items-center gap-1.5 text-text-secondary hover:text-primary font-body-md text-body-md font-medium transition-colors" href="#">
+<span class="material-symbols-outlined text-base" data-icon="arrow_back">arrow_back</span>
+<span>All open votes</span>
+</a>
+<span class="text-border-strong">/</span>
+<span class="px-2 py-0.5 rounded bg-surface-subtle border border-border-subtle font-label-numeric text-label-numeric font-semibold text-text-muted">
+          TASK ID #123-A9X
+        </span>
+</div>
+<!-- Live Metadata Pills -->
+<div class="flex flex-wrap items-center gap-2 sm:gap-3">
+<!-- Earnings Badge -->
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-success-emerald-subtle border border-success-emerald-border text-emerald-700 font-label-numeric text-label-numeric font-semibold shadow-xs">
+<span class="material-symbols-outlined text-sm" data-icon="payments">payments</span>
+          Earn $0.50 · 0.0042 SOL
+        </span>
+<!-- Quorum Counter -->
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-card border border-border-subtle text-text-secondary font-label-numeric text-label-numeric font-medium">
+<span class="material-symbols-outlined text-sm text-text-muted" data-icon="group">group</span>
+          14 / 20 votes filled
+        </span>
+<!-- Consensus Threshold -->
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-card border border-border-subtle text-text-secondary font-label-numeric text-label-numeric font-medium">
+<span class="material-symbols-outlined text-sm text-primary" data-icon="how_to_reg">how_to_reg</span>
+          Consensus: 70% Quorum
+        </span>
+<!-- Expiration Timer -->
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 font-label-numeric text-label-numeric font-semibold">
+<span class="material-symbols-outlined text-sm" data-icon="hourglass_top">hourglass_top</span>
+          18m 42s remaining
+        </span>
+</div>
+</div>
+<!-- Ballot Headline & Subtext -->
+<div class="mt-6 mb-6">
+<h1 class="text-headline-lg font-headline-lg font-bold text-text-primary tracking-tight">
+        Choose the best podcast cover art for episode #42
+      </h1>
+<p class="mt-2 text-text-secondary font-body-lg text-body-lg max-w-4xl">
+        Evaluate thumbnail impact, visual hierarchy, title legibility on mobile viewports, and consistency with high-tech decentralized journalism.
+      </p>
+</div>
+<!-- Info Alert Notification Banner -->
+<div class="mb-8 rounded-lg bg-brand-violet-subtle border border-brand-violet-border p-4 flex items-start sm:items-center gap-3">
+<span class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-lg" data-icon="info">info</span>
+</span>
+<div class="flex-1 font-body-md text-body-md text-text-secondary">
+<span class="font-semibold text-text-primary">Automated Instant Payout:</span> When this batch fills, about $0.50 of Devnet SOL ($0.50 · 0.0042 SOL) is sent directly to your connected wallet. Switch Phantom to Devnet to view it.
+      </div>
+<button aria-label="Dismiss alert" class="text-text-muted hover:text-text-primary transition-colors shrink-0 p-1">
+<span class="material-symbols-outlined text-base" data-icon="close">close</span>
+</button>
+</div>
+<!-- Ballot Comparison: 3 Large Option Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+<!-- Option A -->
+<div class="group relative rounded-xl bg-surface-card border border-border-subtle hover:border-border-strong p-4 transition-all duration-200 shadow-sm flex flex-col justify-between">
+<div>
+<!-- Bay Utility Header -->
+<div class="flex items-center justify-between mb-3">
+<span class="px-2.5 py-0.5 rounded bg-surface-subtle border border-border-subtle font-label-caps text-label-caps font-bold text-text-secondary">
+              OPTION A
+            </span>
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-full bg-surface-subtle text-text-muted font-label-caps text-label-caps">1080x1080</span>
+<button class="p-1 rounded text-text-muted hover:text-text-primary hover:bg-surface-subtle" title="Zoom Asset">
+<span class="material-symbols-outlined text-base" data-icon="zoom_in">zoom_in</span>
+</button>
+</div>
+</div>
+<!-- Image Asset Bay -->
+<div class="relative w-full aspect-square rounded-lg overflow-hidden bg-slate-100 border border-border-subtle mb-4">
+<img alt="Option A Cover Art" class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300" data-alt="A clean, minimalist high-end podcast cover design framed in pristine light studio lighting. The center features a sleek metallic broadcast microphone surrounded by ultra-crisp typography reading CrowdLens Decoded in deep slate and neutral charcoal colors. High key exposure with zero clutter creates an institutional, modern editorial aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDY-GV4BOn_QdTT7O8Jp60xmeFlKSNR6mf3456Z67taaWg0znSexnjS9O-7Ayq3cXJmsFAdF5C1i5sHDdllDlMOITPju4RG8_V569eDY1nzBZMtThGll13ClALG0V5KyOGbXsINulzH4BN3wtB5_kzlM5NkLDTRtH-9pQJ2aw2OIgpEOhUTLLw721nfQeNgLSNFaYOUNWEz81D2wFvf8-mGkTl1cEYV6waP7QrKX7HtwooGzND3nCHn"/>
+<div class="absolute bottom-2 left-2 px-2 py-1 rounded bg-white/90 backdrop-blur-sm border border-slate-200 text-[10px] font-mono text-slate-600">
+              sha256: 4fa9...8c21
+            </div>
+</div>
+<!-- Card Description -->
+<div class="mb-4">
+<h3 class="font-headline-sm text-headline-sm font-semibold text-text-primary">Acoustic Studio Minimal</h3>
+<p class="mt-1 font-body-sm text-body-sm text-text-muted">Standard broadcast framing with neutral slate palette and high key lighting.</p>
+</div>
+</div>
+<!-- Vote Action Button -->
+<button class="w-full py-2.5 px-4 rounded-lg border border-border-subtle bg-surface-card hover:bg-surface-subtle text-text-secondary hover:text-text-primary font-body-md text-body-md font-semibold flex items-center justify-center gap-2 transition-all">
+<span class="w-4 h-4 rounded-full border border-border-strong flex items-center justify-center"></span>
+<span>Select Option A</span>
+</button>
+</div>
+<!-- Option B (SELECTED / ACTIVE) -->
+<div class="relative rounded-xl bg-surface-card border-2 border-primary ring-4 ring-primary/10 p-4 transition-all duration-200 shadow-md flex flex-col justify-between">
+<!-- Floating Selected Indicator -->
+<div class="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10">
+<span class="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-primary-container text-white font-label-caps text-label-caps font-bold shadow-sm">
+<span class="material-symbols-outlined text-xs" data-icon="check_circle">check_circle</span>
+            CURRENT CHOICE
+          </span>
+</div>
+<div>
+<!-- Bay Utility Header -->
+<div class="flex items-center justify-between mb-3 mt-1">
+<span class="px-2.5 py-0.5 rounded bg-brand-violet-subtle border border-brand-violet-border font-label-caps text-label-caps font-bold text-primary">
+              OPTION B
+            </span>
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-full bg-brand-violet-subtle text-primary font-label-caps text-label-caps font-semibold">Selected</span>
+<button class="p-1 rounded text-primary hover:bg-brand-violet-subtle" title="Zoom Asset">
+<span class="material-symbols-outlined text-base" data-icon="zoom_in">zoom_in</span>
+</button>
+</div>
+</div>
+<!-- Image Asset Bay -->
+<div class="relative w-full aspect-square rounded-lg overflow-hidden bg-slate-100 border border-primary/30 mb-4">
+<img alt="Option B Selected Cover Art" class="w-full h-full object-cover scale-[1.01]" data-alt="A bold, high-contrast digital podcast artwork titled CrowdLens: The Oracle Dilemma featuring an artistic studio silhouette illuminated by glowing violet neon rim lighting and electric ultraviolet gradients. The typography is razor sharp, highly legible against rich dark slate contours with an immaculate high-tech crypto instrumentation ambiance. Modern, energetic, and commanding." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMHcQFG3Vh1poUsO1VkUYPX5T3pb2FEmTxb7qAjJzXdJUHy2h8jpKUH1fpvxmWy3ZuquTMVC3Y_wGGVVWwVzyqdF-o1UHSsEIcjGyIMQbW8kEWbwwuwns7fLMa0qnW5jjX2yc07TdBbqQZll7fdPsjZBZuWKqbs2ro4LBQYX2LRio2oFXsutMX7A68L5_SYVTqLvAg8RmYm0mXYxsXeqh4yvNV-DM7Y4YgPs-qvPtrYswECYHFoZWf"/>
+<div class="absolute bottom-2 left-2 px-2 py-1 rounded bg-white/95 backdrop-blur-sm border border-brand-violet-border text-[10px] font-mono text-primary font-medium">
+              sha256: 9de1...34b7
+            </div>
+</div>
+<!-- Card Description -->
+<div class="mb-4">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm font-semibold text-text-primary">Neon Violet Studio Portrait</h3>
+<span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-label-caps text-label-caps font-semibold">+12% Quorum</span>
+</div>
+<p class="mt-1 font-body-sm text-body-sm text-text-muted">High-contrast ultraviolet highlights with maximum thumbnail retention on mobile.</p>
+</div>
+</div>
+<!-- Vote Action Button (Active State) -->
+<button class="w-full py-2.5 px-4 rounded-lg bg-primary-container text-white font-body-md text-body-md font-semibold flex items-center justify-center gap-2 shadow-sm">
+<span class="w-4 h-4 rounded-full bg-white flex items-center justify-center">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</span>
+<span>Active Vote</span>
+</button>
+</div>
+<!-- Option C -->
+<div class="group relative rounded-xl bg-surface-card border border-border-subtle hover:border-border-strong p-4 transition-all duration-200 shadow-sm flex flex-col justify-between">
+<div>
+<!-- Bay Utility Header -->
+<div class="flex items-center justify-between mb-3">
+<span class="px-2.5 py-0.5 rounded bg-surface-subtle border border-border-subtle font-label-caps text-label-caps font-bold text-text-secondary">
+              OPTION C
+            </span>
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-full bg-surface-subtle text-text-muted font-label-caps text-label-caps">1080x1080</span>
+<button class="p-1 rounded text-text-muted hover:text-text-primary hover:bg-surface-subtle" title="Zoom Asset">
+<span class="material-symbols-outlined text-base" data-icon="zoom_in">zoom_in</span>
+</button>
+</div>
+</div>
+<!-- Image Asset Bay -->
+<div class="relative w-full aspect-square rounded-lg overflow-hidden bg-slate-100 border border-border-subtle mb-4">
+<img alt="Option C Cover Art" class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300" data-alt="An abstract technical vector schematic podcast cover design featuring isometric geometric network nodes and consensus verification graphs. The background is crisp off-white with fine blue and charcoal wireframe overlays. The lighting is diffused, clean, and analytical, resembling a sophisticated mathematical journal cover or decentralized systems manual." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUp76FNNFm7jaKIsRz6Gnm-8nmTpwW4_0E-4SBwTQ4VUFEE2TAGr5pcsP-7EQ_nr0NpfSo5BZsv0yuZ1rA0E-GWCEJ_0c8OUe1O327KqBLASlY01HQZZ3FS5QeWcBbMnFMeysIXZJGvBpnGNnbo1L2xrJ8rjLwb4CQaBp-P9iX-8HGhew_LX7JuaxC4W1MxchuSFfu_1UOIvMpsto_SXO_CarkKiR8k3OwU7BJibgA7fKfPOEtFPZN"/>
+<div class="absolute bottom-2 left-2 px-2 py-1 rounded bg-white/90 backdrop-blur-sm border border-slate-200 text-[10px] font-mono text-slate-600">
+              sha256: 7bc2...11ef
+            </div>
+</div>
+<!-- Card Description -->
+<div class="mb-4">
+<h3 class="font-headline-sm text-headline-sm font-semibold text-text-primary">Vector Schematic Mesh</h3>
+<p class="mt-1 font-body-sm text-body-sm text-text-muted">Geometric oracle topology diagram appealing to protocol researchers.</p>
+</div>
+</div>
+<!-- Vote Action Button -->
+<button class="w-full py-2.5 px-4 rounded-lg border border-border-subtle bg-surface-card hover:bg-surface-subtle text-text-secondary hover:text-text-primary font-body-md text-body-md font-semibold flex items-center justify-center gap-2 transition-all">
+<span class="w-4 h-4 rounded-full border border-border-strong flex items-center justify-center"></span>
+<span>Select Option C</span>
+</button>
+</div>
+</div>
+<!-- Validator Rationale Feedback Panel -->
+<div class="bg-surface-card rounded-xl border border-border-subtle p-6 shadow-sm">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-3">
+<label class="font-headline-sm text-headline-sm font-semibold text-text-primary" for="rationale">
+          Why did you pick this? <span class="text-text-muted font-normal text-body-md">(Optional)</span>
+</label>
+<span class="inline-flex items-center gap-1 font-body-sm text-body-sm text-primary font-medium">
+<span class="material-symbols-outlined text-sm" data-icon="verified_user">verified_user</span>
+          +15 Validator XP Potential
+        </span>
+</div>
+<p class="font-body-md text-body-md text-text-muted mb-4">
+        High-quality rationales boost your validator reputation rank and increase priority allocations on higher reward devnet pools.
+      </p>
+<!-- Quick Tag Suggestion Chips -->
+<div class="flex flex-wrap items-center gap-2 mb-3">
+<span class="text-text-muted font-label-caps text-label-caps">SUGGESTIONS:</span>
+<button class="px-2.5 py-1 rounded-md bg-surface-subtle hover:bg-brand-violet-subtle border border-border-subtle hover:border-brand-violet-border text-text-secondary hover:text-primary font-body-sm text-body-sm font-medium transition-colors">
+          + Stronger Typography
+        </button>
+<button class="px-2.5 py-1 rounded-md bg-surface-subtle hover:bg-brand-violet-subtle border border-border-subtle hover:border-brand-violet-border text-text-secondary hover:text-primary font-body-sm text-body-sm font-medium transition-colors">
+          + Mobile Legibility
+        </button>
+<button class="px-2.5 py-1 rounded-md bg-surface-subtle hover:bg-brand-violet-subtle border border-border-subtle hover:border-brand-violet-border text-text-secondary hover:text-primary font-body-sm text-body-sm font-medium transition-colors">
+          + Better Color Harmony
+        </button>
+</div>
+<!-- Textarea Input -->
+<textarea class="w-full rounded-lg border border-border-subtle bg-surface-card p-3 font-body-md text-body-md text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-text-muted" id="rationale" placeholder="Explain your visual consensus logic..." rows="3">Option B has clearly defined contrast that remains legible even at 64px mobile thumbnail viewports. The violet neon hue separates it from generic podcast covers.</textarea>
+<div class="mt-2 flex items-center justify-between text-text-muted font-body-sm text-body-sm">
+<span>Detailed technical critiques are weighted higher during dispute resolutions.</span>
+<span>142 / 500 characters</span>
+</div>
+</div>
+</main>
+<!-- Sticky Footer Action Bar -->
+<div class="fixed bottom-0 inset-x-0 bg-surface-card border-t border-border-subtle py-4 px-4 sm:px-8 z-30 shadow-lg">
+<div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+<!-- Selection Summary Feedback -->
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-brand-violet-subtle border border-brand-violet-border text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-lg" data-icon="check">check</span>
+</div>
+<div>
+<div class="font-body-md text-body-md font-semibold text-text-primary flex items-center gap-2">
+<span>Option B (Neon Studio Portrait)</span>
+<span class="px-2 py-0.2 rounded bg-success-emerald-subtle text-emerald-700 font-label-numeric text-label-numeric font-bold">+$0.50 pending</span>
+</div>
+<div class="text-text-muted font-body-sm text-body-sm">Ready for cryptographic signature via Phantom</div>
+</div>
+</div>
+<!-- Primary Action Controls -->
+<div class="flex items-center gap-3 w-full sm:w-auto">
+<button class="flex-1 sm:flex-initial px-5 py-2.5 rounded-lg border border-border-subtle bg-surface-card hover:bg-surface-subtle text-text-secondary font-body-md text-body-md font-semibold transition-all">
+          Back to Votes
+        </button>
+<button class="flex-1 sm:flex-initial px-6 py-2.5 rounded-lg bg-primary-container hover:bg-brand-violet-hover text-white font-body-md text-body-md font-semibold shadow-sm transition-all transform active:scale-98 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-base" data-icon="verified">verified</span>
+<span>Submit Vote &amp; Earn $0.50 · 0.0042 SOL</span>
+</button>
+</div>
+</div>
+</div>
+<!-- On-Screen Devnet Transaction Toast -->
+<aside class="fixed bottom-24 right-6 max-w-md bg-surface-card border border-border-subtle rounded-xl shadow-xl p-4 z-50 flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-success-emerald-subtle border border-success-emerald-border text-emerald-700 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-base" data-icon="check_circle">check_circle</span>
+</div>
+<div class="flex-1">
+<h4 class="font-headline-sm text-headline-sm font-semibold text-text-primary leading-tight">Vote recorded!</h4>
+<p class="font-body-sm text-body-sm text-text-secondary mt-1">
+        0.0042 SOL will be released to your wallet upon quorum. 
+        <span class="font-mono text-primary font-medium block mt-0.5">Tx: 5rPq...v89L</span>
+</p>
+</div>
+<button aria-label="Close notification" class="text-text-muted hover:text-text-primary p-1" onclick="this.parentElement.remove()">
+<span class="material-symbols-outlined text-sm" data-icon="close">close</span>
+</button>
+</aside>
+<!-- Footer (from Shared Components JSON) -->
+<footer class="bg-surface-canvas border-t border-border-subtle w-full mt-auto mb-16 sm:mb-20">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-space-lg py-space-xl max-w-7xl mx-auto gap-space-md">
+<!-- Brand & Copyright -->
+<div class="flex flex-col items-center md:items-start gap-1">
+<div class="text-headline-sm font-headline-sm font-bold text-text-primary flex items-center gap-1.5">
+<span class="w-5 h-5 rounded bg-primary-container text-white flex items-center justify-center text-[10px] font-extrabold">CL</span>
+          CrowdLens
+        </div>
+<p class="text-body-sm font-body-sm text-text-muted">
+          © 2025 CrowdLens Protocol. Built for Solana Devnet. Decentralized Human Verification &amp; Consensus.
+        </p>
+</div>
+<!-- Footer Nav Cluster -->
+<div class="flex flex-wrap justify-center gap-6 font-body-sm text-body-sm text-text-muted">
+<a class="hover:text-primary transition-colors duration-150 hover:underline" href="#">Documentation</a>
+<a class="hover:text-primary transition-colors duration-150 hover:underline" href="#">Devnet Explorer</a>
+<a class="hover:text-primary transition-colors duration-150 hover:underline" href="#">Faucet</a>
+<a class="hover:text-primary transition-colors duration-150 hover:underline" href="#">Validator Governance</a>
+<a class="hover:text-primary transition-colors duration-150 hover:underline" href="#">Terms of Service</a>
+<a class="hover:text-primary transition-colors duration-150 hover:underline" href="#">Privacy Policy</a>
+</div>
+</div>
+</footer>
+</body></html>

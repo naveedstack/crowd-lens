@@ -12,10 +12,10 @@ const SectionHeading: React.FC<SectionHeadingProps> = ({
 }) => {
   return (
     <div className={`mb-12 ${centered ? "text-center" : ""}`}>
-      <h2 className={`font-display text-3xl font-bold tracking-tight text-white md:text-4xl ${centered ? "" : ""}`}>
+      <h2 className={`font-display text-3xl font-bold tracking-tight text-fg md:text-4xl ${centered ? "" : ""}`}>
         {title}
       </h2>
-      <p className={`mt-4 text-lg text-slate-400 max-w-2xl ${centered ? "mx-auto" : ""}`}>
+      <p className={`mt-4 text-lg text-fg-muted max-w-2xl ${centered ? "mx-auto" : ""}`}>
         {subtitle}
       </p>
     </div>

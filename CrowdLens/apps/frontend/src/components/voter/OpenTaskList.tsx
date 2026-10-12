@@ -113,32 +113,32 @@ export function OpenTaskList() {
         <Link
           key={task.id}
           href={`/validators/task/${task.id}`}
-          className="flex gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-4 transition-colors hover:border-violet-500/40"
+          className="flex gap-4 rounded-2xl border border-line bg-card p-4 transition-colors hover:border-violet-500/40"
         >
           {task.optionType === "Text" ? (
-            <div className="h-20 w-28 shrink-0 overflow-hidden rounded-md bg-slate-950 p-2 text-xs leading-snug text-slate-400">
+            <div className="h-20 w-28 shrink-0 overflow-hidden rounded-md bg-subtle p-2 text-xs leading-snug text-fg-muted">
               {task.preview || "Caption"}
             </div>
           ) : task.thumbnail ? (
             <img
               src={task.thumbnail}
               alt=""
-              className="h-20 w-28 shrink-0 rounded-md object-cover bg-slate-950"
+              className="h-20 w-28 shrink-0 rounded-md object-cover bg-canvas"
             />
           ) : (
-            <div className="h-20 w-28 shrink-0 rounded-md bg-slate-950" />
+            <div className="h-20 w-28 shrink-0 rounded-md bg-subtle" />
           )}
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
               <h2 className="font-medium truncate">{task.title || "Untitled vote"}</h2>
-              <span className="text-xs rounded-full border border-slate-700 px-2 py-0.5 text-slate-300">
+              <span className="text-xs rounded-full border border-line px-2 py-0.5 text-fg-muted">
                 Image
               </span>
               <span className="ml-auto text-sm text-emerald-400">
                 {formatUsdAndSol(task.reward, economics.solUsd)}
               </span>
             </div>
-            <div className="mt-2 text-sm text-slate-400">
+            <div className="mt-2 text-sm text-fg-muted">
               {task.submission_count} / {task.required_submissions} votes
             </div>
           </div>

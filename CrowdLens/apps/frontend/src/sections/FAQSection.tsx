@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import SectionHeading from "../components/SectionHeading";
+import { Reveal } from "@/components/landing/Reveal";
 
 const ITEMS = [
   {
@@ -42,30 +43,34 @@ const FAQSection: React.FC = () => {
   return (
     <section id="faq" className="py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          title="Frequently asked questions"
-          subtitle="What the live MVP actually does."
-          centered
-        />
+        <Reveal>
+          <SectionHeading
+            title="Frequently asked questions"
+            subtitle="What the live MVP actually does."
+            centered
+          />
+        </Reveal>
         <div className="mx-auto max-w-3xl space-y-3">
           {ITEMS.map((item, index) => {
             const isOpen = open === index;
             return (
-              <div key={item.question} className="rounded-xl border border-slate-800 bg-slate-900">
+              <Reveal key={item.question} delayMs={index * 50}>
+              <div className="rounded-xl border border-line bg-card">
                 <button
                   type="button"
                   className="flex w-full items-center justify-between px-5 py-4 text-left"
                   onClick={() => setOpen(isOpen ? null : index)}
                 >
-                  <span className="pr-4 font-medium text-white">{item.question}</span>
+                  <span className="pr-4 font-medium text-fg">{item.question}</span>
                   {isOpen ? (
-                    <ChevronUp className="h-5 w-5 shrink-0 text-slate-500" />
+                    <ChevronUp className="h-5 w-5 shrink-0 text-fg-muted" />
                   ) : (
-                    <ChevronDown className="h-5 w-5 shrink-0 text-slate-500" />
+                    <ChevronDown className="h-5 w-5 shrink-0 text-fg-muted" />
                   )}
                 </button>
-                {isOpen ? <p className="px-5 pb-4 text-sm leading-relaxed text-slate-400">{item.answer}</p> : null}
+                {isOpen ? <p className="px-5 pb-4 text-sm leading-relaxed text-fg-muted">{item.answer}</p> : null}
               </div>
+              </Reveal>
             );
           })}
         </div>

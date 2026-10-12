@@ -134,10 +134,10 @@ export function EarningsStats() {
       {cards.map((card) => (
         <div
           key={card.label}
-          className="rounded-2xl border border-slate-800 bg-slate-900 px-4 py-5"
+          className="rounded-2xl border border-line bg-card px-4 py-5"
         >
-          <div className="text-sm text-slate-400">{card.label}</div>
-          <div className="mt-1 font-display text-2xl font-semibold text-white">{card.value}</div>
+          <div className="text-sm text-fg-muted">{card.label}</div>
+          <div className="mt-1 font-display text-2xl font-semibold text-fg">{card.value}</div>
         </div>
       ))}
     </div>
@@ -152,8 +152,8 @@ function StatusCard({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="mb-8 rounded-2xl border border-slate-800 bg-slate-900 px-6 py-10 text-center">
-      <div className="text-lg font-medium text-slate-300">{children}</div>
+    <div className="mb-8 rounded-2xl border border-line bg-card px-6 py-10 text-center">
+      <div className="text-lg font-medium text-fg-muted">{children}</div>
       {action && <div className="mt-4">{action}</div>}
     </div>
   );

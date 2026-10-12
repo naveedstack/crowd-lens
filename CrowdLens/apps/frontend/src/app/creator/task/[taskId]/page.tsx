@@ -222,22 +222,22 @@ export default function Page({params}: {params: Promise<{ taskId: string }>}) {
             <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
                 <BackToTasks />
                 <div className="mb-12 mt-6 text-center">
-                    <h1 className="font-display mb-4 text-3xl font-bold tracking-tight text-white md:text-4xl">
+                    <h1 className="font-display mb-4 text-3xl font-bold tracking-tight text-fg md:text-4xl">
                         {taskDetails.title || "Untitled Task"}
                     </h1>
-                    <div className="flex flex-wrap items-center justify-center gap-3 text-slate-300">
+                    <div className="flex flex-wrap items-center justify-center gap-3 text-fg-muted">
                         <span
                             className={`px-3 py-1 rounded-full text-sm font-medium border ${
                                 isDone
                                     ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/30"
-                                    : "bg-amber-500/10 text-amber-300 border-amber-500/30"
+                                    : "bg-amber-500/10 text-amber-400 border-amber-500/30"
                             }`}
                         >
                             {isDone ? (isTie ? "Done · Tie" : "Done") : "Open"}
                         </span>
                         <span>
                             Votes:{" "}
-                            <span className="text-cyan-300 font-semibold">
+                            <span className="text-cyan-400 font-semibold">
                                 {submitted} / {required}
                             </span>
                         </span>
@@ -246,7 +246,7 @@ export default function Page({params}: {params: Promise<{ taskId: string }>}) {
                             {!isDone && (
                                 <>
                                     {" · "}
-                                    <span className="text-white font-medium">{remaining} remaining</span>
+                                    <span className="text-fg font-medium">{remaining} remaining</span>
                                 </>
                             )}
                         </span>
@@ -255,7 +255,7 @@ export default function Page({params}: {params: Promise<{ taskId: string }>}) {
                         <div className="mt-3 flex flex-wrap items-center justify-center gap-3 text-sm">
                             {payInUrl && (
                                 <a
-                                    className="rounded-full border border-slate-800 bg-slate-900 px-3 py-1 text-cyan-300 hover:text-white"
+                                    className="rounded-full border border-line bg-card px-3 py-1 text-cyan-400 hover:text-fg"
                                     href={payInUrl}
                                     target="_blank"
                                     rel="noreferrer"
@@ -265,7 +265,7 @@ export default function Page({params}: {params: Promise<{ taskId: string }>}) {
                             )}
                             {escrowUrl && (
                                 <a
-                                    className="rounded-full border border-slate-800 bg-slate-900 px-3 py-1 text-cyan-300 hover:text-white"
+                                    className="rounded-full border border-line bg-card px-3 py-1 text-cyan-400 hover:text-fg"
                                     href={escrowUrl}
                                     target="_blank"
                                     rel="noreferrer"
@@ -274,7 +274,7 @@ export default function Page({params}: {params: Promise<{ taskId: string }>}) {
                                 </a>
                             )}
                             {taskDetails.settle_status && taskDetails.settle_status !== "Offchain" && (
-                                <span className="text-slate-500">
+                                <span className="text-fg-muted">
                                     {taskDetails.settle_status}
                                     {taskDetails.vote_commitment
                                         ? ` · ${taskDetails.vote_commitment.slice(0, 8)}…`
@@ -286,9 +286,9 @@ export default function Page({params}: {params: Promise<{ taskId: string }>}) {
                 </div>
                 
                 {Object.keys(result).length === 0 ? (
-                    <div className="rounded-2xl border border-slate-800 bg-slate-900 p-8 text-center">
-                        <div className="text-slate-400 mb-2">No options available for this task yet.</div>
-                        <div className="text-sm text-slate-500">Check back later for results.</div>
+                    <div className="rounded-2xl border border-line bg-card p-8 text-center">
+                        <div className="text-fg-muted mb-2">No options available for this task yet.</div>
+                        <div className="text-sm text-fg-muted">Check back later for results.</div>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -333,7 +333,7 @@ export default function Page({params}: {params: Promise<{ taskId: string }>}) {
 
 function BackToTasks() {
     return (
-        <Link href="/creator" className="text-sm text-slate-400 hover:text-white">
+        <Link href="/creator" className="text-sm text-fg-muted hover:text-fg">
             ← Back to Tasks
         </Link>
     );
@@ -389,9 +389,9 @@ function AnalyticsPanel({
     );
 
     return (
-        <div className="mt-10 space-y-6 rounded-2xl border border-slate-800 bg-slate-900 p-6">
+        <div className="mt-10 space-y-6 rounded-2xl border border-line bg-card p-6">
             <div className="flex flex-wrap items-center gap-3">
-                <h2 className="text-lg font-semibold text-slate-100">Analytics</h2>
+                <h2 className="text-lg font-semibold text-fg">Analytics</h2>
                 {done && analytics.underFiveMinutes && (
                     <span className="px-2.5 py-1 rounded-full text-xs font-medium border border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
                         under 5 min
@@ -402,7 +402,7 @@ function AnalyticsPanel({
                         type="button"
                         onClick={() => onExport("csv")}
                         disabled={exporting != null}
-                        className="rounded-md border border-slate-700 px-3 py-1.5 text-sm text-slate-200 hover:bg-slate-800 disabled:opacity-40"
+                        className="rounded-md border border-line px-3 py-1.5 text-sm text-fg hover:bg-subtle disabled:opacity-40"
                     >
                         {exporting === "csv" ? "Exporting…" : "Export CSV"}
                     </button>
@@ -418,29 +418,29 @@ function AnalyticsPanel({
             </div>
             {exportError && <p className="text-sm text-red-400">{exportError}</p>}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-                <div className="rounded-lg border border-slate-800 bg-slate-950 px-4 py-3">
-                    <div className="text-slate-400">Completion</div>
-                    <div className="mt-1 text-lg font-semibold text-slate-100">
+                <div className="rounded-lg border border-line bg-subtle px-4 py-3">
+                    <div className="text-fg-muted">Completion</div>
+                    <div className="mt-1 text-lg font-semibold text-fg">
                         {analytics.submissionCount} / {analytics.requiredSubmissions}
                     </div>
                 </div>
-                <div className="rounded-lg border border-slate-800 bg-slate-950 px-4 py-3">
-                    <div className="text-slate-400">Turnaround</div>
-                    <div className="mt-1 text-lg font-semibold text-slate-100">
+                <div className="rounded-lg border border-line bg-subtle px-4 py-3">
+                    <div className="text-fg-muted">Turnaround</div>
+                    <div className="mt-1 text-lg font-semibold text-fg">
                         {formatTurnaround(analytics.turnaroundMs, done)}
                     </div>
                 </div>
-                <div className="rounded-lg border border-slate-800 bg-slate-950 px-4 py-3">
-                    <div className="text-slate-400">Fill rate</div>
-                    <div className="mt-1 text-lg font-semibold text-slate-100">
+                <div className="rounded-lg border border-line bg-subtle px-4 py-3">
+                    <div className="text-fg-muted">Fill rate</div>
+                    <div className="mt-1 text-lg font-semibold text-fg">
                         {Math.round(analytics.completionRate * 100)}%
                     </div>
                 </div>
             </div>
             <div>
-                <div className="text-sm text-slate-400 mb-3">Votes over time</div>
+                <div className="text-sm text-fg-muted mb-3">Votes over time</div>
                 {analytics.timeline.length === 0 ? (
-                    <div className="text-sm text-slate-500">No votes yet.</div>
+                    <div className="text-sm text-fg-muted">No votes yet.</div>
                 ) : (
                     <div className="flex items-end gap-2 h-32">
                         {analytics.timeline.map((bucket) => {
@@ -467,7 +467,7 @@ function AnalyticsPanel({
                                             );
                                         })}
                                     </div>
-                                    <span className="text-[10px] text-slate-500 truncate w-full text-center">
+                                    <span className="text-[10px] text-fg-muted truncate w-full text-center">
                                         {new Date(bucket.start).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                                     </span>
                                 </div>
@@ -478,14 +478,14 @@ function AnalyticsPanel({
             </div>
             {comments.length > 0 ? (
                 <div>
-                    <h3 className="mb-3 text-sm font-semibold text-white">Validator comments</h3>
+                    <h3 className="mb-3 text-sm font-semibold text-fg">Validator comments</h3>
                     <div className="space-y-3">
                         {comments.map((row, index) => (
-                            <div key={`${row.optionId}-${index}`} className="rounded-xl border border-slate-800 bg-slate-950 px-4 py-3">
+                            <div key={`${row.optionId}-${index}`} className="rounded-xl border border-line bg-subtle px-4 py-3">
                                 <p className="text-xs text-cyan-400">
                                     {optionLabels[String(row.optionId)] ?? `Option ${row.optionId}`}
                                 </p>
-                                <p className="mt-1 text-sm text-slate-300">{row.comment}</p>
+                                <p className="mt-1 text-sm text-fg-muted">{row.comment}</p>
                             </div>
                         ))}
                     </div>
@@ -504,8 +504,8 @@ function StatusCard({
 }) {
     return (
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
-            <div className="mx-auto max-w-lg rounded-2xl border border-slate-800 bg-slate-900 px-6 py-10 text-center">
-                <div className="text-lg font-medium text-slate-300">{children}</div>
+            <div className="mx-auto max-w-lg rounded-2xl border border-line bg-card px-6 py-10 text-center">
+                <div className="text-lg font-medium text-fg-muted">{children}</div>
                 {action && <div className="mt-4">{action}</div>}
             </div>
         </div>
@@ -525,15 +525,15 @@ function Task({type, content, imageUrl, votes, totalVotes, isWinner, isTie}: {
     const isText = type === "Text";
     
     return (
-        <div className={`group relative overflow-hidden rounded-2xl border bg-slate-900 ${
+        <div className={`group relative overflow-hidden rounded-2xl border bg-card ${
             isWinner
                 ? "border-violet-500 ring-1 ring-violet-500/40"
-                : "border-slate-800"
+                : "border-line"
         }`}>
             <div className="relative aspect-[3/2] w-full">
                 {isText ? (
-                    <div className="absolute inset-0 flex items-center justify-center bg-slate-950 p-6">
-                        <p className="text-center text-base leading-relaxed text-slate-100">{content}</p>
+                    <div className="absolute inset-0 flex items-center justify-center bg-subtle p-6">
+                        <p className="text-center text-base leading-relaxed text-fg">{content}</p>
                     </div>
                 ) : (
                     <img
@@ -546,7 +546,7 @@ function Task({type, content, imageUrl, votes, totalVotes, isWinner, isTie}: {
                     <div className={`absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-semibold ${
                         isWinner
                             ? "bg-violet-500 text-white"
-                            : "bg-slate-800/90 text-amber-300 border border-amber-400/40"
+                            : "bg-subtle/90 text-amber-400 border border-amber-400/40"
                     }`}>
                         {isWinner ? "Winner" : "Tie"}
                     </div>
@@ -555,17 +555,17 @@ function Task({type, content, imageUrl, votes, totalVotes, isWinner, isTie}: {
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 )}
             </div>
-            <div className="p-4 bg-slate-950 border-t border-slate-800">
+            <div className="p-4 bg-subtle border-t border-line">
                 <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                        <span className="text-xl font-semibold text-white">{votes}</span>
-                        <span className="text-slate-400">{votes === 1 ? "vote" : "votes"}</span>
+                        <span className="text-xl font-semibold text-fg">{votes}</span>
+                        <span className="text-fg-muted">{votes === 1 ? "vote" : "votes"}</span>
                     </div>
-                    <div className="text-sm font-semibold text-cyan-300">
+                    <div className="text-sm font-semibold text-cyan-400">
                         {percentage}%
                     </div>
                 </div>
-                <div className="w-full bg-slate-800 rounded-full h-2">
+                <div className="w-full bg-subtle rounded-full h-2">
                     <div 
                         className="bg-gradient-to-r from-violet-500 to-cyan-400 h-2 rounded-full transition-all duration-300"
                         style={{ width: `${percentage}%` }}

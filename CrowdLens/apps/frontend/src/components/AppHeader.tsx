@@ -15,6 +15,7 @@ import { WalletButton } from "@/components/WalletButton";
 import { FaucetHint } from "@/components/FaucetHint";
 import { WorkerBalance } from "@/components/voter/WorkerBalance";
 import { BrandMark } from "@/components/BrandMark";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 const NAV = [
   {
@@ -129,12 +130,12 @@ export function AppHeader() {
   }, [publicKey, hasSigned, signMessage, connecting, connected]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/85 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-line bg-canvas/85 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl flex-wrap items-center justify-between gap-3 px-4 sm:px-6">
         <div className="flex min-w-0 items-center gap-5">
           <BrandMark />
           {isUiPreview && (
-            <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-xs text-amber-300">
+            <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-xs text-amber-400">
               Preview
             </span>
           )}
@@ -147,8 +148,8 @@ export function AppHeader() {
                   href={item.href}
                   className={
                     active
-                      ? "rounded-md bg-slate-800 px-3 py-1.5 font-medium text-white"
-                      : "rounded-md px-3 py-1.5 text-slate-400 hover:bg-slate-800/70 hover:text-white"
+                      ? "rounded-md bg-subtle px-3 py-1.5 font-medium text-fg"
+                      : "rounded-md px-3 py-1.5 text-fg-muted hover:bg-subtle/70 hover:text-fg"
                   }
                 >
                   {item.label}
@@ -159,6 +160,7 @@ export function AppHeader() {
         </div>
         <div className="flex items-center gap-3">
           {loading && <span className="hidden text-sm text-cyan-400 animate-pulse sm:inline">Signing in…</span>}
+          <ThemeToggle />
           <FaucetHint />
           {onValidatorPages ? <WorkerBalance /> : null}
           <WalletButton />
@@ -172,8 +174,8 @@ export function AppHeader() {
                 href={item.href}
                 className={
                   active
-                    ? "shrink-0 rounded-md bg-slate-800 px-3 py-1.5 font-medium text-white"
-                    : "shrink-0 rounded-md px-3 py-1.5 text-slate-400"
+                    ? "shrink-0 rounded-md bg-subtle px-3 py-1.5 font-medium text-fg"
+                    : "shrink-0 rounded-md px-3 py-1.5 text-fg-muted"
                 }
               >
                 {item.label}

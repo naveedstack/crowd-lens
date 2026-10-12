@@ -57,22 +57,22 @@ export default function StatsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200">
+    <div className="min-h-screen bg-canvas text-fg">
       <Navbar />
       <main className="mx-auto max-w-7xl px-4 pt-28 pb-16 sm:px-6 lg:px-8">
-        <h1 className="font-display text-3xl font-bold tracking-tight text-white md:text-4xl">
+        <h1 className="font-display text-3xl font-bold tracking-tight text-fg md:text-4xl">
           Platform stats
         </h1>
-        <p className="mt-3 text-slate-400 max-w-2xl">
+        <p className="mt-3 text-fg-muted max-w-2xl">
           Live totals from CrowdLens votes. Individual ballots stay with the creator who can export them as CSV or JSON.
         </p>
 
-        {loading && <p className="mt-10 text-slate-400">Loading stats…</p>}
+        {loading && <p className="mt-10 text-fg-muted">Loading stats…</p>}
         {error && <p className="mt-10 text-red-400">{error}</p>}
         {stats && !loading && (
           <>
             <h2 className="mt-12 text-xl font-semibold">Pilot KPIs</h2>
-            <p className="mt-2 text-sm text-slate-400 max-w-2xl">
+            <p className="mt-2 text-sm text-fg-muted max-w-2xl">
               Progress against grant targets, excluding the seeded demo queue. Unmet targets stay visible.
             </p>
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -107,13 +107,13 @@ export default function StatsPage() {
               />
             </div>
             {stats.pilot.avgTurnaroundMs != null && (
-              <p className="mt-3 text-sm text-slate-500">
+              <p className="mt-3 text-sm text-fg-muted">
                 Average pilot batch turnaround: {formatTurnaround(stats.pilot.avgTurnaroundMs)}
               </p>
             )}
 
             <h2 className="mt-12 text-xl font-semibold">All activity</h2>
-            <p className="mt-2 text-sm text-slate-400">Includes the demo seed and verify traffic.</p>
+            <p className="mt-2 text-sm text-fg-muted">Includes the demo seed and verify traffic.</p>
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
               <StatCard label="Votes" value={stats.votes.toLocaleString()} />
               <StatCard label="Unique validators" value={stats.uniqueValidators.toLocaleString()} />
@@ -131,11 +131,11 @@ export default function StatsPage() {
 
             <h2 className="mt-12 text-xl font-semibold">Validator leaderboard</h2>
             {stats.leaderboard.length === 0 ? (
-              <p className="mt-4 text-slate-400">No votes yet.</p>
+              <p className="mt-4 text-fg-muted">No votes yet.</p>
             ) : (
-              <div className="mt-4 overflow-x-auto rounded-xl border border-slate-800">
+              <div className="mt-4 overflow-x-auto rounded-xl border border-line">
                 <table className="w-full text-sm">
-                  <thead className="bg-slate-900 text-slate-400">
+                  <thead className="bg-card text-fg-muted">
                     <tr>
                       <th className="text-left px-4 py-3 font-medium">Rank</th>
                       <th className="text-left px-4 py-3 font-medium">Validator</th>
@@ -146,12 +146,12 @@ export default function StatsPage() {
                   </thead>
                   <tbody>
                     {stats.leaderboard.map((row) => (
-                      <tr key={`${row.rank}-${row.addressPreview}`} className="border-t border-slate-800">
-                        <td className="px-4 py-3 text-slate-300">{row.rank}</td>
-                        <td className="px-4 py-3 font-mono text-slate-200">{row.addressPreview}</td>
-                        <td className="px-4 py-3 text-right text-slate-200">{row.reputation}</td>
+                      <tr key={`${row.rank}-${row.addressPreview}`} className="border-t border-line">
+                        <td className="px-4 py-3 text-fg-muted">{row.rank}</td>
+                        <td className="px-4 py-3 font-mono text-fg">{row.addressPreview}</td>
+                        <td className="px-4 py-3 text-right text-fg">{row.reputation}</td>
                         <td className="px-4 py-3 text-right text-emerald-400">{row.alignedVotes}</td>
-                        <td className="px-4 py-3 text-right text-slate-200">{row.votes}</td>
+                        <td className="px-4 py-3 text-right text-fg">{row.votes}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -181,10 +181,10 @@ function KpiMeter({
 }) {
   const pct = Math.max(0, Math.min(100, Math.round(((ratio ?? (target > 0 ? current / target : 0)) * 100))));
   return (
-            <div className="rounded-xl border border-slate-800 bg-slate-900 px-4 py-5">
-      <div className="text-sm text-slate-400">{label}</div>
-      <div className="mt-2 text-2xl font-semibold text-white">{display}</div>
-      <div className="mt-3 h-2 rounded-full bg-slate-800 overflow-hidden">
+            <div className="rounded-xl border border-line bg-card px-4 py-5">
+      <div className="text-sm text-fg-muted">{label}</div>
+      <div className="mt-2 text-2xl font-semibold text-fg">{display}</div>
+      <div className="mt-3 h-2 rounded-full bg-subtle overflow-hidden">
         <div
           className="h-2 rounded-full bg-gradient-to-r from-violet-500 to-cyan-400"
           style={{ width: `${pct}%` }}
@@ -196,9 +196,9 @@ function KpiMeter({
 
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
-            <div className="rounded-xl border border-slate-800 bg-slate-900 px-4 py-5">
-      <div className="text-sm text-slate-400">{label}</div>
-      <div className="mt-2 text-2xl font-semibold text-white">{value}</div>
+            <div className="rounded-xl border border-line bg-card px-4 py-5">
+      <div className="text-sm text-fg-muted">{label}</div>
+      <div className="mt-2 text-2xl font-semibold text-fg">{value}</div>
     </div>
   );
 }

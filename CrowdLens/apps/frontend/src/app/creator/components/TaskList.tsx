@@ -115,24 +115,24 @@ export function TaskList() {
           <Link
             key={task.id}
             href={`/creator/task/${task.id}`}
-            className="grid grid-cols-1 items-center gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-4 transition-colors hover:border-violet-500/40 sm:grid-cols-[8rem_minmax(0,1fr)_auto]"
+            className="grid grid-cols-1 items-center gap-4 rounded-2xl border border-line bg-card p-4 transition-colors hover:border-violet-500/40 sm:grid-cols-[8rem_minmax(0,1fr)_auto]"
           >
             {task.optionType === "Text" ? (
-              <div className="h-20 overflow-hidden rounded-lg bg-slate-950 p-2 text-xs leading-snug text-slate-400">
+              <div className="h-20 overflow-hidden rounded-lg bg-subtle p-2 text-xs leading-snug text-fg-muted">
                 {task.preview || "Caption"}
               </div>
             ) : task.thumbnail ? (
               <img
                 src={task.thumbnail}
                 alt=""
-                className="h-20 w-full rounded-lg bg-slate-950 object-cover sm:w-28"
+                className="h-20 w-full rounded-lg bg-subtle object-cover sm:w-28"
               />
             ) : (
-              <div className="h-20 rounded-lg bg-slate-950 sm:w-28" />
+              <div className="h-20 rounded-lg bg-subtle sm:w-28" />
             )}
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <h2 className="truncate font-medium text-white">{task.title || "Untitled task"}</h2>
+                <h2 className="truncate font-medium text-fg">{task.title || "Untitled task"}</h2>
                 <span
                   className={
                     task.done
@@ -144,13 +144,13 @@ export function TaskList() {
                 </span>
               </div>
               <div className="mt-3">
-                <div className="flex justify-between text-sm text-slate-400">
+                <div className="flex justify-between text-sm text-fg-muted">
                   <span>
                     {task.submission_count} / {task.required_submissions} votes
                   </span>
                   <span>{filled}%</span>
                 </div>
-                <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-800">
+                <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-subtle">
                   <div
                     className={`h-full ${task.done ? "bg-emerald-500" : "bg-violet-500"}`}
                     style={{ width: `${filled}%` }}
@@ -158,9 +158,9 @@ export function TaskList() {
                 </div>
               </div>
             </div>
-            <div className="text-left text-sm text-slate-300 sm:text-right">
-              <p className="text-xs text-slate-500">Escrow</p>
-              <p className="font-medium text-white">{formatUsdAndSol(task.amount, economics.solUsd)}</p>
+            <div className="text-left text-sm text-fg-muted sm:text-right">
+              <p className="text-xs text-fg-muted">Escrow</p>
+              <p className="font-medium text-fg">{formatUsdAndSol(task.amount, economics.solUsd)}</p>
             </div>
           </Link>
         );

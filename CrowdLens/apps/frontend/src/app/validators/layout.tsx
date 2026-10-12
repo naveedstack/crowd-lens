@@ -13,7 +13,7 @@ export default function ValidatorsLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200">
+    <div className="min-h-screen bg-canvas text-fg">
       <AppHeader />
       {children}
     </div>

@@ -21,6 +21,7 @@ const description =
   "Real humans pick the thumbnail before you publish. Upload two to five images, escrow SOL, and let validators vote. When the batch fills, the winner is committed on-chain and voters are paid in Devnet SOL.";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://crowdlens-bay.vercel.app"),
   title: "CrowdLens | Real humans pick the thumbnail",
   description,
   keywords: "CrowdLens, thumbnail testing, Solana Devnet, image comparison, creator tools, validator voting",
@@ -34,7 +35,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "CrowdLens | Real humans pick the thumbnail",
     description,
-  }
+  },
 };
 
 export default function RootLayout({

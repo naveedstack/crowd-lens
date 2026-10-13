@@ -6,7 +6,7 @@ import { workerAuthMiddleware } from "../middleware";
 import { getNextTask, getTaskForWorker, listOpenTasks, parseExcludeIds } from "../db";
 import { createSubmissionInput } from "../types";
 import { env } from "../env";
-import { HttpError, isUniqueConstraintError, sendError } from "../http";
+import { HttpError, isTransactionGoneError, isUniqueConstraintError, sendError } from "../http";
 import { issueNonce, verifySignedNonce } from "../auth/nonce";
 import { issueTokenFromPeerSession } from "../auth/sessionExchange";
 import { authRateLimit, payoutRateLimit, submissionRateLimit } from "../rateLimit";
@@ -164,14 +164,17 @@ router.post("/submission", workerAuthMiddleware, submissionRateLimit, async (req
 
     let amount: number;
     try {
-        amount = await prismaClient.$transaction(async (tx) => {
-            return submitVote(tx, {
-                taskId: Number(parsedBody.data.taskId),
-                workerId: userId,
-                optionId,
-                comment: parsedBody.data.comment,
-            });
-        });
+        amount = await prismaClient.$transaction(
+            async (tx) => {
+                return submitVote(tx, {
+                    taskId: Number(parsedBody.data.taskId),
+                    workerId: userId,
+                    optionId,
+                    comment: parsedBody.data.comment,
+                });
+            },
+            { maxWait: 10_000, timeout: 20_000 },
+        );
     } catch (err) {
         if (err instanceof HttpError) {
             sendError(res, err.status, err.error, err.details);
@@ -179,6 +182,10 @@ router.post("/submission", workerAuthMiddleware, submissionRateLimit, async (req
         }
         if (isUniqueConstraintError(err)) {
             sendError(res, 400, "Already submitted for this task");
+            return;
+        }
+        if (isTransactionGoneError(err)) {
+            sendError(res, 503, "Vote did not finish, try again");
             return;
         }
         throw err;

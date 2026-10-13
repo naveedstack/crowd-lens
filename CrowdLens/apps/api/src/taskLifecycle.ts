@@ -1,11 +1,19 @@
-import type { Prisma } from "@prisma/client";
-import { SettleStatus } from "@prisma/client";
+import { Prisma, SettleStatus } from "@prisma/client";
 import { HttpError } from "./http";
 import { rewardFor } from "./economics";
-import { clampReputation } from "./reputation";
 import { hashVoteCommitment } from "./solana/commitment";
 
 type Tx = Prisma.TransactionClient;
+
+type SettlementPlan = {
+  submissionId: number;
+  workerId: number;
+  oldAmount: number;
+  finalAmount: number;
+  role: "aligned" | "outlier" | null;
+  address: string;
+  optionId: number;
+};
 
 export async function computeWinnerOptionId(tx: Tx, taskId: number): Promise<number | null> {
   const grouped = await tx.submission.groupBy({
@@ -42,6 +50,7 @@ export async function settleTask(tx: Tx, taskId: number) {
 
   const submissions = await tx.submission.findMany({
     where: { task_id: taskId, settled: false },
+    include: { worker: { select: { address: true } } },
     orderBy: { worker_id: "asc" },
   });
   if (submissions.length === 0) {
@@ -54,52 +63,111 @@ export async function settleTask(tx: Tx, taskId: number) {
   const outliers = winner == null ? [] : submissions.filter((row) => row.option_id !== winner);
   const creditPending = task.settle_status === SettleStatus.Offchain;
 
+  const plans: SettlementPlan[] = [];
+
   if (winner == null || aligned.length === 0) {
     for (const row of submissions) {
-      await finalizeSubmission(tx, row, row.amount, null, creditPending);
+      plans.push({
+        submissionId: row.id,
+        workerId: row.worker_id,
+        oldAmount: row.amount,
+        finalAmount: row.amount,
+        role: null,
+        address: row.worker.address,
+        optionId: row.option_id,
+      });
     }
-    await markOnchainSettling(tx, taskId, creditPending);
+  } else {
+    const outlierShare = Math.floor(equal / 2);
+    const haircutPool = (equal - outlierShare) * outliers.length;
+    const bonusBase = Math.floor(haircutPool / aligned.length);
+    let remainder = haircutPool - bonusBase * aligned.length;
+    const firstAlignedId = aligned[0]!.worker_id;
+
+    for (const row of aligned) {
+      let finalAmount = equal + bonusBase;
+      if (row.worker_id === firstAlignedId) {
+        finalAmount += remainder;
+        remainder = 0;
+      }
+      plans.push({
+        submissionId: row.id,
+        workerId: row.worker_id,
+        oldAmount: row.amount,
+        finalAmount,
+        role: "aligned",
+        address: row.worker.address,
+        optionId: row.option_id,
+      });
+    }
+
+    for (const row of outliers) {
+      plans.push({
+        submissionId: row.id,
+        workerId: row.worker_id,
+        oldAmount: row.amount,
+        finalAmount: outlierShare,
+        role: "outlier",
+        address: row.worker.address,
+        optionId: row.option_id,
+      });
+    }
+  }
+
+  await applySettlement(tx, plans, creditPending);
+  await markOnchainSettling(tx, taskId, creditPending, plans);
+}
+
+async function applySettlement(tx: Tx, plans: SettlementPlan[], creditPending: boolean) {
+  if (plans.length === 0) {
     return;
   }
 
-  const outlierShare = Math.floor(equal / 2);
-  const haircutPool = (equal - outlierShare) * outliers.length;
-  const bonusBase = Math.floor(haircutPool / aligned.length);
-  let remainder = haircutPool - bonusBase * aligned.length;
-  const firstAlignedId = aligned[0]!.worker_id;
+  const submissionValues = plans.map(
+    (plan) => Prisma.sql`(${plan.submissionId}::int, ${plan.finalAmount}::int)`,
+  );
+  await tx.$executeRaw`
+    UPDATE "Submission" AS s
+    SET amount = v.amount, settled = true
+    FROM (VALUES ${Prisma.join(submissionValues)}) AS v(id, amount)
+    WHERE s.id = v.id
+  `;
 
-  for (const row of aligned) {
-    let finalAmount = equal + bonusBase;
-    if (row.worker_id === firstAlignedId) {
-      finalAmount += remainder;
-      remainder = 0;
-    }
-    await finalizeSubmission(tx, row, finalAmount, "aligned", creditPending);
-  }
-
-  for (const row of outliers) {
-    await finalizeSubmission(tx, row, outlierShare, "outlier", creditPending);
-  }
-
-  await markOnchainSettling(tx, taskId, creditPending);
+  const workerValues = plans.map((plan) => {
+    const repDelta = plan.role === "aligned" ? 2 : plan.role === "outlier" ? -5 : 0;
+    const aligned = plan.role === "aligned" ? 1 : 0;
+    const outlier = plan.role === "outlier" ? 1 : 0;
+    const credit = creditPending ? plan.finalAmount : 0;
+    return Prisma.sql`(${plan.workerId}::int, ${plan.oldAmount}::int, ${credit}::int, ${repDelta}::int, ${aligned}::int, ${outlier}::int)`;
+  });
+  await tx.$executeRaw`
+    UPDATE "Worker" AS w
+    SET
+      unsettled_amount = w.unsettled_amount - v.old_amount,
+      pending_amount = w.pending_amount + v.credit,
+      reputation = GREATEST(0, LEAST(100, w.reputation + v.rep_delta)),
+      aligned_votes = w.aligned_votes + v.aligned,
+      outlier_votes = w.outlier_votes + v.outlier
+    FROM (VALUES ${Prisma.join(workerValues)}) AS v(id, old_amount, credit, rep_delta, aligned, outlier)
+    WHERE w.id = v.id
+  `;
 }
 
-async function markOnchainSettling(tx: Tx, taskId: number, creditPending: boolean) {
+async function markOnchainSettling(
+  tx: Tx,
+  taskId: number,
+  creditPending: boolean,
+  plans: SettlementPlan[],
+) {
   if (creditPending) {
     return;
   }
 
-  const rows = await tx.submission.findMany({
-    where: { task_id: taskId },
-    include: { worker: { select: { address: true } } },
-    orderBy: { worker_id: "asc" },
-  });
-
   const commitment = hashVoteCommitment(
-    rows.map((row) => ({
-      address: row.worker.address,
-      optionId: row.option_id,
-      amount: row.amount,
+    plans.map((plan) => ({
+      address: plan.address,
+      optionId: plan.optionId,
+      amount: plan.finalAmount,
     })),
   );
 
@@ -108,39 +176,6 @@ async function markOnchainSettling(tx: Tx, taskId: number, creditPending: boolea
     data: {
       vote_commitment: commitment.toString("hex"),
       settle_status: SettleStatus.Settling,
-    },
-  });
-}
-
-async function finalizeSubmission(
-  tx: Tx,
-  row: { id: number; worker_id: number; amount: number },
-  finalAmount: number,
-  role: "aligned" | "outlier" | null,
-  creditPending: boolean,
-) {
-  await tx.submission.update({
-    where: { id: row.id },
-    data: { amount: finalAmount, settled: true },
-  });
-
-  const worker = await tx.worker.findUnique({
-    where: { id: row.worker_id },
-  });
-  if (!worker) {
-    return;
-  }
-
-  const reputationDelta = role === "aligned" ? 2 : role === "outlier" ? -5 : 0;
-
-  await tx.worker.update({
-    where: { id: row.worker_id },
-    data: {
-      unsettled_amount: { decrement: row.amount },
-      ...(creditPending ? { pending_amount: { increment: finalAmount } } : {}),
-      reputation: clampReputation(worker.reputation + reputationDelta),
-      ...(role === "aligned" ? { aligned_votes: { increment: 1 } } : {}),
-      ...(role === "outlier" ? { outlier_votes: { increment: 1 } } : {}),
     },
   });
 }

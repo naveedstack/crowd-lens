@@ -25,10 +25,17 @@ export function sendError(
 }
 
 export function isUniqueConstraintError(err: unknown): boolean {
-  return Boolean(
-    err &&
-    typeof err === "object" &&
-    "code" in err &&
-    (err as { code: unknown }).code === "P2002",
-  );
+  return prismaCode(err) === "P2002";
+}
+
+export function isTransactionGoneError(err: unknown): boolean {
+  return prismaCode(err) === "P2028";
+}
+
+function prismaCode(err: unknown): string | undefined {
+  if (!err || typeof err !== "object" || !("code" in err)) {
+    return undefined;
+  }
+  const code = (err as { code: unknown }).code;
+  return typeof code === "string" ? code : undefined;
 }

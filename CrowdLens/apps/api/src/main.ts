@@ -5,7 +5,7 @@ import userRouter from "./routers/user";
 import workerRouter from "./routers/worker";
 import cors from "cors";
 import { prismaClient } from "db/client";
-import { HttpError, sendError } from "./http";
+import { HttpError, isTransactionGoneError, sendError } from "./http";
 import { platformStats } from "./analytics";
 import { reconcileProcessingPayouts } from "./payouts/engine";
 import { reconcileEscrowSettles } from "./solana/escrow";
@@ -72,6 +72,11 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
 
     if (err instanceof SyntaxError) {
         sendError(res, 400, "Invalid JSON");
+        return;
+    }
+
+    if (isTransactionGoneError(err)) {
+        sendError(res, 503, "Vote did not finish, try again");
         return;
     }
 

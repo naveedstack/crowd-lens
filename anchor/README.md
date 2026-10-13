@@ -5,7 +5,7 @@ Escrows creator SOL in a per-task PDA and pays validators from that PDA. Votes s
 Program ID (localnet + devnet): `4DcAdpaXFFvzLVDxjHoswyKojaueMuQBF4cMTY4XNfw4`
 
 ```bash
-# from CrowdLens/anchor
+# from repo-root/anchor
 cp keys/crowdlens-keypair.json target/deploy/crowdlens-keypair.json
 NO_DNA=1 anchor build
 NO_DNA=1 bun install

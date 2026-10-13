@@ -4,5 +4,4 @@
 **/.vercel
 **/node_modules
 **/.turbo
-CrowdLens/anchor
 anchor

@@ -2,7 +2,7 @@
 
 Grant reviewers need one public Next app and one API. Network is **Solana devnet only**. Do not commit secrets.
 
-Repo root for these files is `CrowdLens/`.
+Repo root is this directory (`apps/`, `packages/`, `anchor/`).
 
 ## 1. Postgres + API (Render)
 
@@ -71,7 +71,7 @@ Keep a treasury airdrop only as fee payer / oracle signer. Do not switch this on
 
 Default is still **custodial** (`SETTLEMENT_MODE=custodial`). To pay validators from a task PDA instead of `TREASURY_SECRET_KEY`:
 
-1. From `CrowdLens/anchor`: copy `keys/crowdlens-keypair.json` to `target/deploy/crowdlens-keypair.json`, then `NO_DNA=1 anchor deploy --provider.cluster devnet`.
+1. From `anchor/`: copy `keys/crowdlens-keypair.json` to `target/deploy/crowdlens-keypair.json`, then `NO_DNA=1 anchor deploy --provider.cluster devnet`.
 2. Initialize config (authority = treasury wallet): `cd apps/api && bun scripts/init-crowdlens-program.ts`
 3. Set API env:
    - `SETTLEMENT_MODE=onchain`

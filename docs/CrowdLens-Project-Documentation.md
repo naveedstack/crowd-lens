@@ -168,7 +168,7 @@ Solana, Anchor, Phantom (wallet adapter), Next.js, React, TypeScript, Express, P
 ## Repository map
 
 GitHub: https://github.com/naveedstack/crowd-lens  
-Application code lives under `CrowdLens/`.
+Application code lives at the repository root.
 
 | Path | Contents |
 | --- | --- |

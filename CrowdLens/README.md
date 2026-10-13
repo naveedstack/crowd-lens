@@ -1,24 +1,27 @@
 # CrowdLens
 
-Decentralized thumbnail or caption feedback: creators pay in SOL, validators vote, custodial payouts on **Solana devnet**.
+Started from Pratik Kale’s open-source CrowdLens MVP (https://github.com/Pratikkale26/CrowdLens); during this build we added the Anchor escrow program, on-chain commit and settlement, live USD-to-SOL pricing, and a single creator/validator app.
 
-Grant MVP is Phases 0–6 (this repo). Lens AI and compressed NFTs are explicitly out of scope.
+This demo is **https://crowdlens-bay.vercel.app**. Pratik’s public site is **https://crowdlens.kalehub.com** — they are not the same deployment.
+
+Creators escrow SOL on **Solana Devnet**, humans vote on 2–5 images, and when the batch fills the winner is committed on-chain and aligned voters are paid from escrow. Image tasks only. Lens AI and compressed NFTs are out of scope.
 
 ## Live demo
 
 | Surface | URL |
 | --- | --- |
-| App | _after Vercel deploy_ (`/` landing, `/creator`, `/validators`) |
-| API health | `GET <api>/health` → `{ "ok": true }` |
+| App | https://crowdlens-bay.vercel.app |
+| Creator | https://crowdlens-bay.vercel.app/creator |
+| Validator votes | https://crowdlens-bay.vercel.app/validators/votes |
+| Stats | https://crowdlens-bay.vercel.app/stats |
+| API health | https://crowdlens-api.vercel.app/health |
+| App health (proxies the API) | https://crowdlens-bay.vercel.app/health |
 
-📽️ **Demo video:** _paste link after recording_
+Phantom on **Devnet**. Empty wallets: https://faucet.solana.com
 
-Shot list:
-
-1. Phantom on **devnet**, faucet if the wallet is empty
-2. `/validators/votes`: connect, vote on a seeded demo task (optional comment)
-3. `/creator`: upload two images, pick a batch, pay, see the task on the list
-4. `/validators/votes`: vote on that task, open Earnings, withdraw, open the explorer
+1. `/validators/votes`: connect, vote on a seeded demo task (optional comment)
+2. `/creator`: upload two images, pick a vote count, pay, see the task on the list
+3. `/validators/votes`: vote on that task from a **second** wallet, then check Earnings and Explorer
 
 ## How it works
 
@@ -26,18 +29,18 @@ Shot list:
 Next.js (`/` `/creator` `/validators`)  ──  Express API  ──  Postgres (Prisma)
                                            │
                                            ├──  S3 (presigned image upload)
-                                           └──  Solana devnet (pay-in + custodial pay-out, optional PDA escrow)
+                                           └──  Solana Devnet (task PDA escrow, commit_votes, settle_chunk)
 ```
 
 - **App** (`apps/frontend`, port 3000): landing `/`, validator guide `/validators`, votes `/validators/votes`, creator `/creator`.
-- **API** (`apps/api`, port 8080): nonce JWT auth, tasks, votes, custodial treasury.
-- Payouts default to **custodial** (server signs from `TREASURY_SECRET_KEY`). Set `SETTLEMENT_MODE=onchain` after deploying the Anchor program in [`anchor/`](anchor/) to escrow task funds in a PDA.
+- **API** (`apps/api`, port 8080): nonce JWT auth, tasks, votes, settlement.
+- Live path is **on-chain escrow** (`SETTLEMENT_MODE=onchain`). Creator pay-in funds a task PDA; after the batch fills the API commits the winner and pays voters from escrow. Custodial treasury send remains only for leftover pending from older tasks.
 
 ## Economics (devnet)
 
 - Creators pay **$1 per vote**, voters earn **$0.80 per vote** (80% of escrow), converted to SOL at the live rate
 - Vote count is adjustable (**1–100** by default)
-- Minimum worker withdraw: **one vote payout ($0.80 in SOL)**
+- Images per task: **2–5**
 - Network: **devnet only** — faucet: https://faucet.solana.com
 
 ## Local
@@ -53,12 +56,12 @@ bun run --filter=frontend dev
 
 Optional demo queue: `cd apps/api && bun scripts/seed-demo.ts`
 
-Production deploy: [`DEPLOY.md`](DEPLOY.md). Creator pilot runbook: [`PILOT.md`](PILOT.md). Live KPI progress: `/stats`.
+Production deploy: [`DEPLOY.md`](DEPLOY.md). Product requirements: [`docs/PRD.md`](docs/PRD.md). Creator pilot runbook: [`PILOT.md`](PILOT.md). Live KPI progress: `/stats`.
 
 ## Roadmap
 
-- **Done:** Phase 0 real stack · 1 auth · 2 task lifecycle · 3 custodial payouts · 4 worker dashboard · 5 creator dashboard · 6 deploy + public demo seed · 7 reputation / anti-sybil · 8 Anchor settlement (flagged)
-- **Post-MVP:** 9 text tasks · 10 analytics export · 11 creator pilot KPIs
+- **Shipped:** auth, image tasks, worker and creator dashboards, public demo, reputation, on-chain escrow settlement, analytics export, `/stats`
+- **Not in this MVP:** captions/text, Lens AI, cNFTs, DePIN nodes, mainnet (see [`docs/PRD.md`](docs/PRD.md) §14)
 
 ## KPIs (progress vs target)
 

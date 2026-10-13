@@ -1,2 +1,6 @@
 .vercel
 .env*
+.DS_Store
+**/.DS_Store
+dark_theme/
+light_theme_ui/

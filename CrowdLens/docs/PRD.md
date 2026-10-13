@@ -5,7 +5,7 @@
 | --- | --- |
 | **Product** | CrowdLens |
 | **Stage** | MVP (grant / Devnet) |
-| **Version** | 1.2 |
+| **Version** | 1.3 |
 | **Date** | 12 October 2026 |
 | **Network** | Solana Devnet only |
 | **Program ID** | `4DcAdpaXFFvzLVDxjHoswyKojaueMuQBF4cMTY4XNfw4` |
@@ -270,16 +270,19 @@ Every row below is **named in that idea** (problem, solution, resources, or “a
 | NP-6 | **Slashing** to discourage spam | Not built | No stake. Outliers get a **smaller SOL share** and lose **off-chain reputation** points |
 | NP-7 | **Compressed NFTs (cNFTs)** — listed under Dev Tools / resources (vote receipts or badges) | Not built | No NFT mint, no badge, no compressed Merkle tree |
 | NP-8 | **DePIN-powered** network of independent workers | Not built | One Express API + one Anchor program. Validators are **wallets**, not DePIN nodes |
-| NP-9 | Upload **4–5** variations as the stated default | Not as specified | **2–5** images; vote batch is **1–100**, not a fixed 4–5 options |
 | NP-10 | Open protocol for **subjective content** in general (not only stills) | Narrowed | Stills only (thumbnails/posters). No video, audio, or live caption A/B |
 | NP-11 | On-chain **reputation** as part of a quality-controlled system | Off-chain only | Score 0–100 in Postgres; not in the program accounts |
 | NP-12 | **Mainnet** / production Solana cluster (implied by a real oracle and DePIN) | Not built | **Devnet only** |
+| NP-13 | Crowd validation that is not **noisy or gamed** — identity so one human ≠ many votes | Not built | Self-vote block, 3s dwell/gap, rate limits. `WALLET_MIN_SIGNATURES` exists but **defaults to 0**. Each wallet is one vote; Devnet faucet wallets are free. Reputation does **not** weight ballots. Slashing (NP-6) does not solve this |
+| NP-14 | **Open, incentivized protocol** other apps can use | Not built | Private JWT app API + creator CSV/JSON export. No public task/read API, no SDK, no third-party integration |
+| NP-15 | **Diverse human input** vs closed A/B tests — creators choose *who* votes | Not built | Open queue; no region, niche, or demographic filters on tasks or validators |
+| NP-16 | **Mobile** (idea tag) | Not as specified | Responsive Next.js in a browser. No native iOS/Android app, no store listing |
 
 ### 14.2 Idea items that *are* in the MVP (not Next Phase)
 
 These Superteam bullets **are** implemented and belong in §7, not here:
 
-- Creators upload multiple image variations
+- Creators upload multiple image variations (idea example **4–5** thumbnails; MVP allows **2–5**. Former NP-9 mixed this up with vote count 1–100, which is an MVP product choice, not an idea miss)
 - Validators (real humans with wallets) vote
 - Rewards for consensus-aligned votes (80% escrow + majority/minority split)
 - Reputation as a quality signal (off-chain)
@@ -291,10 +294,13 @@ These Superteam bullets **are** implemented and belong in §7, not here:
 | Order | Phase | Idea IDs | Notes |
 | --- | --- | --- | --- |
 | 1 | Text / caption tasks | NP-4, NP-10 | Closest to the written problem statement |
-| 2 | Stronger oracle | NP-5, NP-6, NP-11 | On-chain (or more complete) votes, slashing, portable reputation |
-| 3 | AI and data | NP-1, NP-2, NP-3 | Dataset for AI teams first, then Lens AI + flywheel |
-| 4 | Identity / network | NP-7, NP-8 | cNFTs, then DePIN only if still a goal |
-| 5 | Production cluster | NP-12 | Mainnet after audit + Devnet pilot evidence |
+| 2 | Stronger oracle | NP-5, NP-6, NP-11, NP-13 | On-chain votes, slashing, portable reputation, **sybil / proof of personhood** (wallet-history gating or reputation-weighted votes). NP-6 does not replace NP-13 |
+| 3 | Audience targeting | NP-15 | Region / niche filters so “diverse human input” is choosable |
+| 4 | Open protocol | NP-14 | Public API + SDK so other apps can post tasks and read results |
+| 5 | AI and data | NP-1, NP-2, NP-3 | Dataset for AI teams first, then Lens AI + flywheel |
+| 6 | Identity / network | NP-7, NP-8 | cNFTs, then DePIN only if still a goal |
+| 7 | Mobile | NP-16 | Native app only if the Mobile tag still matters; web stays the MVP |
+| 8 | Production cluster | NP-12 | Mainnet after audit + Devnet pilot evidence |
 
 **Prerequisite:** anonymized dataset export for AI teams before Lens AI.
 
@@ -307,3 +313,4 @@ These Superteam bullets **are** implemented and belong in §7, not here:
 | 1.0 | 2026-10-12 | MVP as built (chat draft). |
 | 1.1 | 2026-10-12 | Saved to repo. §14 lists every Superteam idea feature not implemented. |
 | 1.2 | 2026-10-12 | Header lists API and `/health` URLs. |
+| 1.3 | 2026-10-12 | NP-9 moved to §14.2 (4–5 thumbnails is an example). Added NP-13 sybil/identity, NP-14 open protocol, NP-15 audience targeting, NP-16 mobile. |
